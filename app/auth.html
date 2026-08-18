@@ -144,10 +144,10 @@
 
     <div id="auth-alert" class="auth-alert"></div>
 
-    <form id="auth-form">
+    <form id="auth-form" novalidate>
       <div class="form-group" id="name-group" style="display: none;">
         <label class="form-label" for="full-name">Nombre Completo</label>
-        <input class="form-input" type="text" id="full-name" placeholder="Ej. Juan Pérez" autocomplete="name">
+        <input class="form-input" type="text" id="full-name" placeholder="Ej. Bruno Chavarin" autocomplete="name">
       </div>
 
       <div class="form-group">
@@ -223,35 +223,62 @@
       hideAlert();
     });
 
+    function isValidEmail(email) {
+      // Regex ensuring user@domain.tld format
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
     authForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       hideAlert();
-      btnSubmit.disabled = true;
-      btnSubmit.textContent = 'Procesando...';
 
       const email = document.getElementById('email').value.trim();
       const password = document.getElementById('password').value;
       const fullName = document.getElementById('full-name').value.trim();
 
+      // Client-side validation
+      if (!email) {
+        showAlert('Por favor ingresa tu correo electrónico.');
+        return;
+      }
+
+      if (!isValidEmail(email)) {
+        showAlert('Por favor ingresa un correo electrónico válido con dominio (ejemplo: nombre@empresa.com).');
+        return;
+      }
+
+      if (!password || password.length < 6) {
+        showAlert('La contraseña debe tener al menos 6 caracteres.');
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Procesando...';
+
       try {
         if (mode === 'register') {
-          const { data, error } = await supabase.auth.signUp({
+          // 1. Sign up user in Supabase
+          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
             email,
             password,
             options: {
-              data: { full_name: fullName }
+              data: { full_name: fullName || 'Usuario' }
             }
           });
 
-          if (error) throw error;
+          if (signUpError) throw signUpError;
 
-          if (data.session) {
-            // Direct session
-            const context = await tenantManager.init();
-            window.location.href = context.needsOnboarding ? 'onboarding.html' : 'dashboard.html';
-          } else {
-            showAlert('Cuenta creada exitosamente. Por favor verifica tu correo para confirmar.', 'success');
-          }
+          // 2. Immediate sign in to establish persistent session
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (signInError) throw signInError;
+
+          // 3. Initialize tenant context
+          const context = await tenantManager.init();
+          window.location.href = context.needsOnboarding ? 'onboarding.html' : 'dashboard.html';
         } else {
           // Login
           const { data, error } = await supabase.auth.signInWithPassword({
@@ -259,7 +286,12 @@
             password
           });
 
-          if (error) throw error;
+          if (error) {
+            if (error.message.includes('Invalid login credentials')) {
+              throw new Error('Credenciales inválidas. Verifica tu correo y contraseña.');
+            }
+            throw error;
+          }
 
           const context = await tenantManager.init();
           if (context.needsOnboarding) {
@@ -271,7 +303,6 @@
       } catch (err) {
         console.error('Auth error:', err);
         showAlert(err.message || 'Ocurrió un error en la autenticación.');
-      } finally {
         btnSubmit.disabled = false;
         btnSubmit.textContent = mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta Gratis';
       }

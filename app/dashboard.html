@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>oPOSsum — Punto de Venta & Productos</title>
+  <title>oPOSsum — Productos & POS</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -1274,8 +1274,8 @@
             </thead>
             <tbody id="products-table-body">
               <tr>
-                <td colspan="5" style="text-align: center; padding: 2rem; color: #64748b;">
-                  Cargando productos...
+                <td colspan="5" style="text-align: center; padding: 2.5rem; color: #64748b;">
+                  Consultando productos de tu negocio...
                 </td>
               </tr>
             </tbody>
@@ -1357,46 +1357,15 @@
           <div class="customer-pill">
             <div class="customer-avatar">👤</div>
             <div>
-              <div class="customer-name">Juan Perez</div>
-              <div class="customer-meta">5 compras</div>
+              <div class="customer-name">Cliente Mostrador</div>
+              <div class="customer-meta">Venta de mostrador</div>
             </div>
           </div>
 
           <!-- Cart items list -->
-          <div class="cart-items-list">
-            <div class="cart-item">
-              <div class="cart-item-left">
-                <div class="item-icon-box" style="background:#f1f5f9;">👕</div>
-                <div>
-                  <div class="item-title">Remera Negra</div>
-                  <div class="item-price-tag">
-                    $30.00 <span class="wholesale-badge">M Mayoreo</span>
-                  </div>
-                </div>
-              </div>
-              <div class="qty-box">2</div>
-            </div>
-
-            <div class="cart-item">
-              <div class="cart-item-left">
-                <div class="item-icon-box" style="background:#e0f2fe;">👕</div>
-                <div>
-                  <div class="item-title">Remera Azul</div>
-                  <div class="item-price-tag">$75.00</div>
-                </div>
-              </div>
-              <div class="qty-box">2</div>
-            </div>
-
-            <div class="cart-item">
-              <div class="cart-item-left">
-                <div class="item-icon-box" style="background:#f3e8ff;">🏷️</div>
-                <div>
-                  <div class="item-title">Descuento</div>
-                  <div class="item-price-tag" style="color:#9333ea;">Loyalty20</div>
-                </div>
-              </div>
-              <div style="font-size:0.85rem; font-weight:700; color:#9333ea;">- $20.00</div>
+          <div class="cart-items-list" id="pos-cart-items-container">
+            <div style="text-align:center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.85rem;">
+              🛒 Tu carrito de venta está vacío
             </div>
           </div>
 
@@ -1404,17 +1373,17 @@
           <div class="cart-totals">
             <div class="total-row">
               <span>Subtotal</span>
-              <span>$210.00</span>
+              <span>$0.00</span>
             </div>
             <div class="total-row" style="color:#9333ea;">
               <span>Descuentos</span>
-              <span>- $30.00</span>
+              <span>- $0.00</span>
             </div>
           </div>
 
           <!-- Big Checkout Button in Possum Mint -->
           <button class="btn-checkout">
-            Cobrar $180
+            Cobrar $0.00
           </button>
 
         </div>
@@ -1620,14 +1589,14 @@
     });
 
     // -------------------------------------------------------------
-    // PRODUCTS DATA RENDERING
+    // PRODUCTS DATA RENDERING (100% REAL-TIME SUPABASE)
     // -------------------------------------------------------------
     async function loadProductsList() {
       try {
         productsTableBody.innerHTML = `
           <tr>
             <td colspan="5" style="text-align:center; padding: 2rem; color: #64748b;">
-              Cargando productos...
+              Consultando productos en tiempo real...
             </td>
           </tr>
         `;
@@ -1655,9 +1624,9 @@
             <td colspan="5">
               <div class="empty-products-state">
                 <div class="empty-icon">📦</div>
-                <h3 class="empty-title">Aún no tienes productos registrados</h3>
-                <p class="empty-desc">Comienza registrando tu primer producto y sus diferentes presentaciones para tu negocio.</p>
-                <button class="btn-add-product" id="btn-empty-add-product">
+                <h3 class="empty-title">0 productos registrados</h3>
+                <p class="empty-desc">Aún no tienes productos en tu catálogo. Haz clic en '+ Agregar producto' para registrar el primero con sus presentaciones.</p>
+                <button class="btn-add-product" id="btn-empty-add-product" style="margin-top: 0.5rem;">
                   + Agregar primer producto
                 </button>
               </div>
@@ -1693,7 +1662,7 @@
               </div>
             </td>
             <td>
-              <div style="font-size: 0.82rem; color: #334155;">
+              <div style="font-size: 0.82rem; color: #334155; font-weight: 600;">
                 ${presList.map(p => escapeHtml(p.name)).join(', ')}
               </div>
             </td>

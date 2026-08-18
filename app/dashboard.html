@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Productos — oPOSsum</title>
+  <title>oPOSsum — Punto de Venta & Productos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -55,16 +55,21 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 1.5rem 1rem;
+      padding: 1.25rem 1rem;
       min-height: 100vh;
       flex-shrink: 0;
+    }
+
+    .sidebar-top {
+      display: flex;
+      flex-direction: column;
     }
 
     .sidebar-brand {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      padding: 0.25rem 0.75rem 1.75rem;
+      padding: 0.25rem 0.5rem 1.25rem;
       text-decoration: none;
     }
 
@@ -87,12 +92,37 @@
       color: var(--brand-primary);
     }
 
+    /* Quick Action + Button */
+    .sidebar-quick-btn {
+      width: 100%;
+      background: var(--brand-primary);
+      color: #091335;
+      border: none;
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-family: inherit;
+      margin-bottom: 1.25rem;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0, 229, 163, 0.25);
+    }
+
+    .sidebar-quick-btn:hover {
+      background: var(--brand-primary-hover);
+      transform: translateY(-1px);
+    }
+
     .sidebar-nav {
       list-style: none;
       display: flex;
       flex-direction: column;
       gap: 0.25rem;
-      flex: 1;
     }
 
     .nav-item a {
@@ -106,6 +136,7 @@
       font-size: 0.88rem;
       font-weight: 600;
       transition: all 0.15s ease;
+      cursor: pointer;
     }
 
     .nav-item a:hover {
@@ -140,40 +171,106 @@
 
     .sidebar-bottom {
       padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
     }
 
-    .btn-new-sale {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #ffffff;
-      padding: 0.7rem 1rem;
-      border-radius: 8px;
-      font-size: 0.88rem;
-      font-weight: 600;
+    .sidebar-bottom-icons {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      gap: 0.5rem;
+      gap: 1rem;
+      padding: 0.5rem 0.85rem;
+      color: var(--sidebar-text);
+    }
+
+    .sidebar-bottom-icons svg {
+      width: 18px;
+      height: 18px;
       cursor: pointer;
-      font-family: inherit;
-      transition: all 0.15s ease;
+      transition: color 0.15s ease;
     }
 
-    .btn-new-sale:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
+    .sidebar-bottom-icons svg:hover {
+      color: var(--brand-primary);
     }
 
-    /* ================= MAIN CONTENT ================= */
+    /* ================= MAIN CONTAINER ================= */
     .main-wrapper {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 2rem 2.5rem;
-      max-width: 1400px;
+      padding: 1.5rem 2.25rem;
+      max-width: 1440px;
+      overflow-y: auto;
     }
 
+    /* Top Utility Bar */
+    .top-utility-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .branch-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.4rem 0.85rem;
+      cursor: pointer;
+    }
+
+    .branch-icon-box {
+      width: 28px;
+      height: 28px;
+      background: #f1f5f9;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #475569;
+    }
+
+    .branch-info {
+      text-align: left;
+    }
+
+    .branch-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .branch-sub {
+      font-size: 0.72rem;
+      color: var(--brand-primary);
+      font-weight: 600;
+    }
+
+    /* Views */
+    .canvas-view {
+      display: none;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .canvas-view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ================= LIENZO 1: PRODUCTOS ================= */
     .content-header {
       display: flex;
       align-items: center;
@@ -209,7 +306,6 @@
       box-shadow: 0 4px 12px rgba(0, 229, 163, 0.35);
     }
 
-    /* ================= PRODUCTS CARD & TABLE ================= */
     .products-card {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -255,7 +351,6 @@
       color: #94a3b8;
     }
 
-    /* Table */
     .table-responsive {
       overflow-x: auto;
     }
@@ -326,7 +421,6 @@
       font-size: 0.88rem;
     }
 
-    /* Stock Pills */
     .stock-badge {
       display: inline-flex;
       align-items: center;
@@ -372,7 +466,6 @@
       text-decoration: underline;
     }
 
-    /* ================= PAGINATION ================= */
     .pagination-wrapper {
       display: flex;
       align-items: center;
@@ -394,10 +487,6 @@
       cursor: pointer;
     }
 
-    .page-nav-btn:hover {
-      color: var(--text-main);
-    }
-
     .page-numbers {
       display: flex;
       align-items: center;
@@ -417,11 +506,6 @@
       font-size: 0.85rem;
     }
 
-    .page-num:hover {
-      background-color: var(--border-light);
-      color: var(--text-main);
-    }
-
     .page-num.active {
       color: var(--brand-primary);
       position: relative;
@@ -439,31 +523,313 @@
       border-radius: 2px;
     }
 
-    .page-dots {
-      color: var(--text-muted);
-      padding: 0 4px;
+    /* ================= LIENZO 2: PUNTO DE VENTA (NUEVA VENTA) ================= */
+    .pos-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.5rem;
+      align-items: start;
     }
 
-    /* ================= FLOATING COMPLETION MODAL ================= */
-    .floating-modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 1rem;
+    @media (max-width: 1024px) {
+      .pos-layout {
+        grid-template-columns: 1fr;
+      }
     }
-    .floating-card {
+
+    /* Left POS Column */
+    .pos-catalog-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .pos-section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
       background: white;
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 2rem;
-      max-width: 480px;
+      padding: 1.25rem;
+    }
+
+    .quick-action-card {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .quick-action-card:hover {
+      border-color: var(--brand-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      transform: translateY(-2px);
+    }
+
+    .action-card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .icon-mint { background: rgba(0, 229, 163, 0.15); color: #00aa79; }
+    .icon-purple { background: #f3e8ff; color: #9333ea; }
+    .icon-blue { background: #e0f2fe; color: #0284c7; }
+    .icon-coral { background: #fee2e2; color: #ea580c; }
+
+    .action-card-text {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Printer Status Badge */
+    .printer-status-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
       width: 100%;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      margin-top: 0.5rem;
+    }
+
+    .printer-left {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .printer-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+    }
+
+    /* Right POS Column: Cart & Totals */
+    .pos-cart-panel {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .cart-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .cart-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .price-type-select {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+
+    .btn-clear-cart {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-clear-cart:hover {
+      color: #ef4444;
+    }
+
+    /* Customer Tag */
+    .customer-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.65rem 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .customer-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e0f2fe;
+      color: #0284c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+    }
+
+    .customer-name {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .customer-meta {
+      font-size: 0.72rem;
+      color: #64748b;
+    }
+
+    /* Cart Items */
+    .cart-items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem;
+    }
+
+    .cart-item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .item-icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .item-title {
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .item-price-tag {
+      font-size: 0.75rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .wholesale-badge {
+      background: #f3e8ff;
+      color: #7e22ce;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+
+    .qty-box {
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: #f8fafc;
+    }
+
+    /* Cart Totals */
+    .cart-totals {
+      border-top: 1px solid var(--border-light);
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      background: var(--brand-primary);
+      color: #091335;
+      border: none;
+      border-radius: 12px;
+      padding: 0.95rem;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+      box-shadow: 0 4px 14px rgba(0, 229, 163, 0.4);
+    }
+
+    .btn-checkout:hover {
+      background: var(--brand-primary-hover);
+      transform: translateY(-1px);
     }
   </style>
 </head>
@@ -471,17 +837,23 @@
 
   <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar">
-    <div>
+    <div class="sidebar-top">
       <!-- Brand Logo -->
       <a href="#" class="sidebar-brand">
         <span class="sidebar-logo-icon">🐾</span>
         <span class="sidebar-logo-text">oPOS<span>sum</span></span>
       </a>
 
+      <!-- Quick Action: Nueva Venta (+) -->
+      <button class="sidebar-quick-btn" id="btn-quick-new-sale">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nueva Venta
+      </button>
+
       <!-- Navigation Links -->
       <ul class="sidebar-nav">
-        <li class="nav-item">
-          <a href="#">
+        <li class="nav-item" id="nav-inicio">
+          <a href="#pos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
               Inicio
@@ -489,8 +861,8 @@
           </a>
         </li>
 
-        <li class="nav-item active">
-          <a href="#">
+        <li class="nav-item active" id="nav-productos">
+          <a href="#productos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
               Productos
@@ -498,8 +870,8 @@
           </a>
         </li>
 
-        <li class="nav-item">
-          <a href="#">
+        <li class="nav-item" id="nav-compras">
+          <a href="#productos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               Compras
@@ -507,8 +879,8 @@
           </a>
         </li>
 
-        <li class="nav-item">
-          <a href="#">
+        <li class="nav-item" id="nav-ventas">
+          <a href="#pos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
               Ventas
@@ -516,8 +888,8 @@
           </a>
         </li>
 
-        <li class="nav-item">
-          <a href="#">
+        <li class="nav-item" id="nav-estadisticas">
+          <a href="#productos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
               Estadísticas
@@ -526,7 +898,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#">
+          <a href="#productos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
               Usuarios
@@ -536,7 +908,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#">
+          <a href="#pos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
               Caja
@@ -546,7 +918,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#">
+          <a href="#productos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
               Proveedores
@@ -555,7 +927,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#">
+          <a href="#productos">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
               Tutoriales
@@ -565,191 +937,422 @@
       </ul>
     </div>
 
-    <!-- Sidebar Bottom CTA -->
+    <!-- Sidebar Bottom -->
     <div class="sidebar-bottom">
-      <button class="btn-new-sale">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Nueva Venta
-      </button>
+      <div class="sidebar-bottom-icons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
     </div>
   </aside>
 
   <!-- ============ MAIN WRAPPER ============ -->
   <main class="main-wrapper">
     
-    <!-- Content Header -->
-    <div class="content-header">
-      <h1 class="page-title">Productos</h1>
-      <button class="btn-add-product">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Agregar producto
-      </button>
+    <!-- Top Utility Bar with Branch selector -->
+    <div class="top-utility-bar">
+      <div class="branch-badge">
+        <div class="branch-icon-box">🏢</div>
+        <div class="branch-info">
+          <div class="branch-name" id="branch-title">Sucursal Polanco ▾</div>
+          <div class="branch-sub" id="branch-pos-title">Caja Principal</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Products Card -->
-    <div class="products-card">
+    <!-- ========================================================================= -->
+    <!-- LIENZO 1: PRODUCTOS VIEW                                                  -->
+    <!-- ========================================================================= -->
+    <div id="view-productos" class="canvas-view active">
       
-      <!-- Search Bar -->
-      <div class="search-wrapper">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="search-input" placeholder="Filtrar productos">
+      <!-- Content Header -->
+      <div class="content-header">
+        <h1 class="page-title">Productos</h1>
+        <button class="btn-add-product">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Agregar producto
+        </button>
       </div>
 
-      <!-- Table -->
-      <div class="table-responsive">
-        <table class="products-table">
-          <thead>
-            <tr>
-              <th class="checkbox-col"><div class="custom-checkbox"></div></th>
-              <th>Producto</th>
-              <th>Stock</th>
-              <th>Precio</th>
-              <th>Costo</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            <!-- Row 1: Café Nescafé Clásico -->
-            <tr>
-              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-              <td>
-                <div class="product-cell">
-                  <img class="product-thumb" src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=100&auto=format&fit=crop&q=60" alt="Café Nescafé Clásico">
-                  <span class="product-name">Café Nescafé Clásico</span>
-                </div>
-              </td>
-              <td><span class="stock-badge in-stock">33 unidades</span></td>
-              <td class="price-cell">$15</td>
-              <td class="cost-cell">$12</td>
-              <td><a href="#" class="action-edit">Editar</a></td>
-            </tr>
-
-            <!-- Row 2: Pan blanco Bimbo -->
-            <tr>
-              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-              <td>
-                <div class="product-cell">
-                  <img class="product-thumb" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=100&auto=format&fit=crop&q=60" alt="Pan blanco Bimbo">
-                  <span class="product-name">Pan blanco Bimbo</span>
-                </div>
-              </td>
-              <td><span class="stock-badge low-stock"><span class="low-stock-dot"></span> 2 unidades</span></td>
-              <td class="price-cell">$19</td>
-              <td class="cost-cell">$13</td>
-              <td><a href="#" class="action-edit">Editar</a></td>
-            </tr>
-
-            <!-- Row 3: Nesquik Chocolate -->
-            <tr>
-              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-              <td>
-                <div class="product-cell">
-                  <img class="product-thumb" src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=100&auto=format&fit=crop&q=60" alt="Nesquik Chocolate">
-                  <span class="product-name">Nesquik Chocolate</span>
-                </div>
-              </td>
-              <td><span class="stock-badge in-stock">14 unidades</span></td>
-              <td class="price-cell">$20</td>
-              <td class="cost-cell">$14</td>
-              <td><a href="#" class="action-edit">Editar</a></td>
-            </tr>
-
-            <!-- Row 4: Galletas Oreo Chocolate -->
-            <tr>
-              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-              <td>
-                <div class="product-cell">
-                  <img class="product-thumb" src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&auto=format&fit=crop&q=60" alt="Galletas Oreo Chocolate">
-                  <span class="product-name">Galletas Oreo Chocolate</span>
-                </div>
-              </td>
-              <td><span class="stock-badge in-stock">72 unidades</span></td>
-              <td class="price-cell">$12</td>
-              <td class="cost-cell">$10</td>
-              <td><a href="#" class="action-edit">Editar</a></td>
-            </tr>
-
-            <!-- Row 5: Pasta Barilla Fusilli -->
-            <tr>
-              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-              <td>
-                <div class="product-cell">
-                  <img class="product-thumb" src="https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=100&auto=format&fit=crop&q=60" alt="Pasta Barilla Fusilli">
-                  <span class="product-name">Pasta Barilla Fusilli</span>
-                </div>
-              </td>
-              <td><span class="stock-badge in-stock">26 unidades</span></td>
-              <td class="price-cell">$21</td>
-              <td class="cost-cell">$17</td>
-              <td><a href="#" class="action-edit">Editar</a></td>
-            </tr>
-
-            <!-- Row 6: Nutella 650 g -->
-            <tr>
-              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-              <td>
-                <div class="product-cell">
-                  <img class="product-thumb" src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=100&auto=format&fit=crop&q=60" alt="Nutella 650 g">
-                  <span class="product-name">Nutella 650 g</span>
-                </div>
-              </td>
-              <td><span class="stock-badge in-stock">31 unidades</span></td>
-              <td class="price-cell">$18</td>
-              <td class="cost-cell">$10</td>
-              <td><a href="#" class="action-edit">Editar</a></td>
-            </tr>
-
-            <!-- Row 7: Galletas Marías -->
-            <tr>
-              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-              <td>
-                <div class="product-cell">
-                  <img class="product-thumb" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=100&auto=format&fit=crop&q=60" alt="Galletas Marías">
-                  <span class="product-name">Galletas Marías</span>
-                </div>
-              </td>
-              <td><span class="stock-badge in-stock">74 unidades</span></td>
-              <td class="price-cell">$52</td>
-              <td class="cost-cell">$36</td>
-              <td><a href="#" class="action-edit">Editar</a></td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Pagination -->
-      <div class="pagination-wrapper">
-        <a href="#" class="page-nav-btn">← Previous</a>
-        <div class="page-numbers">
-          <a href="#" class="page-num">1</a>
-          <a href="#" class="page-num active">2</a>
-          <a href="#" class="page-num">3</a>
-          <span class="page-dots">...</span>
-          <a href="#" class="page-num">8</a>
-          <a href="#" class="page-num">9</a>
-          <a href="#" class="page-num">10</a>
+      <!-- Products Card -->
+      <div class="products-card">
+        
+        <!-- Search Bar -->
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" placeholder="Filtrar productos">
         </div>
-        <a href="#" class="page-nav-btn">Next →</a>
-      </div>
 
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th class="checkbox-col"><div class="custom-checkbox"></div></th>
+                <th>Producto</th>
+                <th>Stock</th>
+                <th>Precio</th>
+                <th>Costo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              
+              <!-- Row 1: Café Nescafé Clásico -->
+              <tr>
+                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+                <td>
+                  <div class="product-cell">
+                    <img class="product-thumb" src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=100&auto=format&fit=crop&q=60" alt="Café Nescafé Clásico">
+                    <span class="product-name">Café Nescafé Clásico</span>
+                  </div>
+                </td>
+                <td><span class="stock-badge in-stock">33 unidades</span></td>
+                <td class="price-cell">$15</td>
+                <td class="cost-cell">$12</td>
+                <td><a href="#" class="action-edit">Editar</a></td>
+              </tr>
+
+              <!-- Row 2: Pan blanco Bimbo -->
+              <tr>
+                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+                <td>
+                  <div class="product-cell">
+                    <img class="product-thumb" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=100&auto=format&fit=crop&q=60" alt="Pan blanco Bimbo">
+                    <span class="product-name">Pan blanco Bimbo</span>
+                  </div>
+                </td>
+                <td><span class="stock-badge low-stock"><span class="low-stock-dot"></span> 2 unidades</span></td>
+                <td class="price-cell">$19</td>
+                <td class="cost-cell">$13</td>
+                <td><a href="#" class="action-edit">Editar</a></td>
+              </tr>
+
+              <!-- Row 3: Nesquik Chocolate -->
+              <tr>
+                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+                <td>
+                  <div class="product-cell">
+                    <img class="product-thumb" src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=100&auto=format&fit=crop&q=60" alt="Nesquik Chocolate">
+                    <span class="product-name">Nesquik Chocolate</span>
+                  </div>
+                </td>
+                <td><span class="stock-badge in-stock">14 unidades</span></td>
+                <td class="price-cell">$20</td>
+                <td class="cost-cell">$14</td>
+                <td><a href="#" class="action-edit">Editar</a></td>
+              </tr>
+
+              <!-- Row 4: Galletas Oreo Chocolate -->
+              <tr>
+                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+                <td>
+                  <div class="product-cell">
+                    <img class="product-thumb" src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&auto=format&fit=crop&q=60" alt="Galletas Oreo Chocolate">
+                    <span class="product-name">Galletas Oreo Chocolate</span>
+                  </div>
+                </td>
+                <td><span class="stock-badge in-stock">72 unidades</span></td>
+                <td class="price-cell">$12</td>
+                <td class="cost-cell">$10</td>
+                <td><a href="#" class="action-edit">Editar</a></td>
+              </tr>
+
+              <!-- Row 5: Pasta Barilla Fusilli -->
+              <tr>
+                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+                <td>
+                  <div class="product-cell">
+                    <img class="product-thumb" src="https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=100&auto=format&fit=crop&q=60" alt="Pasta Barilla Fusilli">
+                    <span class="product-name">Pasta Barilla Fusilli</span>
+                  </div>
+                </td>
+                <td><span class="stock-badge in-stock">26 unidades</span></td>
+                <td class="price-cell">$21</td>
+                <td class="cost-cell">$17</td>
+                <td><a href="#" class="action-edit">Editar</a></td>
+              </tr>
+
+              <!-- Row 6: Nutella 650 g -->
+              <tr>
+                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+                <td>
+                  <div class="product-cell">
+                    <img class="product-thumb" src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=100&auto=format&fit=crop&q=60" alt="Nutella 650 g">
+                    <span class="product-name">Nutella 650 g</span>
+                  </div>
+                </td>
+                <td><span class="stock-badge in-stock">31 unidades</span></td>
+                <td class="price-cell">$18</td>
+                <td class="cost-cell">$10</td>
+                <td><a href="#" class="action-edit">Editar</a></td>
+              </tr>
+
+              <!-- Row 7: Galletas Marías -->
+              <tr>
+                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+                <td>
+                  <div class="product-cell">
+                    <img class="product-thumb" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=100&auto=format&fit=crop&q=60" alt="Galletas Marías">
+                    <span class="product-name">Galletas Marías</span>
+                  </div>
+                </td>
+                <td><span class="stock-badge in-stock">74 unidades</span></td>
+                <td class="price-cell">$52</td>
+                <td class="cost-cell">$36</td>
+                <td><a href="#" class="action-edit">Editar</a></td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-wrapper">
+          <a href="#" class="page-nav-btn">← Previous</a>
+          <div class="page-numbers">
+            <a href="#" class="page-num">1</a>
+            <a href="#" class="page-num active">2</a>
+            <a href="#" class="page-num">3</a>
+            <span class="page-dots">...</span>
+            <a href="#" class="page-num">8</a>
+            <a href="#" class="page-num">9</a>
+            <a href="#" class="page-num">10</a>
+          </div>
+          <a href="#" class="page-nav-btn">Next →</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- LIENZO 2: PUNTO DE VENTA (NUEVA VENTA)                                    -->
+    <!-- ========================================================================= -->
+    <div id="view-pos" class="canvas-view">
+      <div class="pos-layout">
+        
+        <!-- Left: Search & Quick Actions -->
+        <div class="pos-catalog-panel">
+          <h2 class="pos-section-title">Buscar Productos</h2>
+          
+          <div class="search-wrapper" style="margin-bottom: 0;">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="search-input" placeholder="Buscar por nombre, SKU o código de barras">
+          </div>
+
+          <!-- Quick Action 2x2 Cards -->
+          <div class="quick-actions-grid">
+            
+            <div class="quick-action-card">
+              <div class="action-card-icon icon-mint">➕</div>
+              <span class="action-card-text">Crear Producto</span>
+            </div>
+
+            <div class="quick-action-card">
+              <div class="action-card-icon icon-purple">🏷️</div>
+              <span class="action-card-text">Añadir Descuento</span>
+            </div>
+
+            <div class="quick-action-card">
+              <div class="action-card-icon icon-blue">🧮</div>
+              <span class="action-card-text">Entrada Manual</span>
+            </div>
+
+            <div class="quick-action-card">
+              <div class="action-card-icon icon-coral">👤+</div>
+              <span class="action-card-text">Añadir Cliente</span>
+            </div>
+
+          </div>
+
+          <!-- Thermal Printer Status -->
+          <div class="printer-status-box">
+            <div class="printer-left">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+              <span>Impresora Térmica</span>
+            </div>
+            <span class="printer-status-pill">
+              <span style="width: 6px; height: 6px; background: #15803d; border-radius: 50%; display: inline-block;"></span>
+              Conectada
+            </span>
+          </div>
+
+        </div>
+
+        <!-- Right: Current Sale / Cart Summary -->
+        <div class="pos-cart-panel">
+          
+          <div class="cart-header">
+            <h2 class="cart-title">Venta</h2>
+            <div class="cart-header-actions">
+              <div class="price-type-select">🏷️ Precio Público ▾</div>
+              <button class="btn-clear-cart">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                Borrar todo
+              </button>
+            </div>
+          </div>
+
+          <!-- Customer info -->
+          <div class="customer-pill">
+            <div class="customer-avatar">👤</div>
+            <div>
+              <div class="customer-name">Juan Perez</div>
+              <div class="customer-meta">5 compras</div>
+            </div>
+          </div>
+
+          <!-- Cart items list -->
+          <div class="cart-items-list">
+            
+            <!-- Item 1 -->
+            <div class="cart-item">
+              <div class="cart-item-left">
+                <div class="item-icon-box" style="background:#f1f5f9;">👕</div>
+                <div>
+                  <div class="item-title">Remera Negra</div>
+                  <div class="item-price-tag">
+                    $30.00 <span class="wholesale-badge">M Mayoreo</span>
+                  </div>
+                </div>
+              </div>
+              <div class="qty-box">2</div>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="cart-item">
+              <div class="cart-item-left">
+                <div class="item-icon-box" style="background:#e0f2fe;">👕</div>
+                <div>
+                  <div class="item-title">Remera Azul</div>
+                  <div class="item-price-tag">$75.00</div>
+                </div>
+              </div>
+              <div class="qty-box">2</div>
+            </div>
+
+            <!-- Item 3: Discount -->
+            <div class="cart-item">
+              <div class="cart-item-left">
+                <div class="item-icon-box" style="background:#f3e8ff;">🏷️</div>
+                <div>
+                  <div class="item-title">Descuento</div>
+                  <div class="item-price-tag" style="color:#9333ea;">Loyalty20</div>
+                </div>
+              </div>
+              <div style="font-size:0.85rem; font-weight:700; color:#9333ea;">- $20.00</div>
+            </div>
+
+          </div>
+
+          <!-- Totals -->
+          <div class="cart-totals">
+            <div class="total-row">
+              <span>Subtotal</span>
+              <span>$210.00</span>
+            </div>
+            <div class="total-row" style="color:#9333ea;">
+              <span>Descuentos</span>
+              <span>- $30.00</span>
+            </div>
+          </div>
+
+          <!-- Big Checkout Button in Possum Mint -->
+          <button class="btn-checkout">
+            Cobrar $180
+          </button>
+
+        </div>
+
+      </div>
     </div>
 
   </main>
 
-  <!-- Multi-tenant Verification Background Session Script -->
+  <!-- ================= SCRIPT & NAVIGATION CONTROLLER ================= -->
   <script type="module">
     import { getSupabase } from '../js/supabase-client.js';
     import { tenantManager } from '../js/tenant-context.js';
 
     const supabase = getSupabase();
 
+    // Elements
+    const viewProductos = document.getElementById('view-productos');
+    const viewPos = document.getElementById('view-pos');
+    
+    const navProductos = document.getElementById('nav-productos');
+    const navVentas = document.getElementById('nav-ventas');
+    const navInicio = document.getElementById('nav-inicio');
+    const btnQuickNewSale = document.getElementById('btn-quick-new-sale');
+
+    function switchView(viewName) {
+      if (viewName === 'pos') {
+        viewProductos.classList.remove('active');
+        viewPos.classList.add('active');
+
+        navProductos.classList.remove('active');
+        navVentas.classList.add('active');
+        window.location.hash = 'pos';
+      } else {
+        viewPos.classList.remove('active');
+        viewProductos.classList.add('active');
+
+        navVentas.classList.remove('active');
+        navProductos.classList.add('active');
+        window.location.hash = 'productos';
+      }
+    }
+
+    // Navigation events
+    navProductos.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchView('productos');
+    });
+
+    navVentas.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchView('pos');
+    });
+
+    navInicio.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchView('pos');
+    });
+
+    btnQuickNewSale.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchView('pos');
+    });
+
+    // Check URL hash on load
+    window.addEventListener('load', () => {
+      if (window.location.hash === '#pos') {
+        switchView('pos');
+      } else {
+        switchView('productos');
+      }
+    });
+
+    window.addEventListener('hashchange', () => {
+      if (window.location.hash === '#pos') {
+        switchView('pos');
+      } else {
+        switchView('productos');
+      }
+    });
+
+    // Initialize tenant context
     async function initSession() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        // If not logged in, redirect to auth
-        // window.location.href = 'auth.html';
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const context = await tenantManager.init();
+          if (context.tenant) {
+            document.getElementById('branch-title').textContent = `${context.tenant.name} ▾`;
+          }
+        }
+      } catch (err) {
+        console.log('Session context loaded in canvas mode');
       }
     }
     initSession();

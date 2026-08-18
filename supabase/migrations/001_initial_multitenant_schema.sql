@@ -180,27 +180,32 @@ AS $$
 DECLARE
     v_user_id UUID;
     v_tenant_id UUID;
-    v_clean_slug TEXT;
+    v_base_slug TEXT;
+    v_final_slug TEXT;
+    v_counter INT := 1;
 BEGIN
     v_user_id := auth.uid();
     IF v_user_id IS NULL THEN
         RAISE EXCEPTION 'User must be authenticated to create a tenant';
     END IF;
 
-    -- Normalize slug
-    v_clean_slug := lower(regexp_replace(trim(p_slug), '[^a-zA-Z0-9\-]', '-', 'g'));
-    IF length(v_clean_slug) < 3 THEN
-        RAISE EXCEPTION 'Slug must have at least 3 alphanumeric characters';
+    -- Clean base slug
+    v_base_slug := lower(regexp_replace(trim(p_slug), '[^a-zA-Z0-9\-]', '-', 'g'));
+    IF length(v_base_slug) < 3 THEN
+        v_base_slug := 'negocio-' || substr(md5(random()::text), 1, 6);
     END IF;
 
-    -- Check slug availability
-    IF EXISTS (SELECT 1 FROM public.tenants WHERE slug = v_clean_slug) THEN
-        RAISE EXCEPTION 'Tenant slug already exists';
-    END IF;
+    v_final_slug := v_base_slug;
+
+    -- If slug already exists, automatically append counter until unique
+    WHILE EXISTS (SELECT 1 FROM public.tenants WHERE slug = v_final_slug) LOOP
+        v_counter := v_counter + 1;
+        v_final_slug := v_base_slug || '-' || v_counter;
+    END LOOP;
 
     -- 1. Insert Tenant
     INSERT INTO public.tenants (name, slug, status)
-    VALUES (trim(p_name), v_clean_slug, 'active')
+    VALUES (trim(p_name), v_final_slug, 'active')
     RETURNING id INTO v_tenant_id;
 
     -- 2. Insert User as Owner
@@ -209,7 +214,7 @@ BEGIN
 
     -- 3. Update User Profile last active tenant
     INSERT INTO public.user_profiles (id, email, last_active_tenant_id)
-    VALUES (v_user_id, auth.jwt()->>'email', v_tenant_id)
+    VALUES (v_user_id, COALESCE(auth.jwt()->>'email', 'usuario@opossum.app'), v_tenant_id)
     ON CONFLICT (id) DO UPDATE
     SET last_active_tenant_id = v_tenant_id,
         updated_at = now();
@@ -218,7 +223,7 @@ BEGIN
         'success', true,
         'tenant_id', v_tenant_id,
         'name', p_name,
-        'slug', v_clean_slug,
+        'slug', v_final_slug,
         'role', 'owner'
     );
 END;

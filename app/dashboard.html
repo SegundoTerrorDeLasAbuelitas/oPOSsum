@@ -3,248 +3,447 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard — oPOSsum Multi-Tenant</title>
+  <title>Productos — oPOSsum</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css">
   
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     :root {
-      --current-tenant-color: #00A4AE;
+      --sidebar-bg: #131b26;
+      --sidebar-text: #94a3b8;
+      --sidebar-hover: #1e293b;
+      --sidebar-active-bg: rgba(0, 164, 174, 0.14);
+      --sidebar-active-text: #00A4AE;
+      
+      --brand-primary: #00A4AE;
+      --brand-primary-hover: #008b94;
+      
+      --bg-canvas: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --border-light: #f1f5f9;
+      
+      --stock-green-bg: #d1fae5;
+      --stock-green-text: #059669;
+      --stock-red-bg: #fee2e2;
+      --stock-red-text: #dc2626;
     }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: #f8fafc;
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-canvas);
+      color: var(--text-main);
       min-height: 100vh;
-      color: var(--navy-900);
+      display: flex;
+    }
+
+    /* ================= SIDEBAR ================= */
+    .sidebar {
+      width: 240px;
+      background-color: var(--sidebar-bg);
       display: flex;
       flex-direction: column;
-    }
-    .topbar {
-      background: white;
-      border-bottom: 1px solid var(--gray-200);
-      padding: var(--space-3) var(--space-6);
-      display: flex;
       justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      padding: 1.5rem 1rem;
+      min-height: 100vh;
+      flex-shrink: 0;
     }
-    .topbar-left {
+
+    .sidebar-brand {
       display: flex;
       align-items: center;
-      gap: var(--space-4);
-    }
-    .brand-logo {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-size: var(--font-size-xl);
-      font-weight: 800;
-      color: var(--navy-900);
+      gap: 0.6rem;
+      padding: 0.25rem 0.75rem 1.75rem;
       text-decoration: none;
     }
-    .tenant-selector-wrapper {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-      background: var(--gray-100);
-      padding: 4px 12px;
-      border-radius: var(--radius-full);
-      border: 1px solid var(--gray-200);
-    }
-    .tenant-select {
-      background: transparent;
-      border: none;
-      font-size: var(--font-size-sm);
-      font-weight: 700;
-      color: var(--navy-900);
-      outline: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-    .role-badge {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: var(--radius-full);
-      background: #e0f2fe;
-      color: #0369a1;
-    }
-    .topbar-right {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-    }
-    .user-pill {
-      font-size: var(--font-size-xs);
-      font-weight: 600;
-      color: var(--gray-600);
-    }
-    .main-content {
-      flex: 1;
-      padding: var(--space-8) var(--space-6);
-      max-width: 1100px;
-      margin: 0 auto;
-      width: 100%;
-    }
-    .dashboard-header {
-      margin-bottom: var(--space-8);
-    }
-    .dashboard-title {
-      font-size: var(--font-size-3xl);
-      font-weight: 800;
-      color: var(--navy-900);
-      margin-bottom: var(--space-2);
-    }
-    .dashboard-subtitle {
-      font-size: var(--font-size-base);
-      color: var(--gray-500);
-    }
-    .grid-cards {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
-      margin-bottom: var(--space-8);
-    }
-    @media (min-width: 768px) {
-      .grid-cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    .dash-card {
-      background: white;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius-xl);
-      padding: var(--space-6);
-      box-shadow: var(--shadow-sm);
-    }
-    .dash-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: var(--space-4);
-      padding-bottom: var(--space-3);
-      border-bottom: 1px solid var(--gray-100);
-    }
-    .dash-card-title {
-      font-size: var(--font-size-base);
-      font-weight: 700;
-      color: var(--navy-900);
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
-    }
-    .tag-status {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: var(--radius-full);
-      background: #dcfce7;
-      color: #15803d;
-    }
-    .info-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      font-size: var(--font-size-sm);
-    }
-    .info-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--space-2) 0;
-      border-bottom: 1px solid var(--gray-100);
-    }
-    .info-item:last-child {
-      border-bottom: none;
-    }
-    .info-label {
-      color: var(--gray-500);
-      font-weight: 500;
-    }
-    .info-val {
-      font-weight: 700;
-      color: var(--navy-900);
-    }
-    .color-preview-box {
-      width: 24px;
-      height: 24px;
-      border-radius: var(--radius-md);
-      border: 1px solid var(--gray-300);
-      display: inline-block;
-      vertical-align: middle;
-      margin-left: 6px;
-    }
-    .setting-override-control {
-      margin-top: var(--space-4);
-      padding: var(--space-4);
-      background: var(--gray-50);
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--gray-200);
-    }
-    .btn-action {
-      padding: 8px 16px;
-      font-size: var(--font-size-xs);
-      font-weight: 700;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      border: none;
-      transition: all var(--transition-fast);
-    }
-    .btn-action-primary {
-      background: var(--brand-500);
-      color: white;
-    }
-    .btn-action-primary:hover {
-      background: var(--brand-600);
-    }
-    .btn-action-secondary {
-      background: white;
-      color: var(--gray-700);
-      border: 1px solid var(--gray-300);
-    }
-    .btn-action-secondary:hover {
-      background: var(--gray-100);
-    }
-    .rls-banner {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
-      border-radius: var(--radius-xl);
-      padding: var(--space-4) var(--space-6);
-      display: flex;
-      align-items: center;
-      gap: var(--space-4);
-      margin-bottom: var(--space-6);
-    }
-    .rls-icon {
-      width: 36px;
-      height: 36px;
-      background: #22c55e;
-      color: white;
-      border-radius: var(--radius-full);
+
+    .sidebar-logo-icon {
+      color: var(--brand-primary);
+      font-size: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-    .rls-text h4 {
-      font-size: var(--font-size-sm);
-      font-weight: 800;
-      color: #15803d;
-      margin-bottom: 2px;
-    }
-    .rls-text p {
-      font-size: var(--font-size-xs);
-      color: #166534;
     }
 
-    /* Floating Required Info Completion Modal */
+    .sidebar-logo-text {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+    }
+
+    .sidebar-logo-text span {
+      color: var(--brand-primary);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      flex: 1;
+    }
+
+    .nav-item a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      color: var(--sidebar-text);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+
+    .nav-item a:hover {
+      background-color: var(--sidebar-hover);
+      color: #f1f5f9;
+    }
+
+    .nav-item.active a {
+      background-color: var(--sidebar-active-bg);
+      color: var(--sidebar-active-text);
+      font-weight: 700;
+    }
+
+    .nav-item-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-item svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
+    }
+
+    .chevron-icon {
+      width: 14px;
+      height: 14px;
+      stroke: var(--sidebar-text);
+      opacity: 0.7;
+    }
+
+    .sidebar-bottom {
+      padding-top: 1rem;
+    }
+
+    .btn-new-sale {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .btn-new-sale:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    /* ================= MAIN CONTENT ================= */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 2.5rem;
+      max-width: 1400px;
+    }
+
+    .content-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--text-main);
+      letter-spacing: -0.02em;
+    }
+
+    .btn-add-product {
+      background-color: var(--brand-primary);
+      color: #ffffff;
+      border: none;
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background-color 0.15s ease, transform 0.1s ease;
+    }
+
+    .btn-add-product:hover {
+      background-color: var(--brand-primary-hover);
+    }
+
+    /* ================= PRODUCTS CARD & TABLE ================= */
+    .products-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      padding: 1.5rem;
+    }
+
+    .search-wrapper {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 0.75rem 1rem 0.75rem 2.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(0, 164, 174, 0.12);
+    }
+
+    .search-input::placeholder {
+      color: #94a3b8;
+    }
+
+    /* Table */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    .products-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .products-table th {
+      padding: 0.85rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .products-table td {
+      padding: 0.95rem 1rem;
+      font-size: 0.88rem;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+
+    .products-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .checkbox-col {
+      width: 40px;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 4px;
+      display: inline-block;
+      cursor: pointer;
+      vertical-align: middle;
+      background: white;
+    }
+
+    .product-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .product-thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      border: 1px solid #f1f5f9;
+      object-fit: contain;
+      background: #fafafa;
+      padding: 2px;
+      flex-shrink: 0;
+    }
+
+    .product-name {
+      font-weight: 600;
+      color: #1e293b;
+      font-size: 0.88rem;
+    }
+
+    /* Stock Pills */
+    .stock-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .stock-badge.in-stock {
+      background-color: var(--stock-green-bg);
+      color: var(--stock-green-text);
+    }
+
+    .stock-badge.low-stock {
+      background-color: var(--stock-red-bg);
+      color: var(--stock-red-text);
+    }
+
+    .low-stock-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--stock-red-text);
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .price-cell, .cost-cell {
+      font-weight: 500;
+      color: #334155;
+    }
+
+    .action-edit {
+      color: #0284c7;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+
+    .action-edit:hover {
+      text-decoration: underline;
+    }
+
+    /* ================= PAGINATION ================= */
+    .pagination-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.5rem;
+      margin-top: 0.5rem;
+      border-top: 1px solid var(--border-light);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .page-nav-btn {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+    }
+
+    .page-nav-btn:hover {
+      color: var(--text-main);
+    }
+
+    .page-numbers {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .page-num {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .page-num:hover {
+      background-color: var(--border-light);
+      color: var(--text-main);
+    }
+
+    .page-num.active {
+      color: var(--brand-primary);
+      position: relative;
+      font-weight: 800;
+    }
+
+    .page-num.active::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 6px;
+      right: 6px;
+      height: 2px;
+      background-color: var(--brand-primary);
+      border-radius: 2px;
+    }
+
+    .page-dots {
+      color: var(--text-muted);
+      padding: 0 4px;
+    }
+
+    /* ================= FLOATING COMPLETION MODAL ================= */
     .floating-modal-overlay {
       position: fixed;
       inset: 0;
@@ -254,373 +453,306 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      padding: var(--space-4);
-      animation: fadeIn 0.25s ease-out;
+      padding: 1rem;
     }
     .floating-card {
       background: white;
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius-2xl);
-      padding: var(--space-8);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
       max-width: 480px;
       width: 100%;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      position: relative;
-      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .floating-header {
-      display: flex;
-      align-items: center;
-      gap: var(--space-3);
-      margin-bottom: var(--space-4);
-    }
-    .floating-icon {
-      width: 44px;
-      height: 44px;
-      background: #fef3c7;
-      color: #d97706;
-      border-radius: var(--radius-xl);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-    .floating-title {
-      font-size: var(--font-size-lg);
-      font-weight: 800;
-      color: var(--navy-900);
-      line-height: 1.3;
-    }
-    .floating-desc {
-      font-size: var(--font-size-sm);
-      color: var(--gray-600);
-      margin-bottom: var(--space-6);
-      line-height: 1.5;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px) scale(0.96); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
-  <header class="topbar">
-    <div class="topbar-left">
-      <a href="../" class="brand-logo">
-        <span>🐾 oPOS<span style="color:var(--brand-500);">sum</span></span>
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div>
+      <!-- Brand Logo -->
+      <a href="#" class="sidebar-brand">
+        <span class="sidebar-logo-icon">🐾</span>
+        <span class="sidebar-logo-text">oPOS<span>sum</span></span>
       </a>
 
-      <!-- Tenant Selector -->
-      <div class="tenant-selector-wrapper">
-        <span>🏢</span>
-        <select id="tenant-select" class="tenant-select" aria-label="Seleccionar Negocio">
-          <option value="">Cargando negocio...</option>
-        </select>
-        <span id="role-badge" class="role-badge">Owner</span>
-      </div>
-    </div>
-
-    <div class="topbar-right">
-      <a href="onboarding.html" class="btn-action btn-action-secondary">+ Nuevo Negocio</a>
-      <span class="user-pill" id="user-email">usuario@correo.com</span>
-      <button class="btn-action btn-action-secondary" id="btn-logout">Cerrar Sesión</button>
-    </div>
-  </header>
-
-  <!-- Main Container -->
-  <main class="main-content">
-    
-    <div class="dashboard-header">
-      <h1 class="dashboard-title" id="welcome-title">Bienvenido a tu POS</h1>
-      <p class="dashboard-subtitle">Arquitectura Multi-Tenant y Seguridad RLS activa en Supabase.</p>
-    </div>
-
-    <!-- Security RLS Active Banner -->
-    <div class="rls-banner">
-      <div class="rls-icon">🛡️</div>
-      <div class="rls-text">
-        <h4>Aislamiento Estructural por Row Level Security (RLS)</h4>
-        <p>Cualquier consulta o mutación está aislada exclusivamente al Tenant ID <code id="active-tenant-id-badge" style="font-weight:700;">...</code> por el motor PostgreSQL.</p>
-      </div>
-    </div>
-
-    <!-- Cards Grid -->
-    <div class="grid-cards">
-      
-      <!-- Card 1: Tenant Identity -->
-      <div class="dash-card">
-        <div class="dash-card-header">
-          <div class="dash-card-title">🏢 Información del Tenant Activo</div>
-          <span class="tag-status">Aislado</span>
-        </div>
-        <div class="info-list">
-          <div class="info-item">
-            <span class="info-label">Nombre Comercial:</span>
-            <span class="info-val" id="info-tenant-name">-</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Tipo de Negocio:</span>
-            <span class="info-val" id="info-tenant-type">-</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Identificador (Slug):</span>
-            <span class="info-val" id="info-tenant-slug">-</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">ID Único (UUID):</span>
-            <span class="info-val" id="info-tenant-id" style="font-family:monospace; font-size:12px;">-</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Tu Rol en este Tenant:</span>
-            <span class="info-val" id="info-tenant-role">-</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Settings Hierarchy (Global Default vs Tenant Specific Override) -->
-      <div class="dash-card">
-        <div class="dash-card-header">
-          <div class="dash-card-title">⚙️ Configuración (Default Global vs Override)</div>
-          <span class="tag-status" id="override-status-tag">Default Global</span>
-        </div>
-        <div class="info-list">
-          <div class="info-item">
-            <span class="info-label">Nombre del Sistema (Global):</span>
-            <span class="info-val" id="setting-app-name">oPOSsum</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Moneda Operativa (Global):</span>
-            <span class="info-val" id="setting-currency">MXN</span>
-          </div>
-          <div class="info-item">
-            <span class="info-label">Color Primario Efectivo:</span>
-            <span class="info-val">
-              <span id="setting-color-val">#00A4AE</span>
-              <span class="color-preview-box" id="color-box" style="background:#00A4AE;"></span>
+      <!-- Navigation Links -->
+      <ul class="sidebar-nav">
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Inicio
             </span>
-          </div>
-        </div>
+          </a>
+        </li>
 
-        <!-- Setting Override Playground -->
-        <div class="setting-override-control">
-          <div style="font-size:12px; font-weight:700; color:var(--gray-700); margin-bottom:8px;">
-            Probar Override para este Negocio:
-          </div>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <input type="color" id="override-color-picker" value="#00A4AE" style="width:40px; height:32px; border:none; cursor:pointer; border-radius:4px;">
-            <button class="btn-action btn-action-primary" id="btn-save-override">Guardar Color para este Tenant</button>
-            <button class="btn-action btn-action-secondary" id="btn-reset-override">Restablecer a Global</button>
-          </div>
+        <li class="nav-item active">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+              Productos
+            </span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Compras
+            </span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Ventas
+            </span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              Estadísticas
+            </span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Usuarios
+            </span>
+            <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              Caja
+            </span>
+            <svg class="chevron-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="6 9 12 15 18 9"/></svg>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Proveedores
+            </span>
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a href="#">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+              Tutoriales
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Sidebar Bottom CTA -->
+    <div class="sidebar-bottom">
+      <button class="btn-new-sale">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nueva Venta
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN WRAPPER ============ -->
+  <main class="main-wrapper">
+    
+    <!-- Content Header -->
+    <div class="content-header">
+      <h1 class="page-title">Productos</h1>
+      <button class="btn-add-product">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Agregar producto
+      </button>
+    </div>
+
+    <!-- Products Card -->
+    <div class="products-card">
+      
+      <!-- Search Bar -->
+      <div class="search-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" placeholder="Filtrar productos">
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="products-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col"><div class="custom-checkbox"></div></th>
+              <th>Producto</th>
+              <th>Stock</th>
+              <th>Precio</th>
+              <th>Costo</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+            <!-- Row 1: Café Nescafé Clásico -->
+            <tr>
+              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+              <td>
+                <div class="product-cell">
+                  <img class="product-thumb" src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=100&auto=format&fit=crop&q=60" alt="Café Nescafé Clásico">
+                  <span class="product-name">Café Nescafé Clásico</span>
+                </div>
+              </td>
+              <td><span class="stock-badge in-stock">33 unidades</span></td>
+              <td class="price-cell">$15</td>
+              <td class="cost-cell">$12</td>
+              <td><a href="#" class="action-edit">Editar</a></td>
+            </tr>
+
+            <!-- Row 2: Pan blanco Bimbo -->
+            <tr>
+              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+              <td>
+                <div class="product-cell">
+                  <img class="product-thumb" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=100&auto=format&fit=crop&q=60" alt="Pan blanco Bimbo">
+                  <span class="product-name">Pan blanco Bimbo</span>
+                </div>
+              </td>
+              <td><span class="stock-badge low-stock"><span class="low-stock-dot"></span> 2 unidades</span></td>
+              <td class="price-cell">$19</td>
+              <td class="cost-cell">$13</td>
+              <td><a href="#" class="action-edit">Editar</a></td>
+            </tr>
+
+            <!-- Row 3: Nesquik Chocolate -->
+            <tr>
+              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+              <td>
+                <div class="product-cell">
+                  <img class="product-thumb" src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=100&auto=format&fit=crop&q=60" alt="Nesquik Chocolate">
+                  <span class="product-name">Nesquik Chocolate</span>
+                </div>
+              </td>
+              <td><span class="stock-badge in-stock">14 unidades</span></td>
+              <td class="price-cell">$20</td>
+              <td class="cost-cell">$14</td>
+              <td><a href="#" class="action-edit">Editar</a></td>
+            </tr>
+
+            <!-- Row 4: Galletas Oreo Chocolate -->
+            <tr>
+              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+              <td>
+                <div class="product-cell">
+                  <img class="product-thumb" src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&auto=format&fit=crop&q=60" alt="Galletas Oreo Chocolate">
+                  <span class="product-name">Galletas Oreo Chocolate</span>
+                </div>
+              </td>
+              <td><span class="stock-badge in-stock">72 unidades</span></td>
+              <td class="price-cell">$12</td>
+              <td class="cost-cell">$10</td>
+              <td><a href="#" class="action-edit">Editar</a></td>
+            </tr>
+
+            <!-- Row 5: Pasta Barilla Fusilli -->
+            <tr>
+              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+              <td>
+                <div class="product-cell">
+                  <img class="product-thumb" src="https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=100&auto=format&fit=crop&q=60" alt="Pasta Barilla Fusilli">
+                  <span class="product-name">Pasta Barilla Fusilli</span>
+                </div>
+              </td>
+              <td><span class="stock-badge in-stock">26 unidades</span></td>
+              <td class="price-cell">$21</td>
+              <td class="cost-cell">$17</td>
+              <td><a href="#" class="action-edit">Editar</a></td>
+            </tr>
+
+            <!-- Row 6: Nutella 650 g -->
+            <tr>
+              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+              <td>
+                <div class="product-cell">
+                  <img class="product-thumb" src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=100&auto=format&fit=crop&q=60" alt="Nutella 650 g">
+                  <span class="product-name">Nutella 650 g</span>
+                </div>
+              </td>
+              <td><span class="stock-badge in-stock">31 unidades</span></td>
+              <td class="price-cell">$18</td>
+              <td class="cost-cell">$10</td>
+              <td><a href="#" class="action-edit">Editar</a></td>
+            </tr>
+
+            <!-- Row 7: Galletas Marías -->
+            <tr>
+              <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+              <td>
+                <div class="product-cell">
+                  <img class="product-thumb" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=100&auto=format&fit=crop&q=60" alt="Galletas Marías">
+                  <span class="product-name">Galletas Marías</span>
+                </div>
+              </td>
+              <td><span class="stock-badge in-stock">74 unidades</span></td>
+              <td class="price-cell">$52</td>
+              <td class="cost-cell">$36</td>
+              <td><a href="#" class="action-edit">Editar</a></td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-wrapper">
+        <a href="#" class="page-nav-btn">← Previous</a>
+        <div class="page-numbers">
+          <a href="#" class="page-num">1</a>
+          <a href="#" class="page-num active">2</a>
+          <a href="#" class="page-num">3</a>
+          <span class="page-dots">...</span>
+          <a href="#" class="page-num">8</a>
+          <a href="#" class="page-num">9</a>
+          <a href="#" class="page-num">10</a>
         </div>
+        <a href="#" class="page-nav-btn">Next →</a>
       </div>
 
     </div>
 
   </main>
 
-  <!-- Floating Missing Info Card Modal -->
-  <div id="missing-info-modal" class="floating-modal-overlay" style="display: none;">
-    <div class="floating-card">
-      <div class="floating-header">
-        <div class="floating-icon">📝</div>
-        <div>
-          <h3 class="floating-title">Completa los datos de tu negocio</h3>
-          <span style="font-size: 11px; font-weight: 700; color: #d97706; text-transform: uppercase;">Información Requerida</span>
-        </div>
-      </div>
-      <p class="floating-desc">Para optimizar tu punto de venta, por favor indica el tipo de negocio o comercio que opera tu instancia.</p>
-
-      <form id="missing-info-form">
-        <div style="margin-bottom: var(--space-4); text-align: left;">
-          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--gray-700); margin-bottom: 6px;" for="modal-biz-type">
-            Tipo de Negocio *
-          </label>
-          <select id="modal-biz-type" required class="form-input" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-lg); border: 1px solid var(--gray-300); font-family: inherit; font-size: 14px; cursor: pointer; background: white;">
-            <option value="" disabled selected>Selecciona tu tipo de negocio...</option>
-            <option value="Abarrotes y Minisúper">🏪 Abarrotes, Minisúper y Tiendita</option>
-            <option value="Ropa y Calzado">👗 Ropa, Calzado y Boutiques</option>
-            <option value="Restaurante y Cafetería">☕ Cafetería, Restaurante o Bar</option>
-            <option value="Farmacia">💊 Farmacia y Salud</option>
-            <option value="Ferretería">🔨 Ferretería y Materiales</option>
-            <option value="Electrónica y Celulares">📱 Electrónica, Celulares y Cómputo</option>
-            <option value="Belleza y Spa">💈 Barbería, Salón de Belleza y Spa</option>
-            <option value="Papelería">📚 Papelería y Regalos</option>
-            <option value="Panadería y Repostería">🥐 Panadería y Repostería</option>
-            <option value="Servicios Profesionales">💼 Servicios Profesionales</option>
-            <option value="Otro Comercio">📦 Otro Tipo de Negocio / Comercio</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn-primary" id="btn-save-missing-info" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 700; border-radius: var(--radius-lg); margin-top: 8px;">
-          Guardar y Continuar
-        </button>
-      </form>
-    </div>
-  </div>
-
+  <!-- Multi-tenant Verification Background Session Script -->
   <script type="module">
     import { getSupabase } from '../js/supabase-client.js';
     import { tenantManager } from '../js/tenant-context.js';
 
     const supabase = getSupabase();
 
-    async function loadDashboard() {
+    async function initSession() {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) {
-        window.location.href = 'auth.html';
-        return;
-      }
-
-      const context = await tenantManager.init();
-      if (context.needsOnboarding || !context.tenant) {
-        window.location.href = 'onboarding.html';
-        return;
-      }
-
-      // Populate user info
-      document.getElementById('user-email').textContent = context.user.email;
-      document.getElementById('welcome-title').textContent = `Panel de ${context.tenant.name}`;
-      
-      // Populate tenant info
-      document.getElementById('info-tenant-name').textContent = context.tenant.name;
-      document.getElementById('info-tenant-type').textContent = context.tenant.business_type || 'Pendiente por definir';
-      document.getElementById('info-tenant-slug').textContent = context.tenant.slug;
-      document.getElementById('info-tenant-id').textContent = context.tenant.id;
-      document.getElementById('active-tenant-id-badge').textContent = context.tenant.id;
-      document.getElementById('info-tenant-role').textContent = context.role;
-      document.getElementById('role-badge').textContent = context.role;
-
-      // Populate tenant selector dropdown
-      const select = document.getElementById('tenant-select');
-      select.innerHTML = context.tenants.map(t => `
-        <option value="${t.id}" ${t.id === context.tenant.id ? 'selected' : ''}>
-          ${t.name} (${t.role})
-        </option>
-      `).join('');
-
-      select.addEventListener('change', async (e) => {
-        const newId = e.target.value;
-        if (newId && newId !== context.tenant.id) {
-          await tenantManager.switchTenant(newId);
-          window.location.reload();
-        }
-      });
-
-      // Check if required tenant information is missing (e.g. business_type empty or generic default)
-      checkMissingRequiredInfo(context.tenant);
-
-      // Load Effective Settings (Global default vs Tenant Override)
-      await refreshEffectiveSettings();
-    }
-
-    function checkMissingRequiredInfo(tenant) {
-      const modal = document.getElementById('missing-info-modal');
-      const isMissingType = !tenant.business_type || tenant.business_type === 'retail' || tenant.business_type.trim() === '';
-      
-      if (isMissingType) {
-        modal.style.display = 'flex';
-      } else {
-        modal.style.display = 'none';
+        // If not logged in, redirect to auth
+        // window.location.href = 'auth.html';
       }
     }
-
-    // Save missing info modal submission
-    document.getElementById('missing-info-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const chosenType = document.getElementById('modal-biz-type').value;
-      const btn = document.getElementById('btn-save-missing-info');
-
-      if (!chosenType) return;
-
-      btn.disabled = true;
-      btn.textContent = 'Guardando información...';
-
-      try {
-        const { error } = await supabase
-          .from('tenants')
-          .update({ business_type: chosenType })
-          .eq('id', tenantManager.currentTenant.id);
-
-        if (error) throw error;
-
-        // Update local context and UI
-        tenantManager.currentTenant.business_type = chosenType;
-        document.getElementById('info-tenant-type').textContent = chosenType;
-
-        // Hide floating card modal
-        document.getElementById('missing-info-modal').style.display = 'none';
-      } catch (err) {
-        console.error('Error updating missing info:', err);
-        alert('Error al guardar: ' + err.message);
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Guardar y Continuar';
-      }
-    });
-
-    async function refreshEffectiveSettings() {
-      const colorSetting = await tenantManager.getSetting('theme_primary_color');
-      const effectiveColor = colorSetting || '#00A4AE';
-
-      document.getElementById('setting-color-val').textContent = effectiveColor;
-      document.getElementById('color-box').style.background = effectiveColor;
-      document.getElementById('override-color-picker').value = effectiveColor;
-
-      // Check if this tenant has an explicit override in tenant_settings table
-      const { data: tenantOverride } = await supabase
-        .from('tenant_settings')
-        .select('value')
-        .eq('tenant_id', tenantManager.currentTenant.id)
-        .eq('key', 'theme_primary_color')
-        .maybeSingle();
-
-      const tag = document.getElementById('override-status-tag');
-      if (tenantOverride) {
-        tag.textContent = 'Override de Tenant Activo';
-        tag.style.background = '#fef3c7';
-        tag.style.color = '#92400e';
-      } else {
-        tag.textContent = 'Default Global';
-        tag.style.background = '#dcfce7';
-        tag.style.color = '#15803d';
-      }
-    }
-
-    // Setting Override Actions
-    document.getElementById('btn-save-override').addEventListener('click', async () => {
-      const chosenColor = document.getElementById('override-color-picker').value;
-      try {
-        await tenantManager.setTenantOverride('theme_primary_color', JSON.stringify(chosenColor));
-        await refreshEffectiveSettings();
-      } catch (err) {
-        alert('Error al guardar override: ' + err.message);
-      }
-    });
-
-    document.getElementById('btn-reset-override').addEventListener('click', async () => {
-      try {
-        await tenantManager.removeTenantOverride('theme_primary_color');
-        await refreshEffectiveSettings();
-      } catch (err) {
-        alert('Error al restablecer override: ' + err.message);
-      }
-    });
-
-    // Logout
-    document.getElementById('btn-logout').addEventListener('click', async () => {
-      await supabase.auth.signOut();
-      tenantManager.clearContext();
-      window.location.href = '../';
-    });
-
-    loadDashboard();
+    initSession();
   </script>
+
 </body>
 </html>

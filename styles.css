@@ -11,17 +11,17 @@
 }
 
 :root {
-  /* Brand Colors */
-  --brand-50: #e6f7f8;
-  --brand-100: #cceff1;
-  --brand-200: #99dfe3;
-  --brand-300: #66cfd5;
-  --brand-400: #33bfc7;
-  --brand-500: #00A4AE;
-  --brand-600: #00939c;
-  --brand-700: #007a82;
-  --brand-800: #006169;
-  --brand-900: #004a50;
+  /* Brand Colors - Possum Mint (#00E5A3) */
+  --brand-50: #e6fdf6;
+  --brand-100: #ccfaed;
+  --brand-200: #99f5db;
+  --brand-300: #66f0c9;
+  --brand-400: #33ebb6;
+  --brand-500: #00E5A3;
+  --brand-600: #00C28A;
+  --brand-700: #009E70;
+  --brand-800: #007A57;
+  --brand-900: #00573E;
   
   /* Gray Scale */
   --gray-50: #f9fafb;
@@ -263,22 +263,23 @@ button {
   justify-content: center;
   padding: var(--space-2) var(--space-6);
   font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: white;
-  background: var(--brand-600);
+  font-weight: 700;
+  color: var(--navy-900);
+  background: var(--brand-500);
   border-radius: var(--radius-full);
   transition: all var(--transition-fast);
   white-space: nowrap;
 }
 
 .btn-primary:hover {
-  background: var(--brand-800);
+  background: var(--brand-600);
+  color: var(--navy-900);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 164, 174, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 229, 163, 0.4);
 }
 
 .btn-primary:active {
-  background: var(--brand-900);
+  background: var(--brand-700);
   transform: translateY(0);
 }
 
@@ -601,6 +602,18 @@ button {
   opacity: 1;
 }
 
+.feature-card-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 229, 163, 0.15);
+  color: var(--brand-700);
+  border-radius: var(--radius-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-4);
+  font-size: 24px;
+}
 .feature-icon {
   width: 48px;
   height: 48px;
@@ -1259,9 +1272,9 @@ button {
 }
 
 /* Price Tag animation */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 164, 174, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(0, 164, 174, 0); }
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 163, 0.45); }
+  50% { box-shadow: 0 0 0 8px rgba(0, 229, 163, 0); }
 }
 
 .pulse-glow {
@@ -1394,9 +1407,9 @@ button {
   }
 }
 
-/* Active & neighboring item styles with clear dark gray and vibrant teal */
+/* Active & neighboring item styles with clear dark gray and vibrant Possum Mint */
 .drum-item.active {
-  color: #00A4AE !important;
+  color: #00E5A3 !important;
   font-weight: 800 !important;
   font-size: 2.05rem !important;
   transform: scale(1.08) !important;

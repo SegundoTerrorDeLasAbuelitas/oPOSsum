@@ -199,10 +199,16 @@
           throw new Error('Por favor completa todos los campos.');
         }
 
-        const result = await tenantManager.createTenant(name, slug);
-        if (result.success) {
-          window.location.href = 'dashboard.html';
+        // Verify session before creating
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+          window.location.href = 'auth.html';
+          return;
         }
+
+        const result = await tenantManager.createTenant(name, slug);
+        btnCreate.textContent = '¡Negocio creado! Entrando...';
+        window.location.href = 'dashboard.html';
       } catch (err) {
         console.error('Onboarding error:', err);
         alertBox.textContent = err.message || 'Error al crear el negocio.';

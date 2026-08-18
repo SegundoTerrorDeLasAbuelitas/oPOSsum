@@ -860,6 +860,11 @@
       transform: translateY(-2px);
     }
 
+    .quick-action-card.active-card {
+      border-color: var(--brand-primary);
+      background: #f0fdf9;
+    }
+
     .action-card-icon {
       width: 38px;
       height: 38px;
@@ -881,6 +886,122 @@
       color: var(--text-main);
     }
 
+    /* ================= POS PRODUCT CARDS CATALOG ================= */
+    .pos-catalog-section {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .pos-catalog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .pos-catalog-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .pos-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.85rem;
+    }
+
+    .pos-product-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.75rem;
+      transition: all 0.15s ease;
+    }
+
+    .pos-product-card:hover {
+      background: #ffffff;
+      border-color: var(--brand-primary);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .pos-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+
+    .pos-card-thumb {
+      width: 36px;
+      height: 36px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .pos-card-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .pos-card-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .pos-presentations-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .pos-pres-btn {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 0.35rem 0.65rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.12s ease;
+    }
+
+    .pos-pres-btn:hover {
+      background: var(--brand-primary);
+      border-color: var(--brand-primary);
+      color: #091335;
+      transform: scale(1.03);
+    }
+
+    .pos-pres-btn:active {
+      transform: scale(0.98);
+    }
+
     .printer-status-box {
       display: inline-flex;
       align-items: center;
@@ -890,7 +1011,6 @@
       border-radius: 12px;
       padding: 0.75rem 1rem;
       width: 100%;
-      margin-top: 0.5rem;
     }
 
     .printer-left {
@@ -914,6 +1034,7 @@
       border-radius: 9999px;
     }
 
+    /* POS Cart Panel */
     .pos-cart-panel {
       background: white;
       border: 1px solid var(--border-color);
@@ -1011,9 +1132,10 @@
       flex-direction: column;
       gap: 0.75rem;
       margin-bottom: 1.5rem;
+      min-height: 120px;
     }
 
-    .cart-item {
+    .cart-item-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -1021,9 +1143,10 @@
       border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 0.75rem;
+      animation: fadeIn 0.15s ease-out;
     }
 
-    .cart-item-left {
+    .cart-item-info {
       display: flex;
       align-items: center;
       gap: 0.75rem;
@@ -1037,6 +1160,7 @@
       align-items: center;
       justify-content: center;
       font-size: 20px;
+      background: #f1f5f9;
     }
 
     .item-title {
@@ -1053,22 +1177,36 @@
       gap: 0.35rem;
     }
 
-    .wholesale-badge {
-      background: #f3e8ff;
-      color: #7e22ce;
-      font-size: 0.68rem;
-      font-weight: 800;
-      padding: 1px 6px;
-      border-radius: 4px;
+    .cart-qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
     }
 
-    .qty-box {
-      border: 1px solid var(--border-color);
+    .btn-qty {
+      width: 26px;
+      height: 26px;
       border-radius: 6px;
-      padding: 0.25rem 0.6rem;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-qty:hover {
+      background: var(--brand-primary);
+      border-color: var(--brand-primary);
+    }
+
+    .qty-number {
       font-size: 0.85rem;
-      font-weight: 700;
-      background: #f8fafc;
+      font-weight: 800;
+      min-width: 20px;
+      text-align: center;
     }
 
     .cart-totals {
@@ -1291,13 +1429,13 @@
     <div id="view-pos" class="canvas-view">
       <div class="pos-layout">
         
-        <!-- Left: Search & Quick Actions -->
+        <!-- Left: Search, Quick Actions & Product Cards -->
         <div class="pos-catalog-panel">
           <h2 class="pos-section-title">Buscar Productos</h2>
           
           <div class="search-wrapper" style="margin-bottom: 0;">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="search-input" placeholder="Buscar por nombre, SKU o código de barras">
+            <input type="text" class="search-input" id="pos-search-input" placeholder="Buscar por nombre o presentación...">
           </div>
 
           <!-- Quick Action 2x2 Cards -->
@@ -1308,21 +1446,33 @@
               <span class="action-card-text">Crear Producto</span>
             </div>
 
-            <div class="quick-action-card">
+            <div class="quick-action-card" id="quick-action-discount">
               <div class="action-card-icon icon-purple">🏷️</div>
               <span class="action-card-text">Añadir Descuento</span>
             </div>
 
-            <div class="quick-action-card">
-              <div class="action-card-icon icon-blue">🧮</div>
-              <span class="action-card-text">Entrada Manual</span>
+            <div class="quick-action-card" id="quick-action-search-prod">
+              <div class="action-card-icon icon-blue">🔍</div>
+              <span class="action-card-text">Buscar Producto</span>
             </div>
 
-            <div class="quick-action-card">
+            <div class="quick-action-card" id="quick-action-add-client">
               <div class="action-card-icon icon-coral">👤+</div>
               <span class="action-card-text">Añadir Cliente</span>
             </div>
 
+          </div>
+
+          <!-- Real-Time Product Cards Catalog for Quick Picking -->
+          <div class="pos-catalog-section" id="pos-catalog-container">
+            <div class="pos-catalog-header">
+              <span class="pos-catalog-title">📦 Catálogo para Venta Rápida</span>
+              <span style="font-size: 0.75rem; color: #64748b; font-weight: 600;">Toca una presentación para cobrar</span>
+            </div>
+
+            <div class="pos-cards-grid" id="pos-cards-grid">
+              <!-- Rendered dynamically from Supabase -->
+            </div>
           </div>
 
           <!-- Thermal Printer Status -->
@@ -1346,7 +1496,7 @@
             <h2 class="cart-title">Venta</h2>
             <div class="cart-header-actions">
               <div class="price-type-select">🏷️ Precio Público ▾</div>
-              <button class="btn-clear-cart">
+              <button class="btn-clear-cart" id="btn-clear-pos-cart">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
                 Borrar todo
               </button>
@@ -1358,14 +1508,14 @@
             <div class="customer-avatar">👤</div>
             <div>
               <div class="customer-name">Cliente Mostrador</div>
-              <div class="customer-meta">Venta de mostrador</div>
+              <div class="customer-meta">Venta rápida</div>
             </div>
           </div>
 
           <!-- Cart items list -->
           <div class="cart-items-list" id="pos-cart-items-container">
             <div style="text-align:center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.85rem;">
-              🛒 Tu carrito de venta está vacío
+              🛒 Tu carrito de venta está vacío.<br>Selecciona una presentación del catálogo.
             </div>
           </div>
 
@@ -1373,16 +1523,16 @@
           <div class="cart-totals">
             <div class="total-row">
               <span>Subtotal</span>
-              <span>$0.00</span>
+              <span id="pos-subtotal-display">$0.00</span>
             </div>
             <div class="total-row" style="color:#9333ea;">
               <span>Descuentos</span>
-              <span>- $0.00</span>
+              <span id="pos-discount-display">- $0.00</span>
             </div>
           </div>
 
           <!-- Big Checkout Button in Possum Mint -->
-          <button class="btn-checkout">
+          <button class="btn-checkout" id="btn-pos-checkout">
             Cobrar $0.00
           </button>
 
@@ -1522,6 +1672,7 @@
 
     const supabase = getSupabase();
     let currentLoadedProducts = [];
+    let currentCartItems = [];
 
     // Views Elements
     const viewProductos = document.getElementById('view-productos');
@@ -1559,6 +1710,15 @@
     const productsTableBody = document.getElementById('products-table-body');
     const searchProductsInput = document.getElementById('search-products-input');
 
+    // POS Elements
+    const quickActionSearchProd = document.getElementById('quick-action-search-prod');
+    const posSearchInput = document.getElementById('pos-search-input');
+    const posCardsGrid = document.getElementById('pos-cards-grid');
+    const posCartItemsContainer = document.getElementById('pos-cart-items-container');
+    const posSubtotalDisplay = document.getElementById('pos-subtotal-display');
+    const btnPosCheckout = document.getElementById('btn-pos-checkout');
+    const btnClearPosCart = document.getElementById('btn-clear-pos-cart');
+
     // View Switching
     function switchView(viewName) {
       if (viewName === 'pos') {
@@ -1568,6 +1728,7 @@
         navProductos.classList.remove('active');
         navVentas.classList.add('active');
         window.location.hash = 'pos';
+        loadPosCatalog();
       } else {
         viewPos.classList.remove('active');
         viewProductos.classList.add('active');
@@ -1584,12 +1745,17 @@
     navInicio.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
     btnQuickNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
     document.getElementById('quick-action-add-prod').addEventListener('click', () => {
-      switchView('productos');
       openAddModal();
     });
 
+    // When "Buscar Producto" is clicked in POS
+    quickActionSearchProd.addEventListener('click', () => {
+      posSearchInput.focus();
+      document.getElementById('pos-catalog-container').scrollIntoView({ behavior: 'smooth' });
+    });
+
     // -------------------------------------------------------------
-    // PRODUCTS DATA RENDERING (100% REAL-TIME SUPABASE)
+    // PRODUCTS DATA RENDERING (PRODUCTOS TABLE)
     // -------------------------------------------------------------
     async function loadProductsList() {
       try {
@@ -1676,7 +1842,6 @@
         `;
       }).join('');
 
-      // Attach click events to Edit buttons
       document.querySelectorAll('.action-edit-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const groupId = e.target.getAttribute('data-group-id');
@@ -1685,7 +1850,7 @@
       });
     }
 
-    // Search filter
+    // Search filter for products table
     searchProductsInput.addEventListener('input', () => {
       const q = searchProductsInput.value.toLowerCase().trim();
       if (!q) {
@@ -1704,13 +1869,188 @@
     });
 
     // -------------------------------------------------------------
+    // POS CATALOG & QUICK PICKING LOGIC
+    // -------------------------------------------------------------
+    async function loadPosCatalog() {
+      try {
+        if (!currentLoadedProducts || currentLoadedProducts.length === 0) {
+          const groups = await productsManager.getProductGroupsWithPresentations();
+          currentLoadedProducts = groups || [];
+        }
+        renderPosCards(currentLoadedProducts);
+      } catch (err) {
+        console.error('Error loading POS catalog:', err);
+      }
+    }
+
+    function renderPosCards(groups) {
+      if (!groups || groups.length === 0) {
+        posCardsGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; padding: 2rem 1rem; text-align: center; color: #64748b; background:#f8fafc; border-radius: 12px;">
+            <div style="font-size: 24px; margin-bottom: 0.5rem;">📦</div>
+            <strong style="color: #0f172a;">No tienes productos registrados</strong><br>
+            <span style="font-size: 0.8rem;">Crea tu primer producto para empezar a vender rápidamente.</span>
+          </div>
+        `;
+        return;
+      }
+
+      posCardsGrid.innerHTML = groups.map(g => {
+        const presList = g.products || [];
+        const presButtons = presList.map(p => `
+          <button class="pos-pres-btn" data-group-name="${escapeHtml(g.name)}" data-pres-id="${p.id}" data-pres-name="${escapeHtml(p.name)}" data-price="${p.price || 0}">
+            + ${escapeHtml(p.name)}
+          </button>
+        `).join('');
+
+        return `
+          <div class="pos-product-card">
+            <div>
+              <div class="pos-card-header">
+                <div class="pos-card-thumb">☕</div>
+                <div>
+                  <div class="pos-card-title">${escapeHtml(g.name)}</div>
+                  ${g.description ? `<div class="pos-card-desc">${escapeHtml(g.description)}</div>` : ''}
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div style="font-size: 0.72rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">Presentaciones:</div>
+              <div class="pos-presentations-picker">
+                ${presButtons || '<span style="font-size: 11px; color:#94a3b8;">Sin presentaciones</span>'}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach click events to presentation buttons to add directly to sale cart
+      posCardsGrid.querySelectorAll('.pos-pres-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const groupName = btn.getAttribute('data-group-name');
+          const presId = btn.getAttribute('data-pres-id');
+          const presName = btn.getAttribute('data-pres-name');
+          const price = parseFloat(btn.getAttribute('data-price')) || 0;
+
+          addItemToCart(presId, `${groupName} - ${presName}`, price);
+        });
+      });
+    }
+
+    // POS Search filter
+    posSearchInput.addEventListener('input', () => {
+      const q = posSearchInput.value.toLowerCase().trim();
+      if (!q) {
+        renderPosCards(currentLoadedProducts);
+        return;
+      }
+
+      const filtered = currentLoadedProducts.filter(g => {
+        const matchName = g.name.toLowerCase().includes(q);
+        const matchDesc = (g.description || '').toLowerCase().includes(q);
+        const matchPres = (g.products || []).some(p => p.name.toLowerCase().includes(q));
+        return matchName || matchDesc || matchPres;
+      });
+
+      renderPosCards(filtered);
+    });
+
+    // -------------------------------------------------------------
+    // POS CART & TICKET LOGIC
+    // -------------------------------------------------------------
+    function addItemToCart(id, name, price) {
+      const existing = currentCartItems.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        currentCartItems.push({ id, name, price, qty: 1 });
+      }
+      renderPosCart();
+    }
+
+    function changeCartQty(id, delta) {
+      const item = currentCartItems.find(i => i.id === id);
+      if (!item) return;
+
+      item.qty += delta;
+      if (item.qty <= 0) {
+        currentCartItems = currentCartItems.filter(i => i.id !== id);
+      }
+      renderPosCart();
+    }
+
+    function renderPosCart() {
+      if (currentCartItems.length === 0) {
+        posCartItemsContainer.innerHTML = `
+          <div style="text-align:center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.85rem;">
+            🛒 Tu carrito de venta está vacío.<br>Selecciona una presentación del catálogo.
+          </div>
+        `;
+        posSubtotalDisplay.textContent = '$0.00';
+        btnPosCheckout.textContent = 'Cobrar $0.00';
+        return;
+      }
+
+      let subtotal = 0;
+
+      posCartItemsContainer.innerHTML = currentCartItems.map(item => {
+        const itemTotal = item.price * item.qty;
+        subtotal += itemTotal;
+
+        return `
+          <div class="cart-item-row">
+            <div class="cart-item-info">
+              <div class="item-icon-box">📦</div>
+              <div>
+                <div class="item-title">${escapeHtml(item.name)}</div>
+                <div class="item-price-tag">$${item.price.toFixed(2)} c/u</div>
+              </div>
+            </div>
+
+            <div class="cart-qty-controls">
+              <button class="btn-qty btn-minus" data-id="${item.id}">-</button>
+              <span class="qty-number">${item.qty}</span>
+              <button class="btn-qty btn-plus" data-id="${item.id}">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      posSubtotalDisplay.textContent = `$${subtotal.toFixed(2)}`;
+      btnPosCheckout.textContent = `Cobrar $${subtotal.toFixed(2)}`;
+
+      // Attach qty buttons
+      posCartItemsContainer.querySelectorAll('.btn-minus').forEach(btn => {
+        btn.addEventListener('click', () => changeCartQty(btn.getAttribute('data-id'), -1));
+      });
+      posCartItemsContainer.querySelectorAll('.btn-plus').forEach(btn => {
+        btn.addEventListener('click', () => changeCartQty(btn.getAttribute('data-id'), 1));
+      });
+    }
+
+    btnClearPosCart.addEventListener('click', () => {
+      currentCartItems = [];
+      renderPosCart();
+    });
+
+    btnPosCheckout.addEventListener('click', () => {
+      if (currentCartItems.length === 0) {
+        alert('Agrega al menos una presentación al carrito para cobrar.');
+        return;
+      }
+      alert(`¡Venta realizada con éxito! Total cobrado: ${posSubtotalDisplay.textContent}`);
+      currentCartItems = [];
+      renderPosCart();
+    });
+
+    // -------------------------------------------------------------
     // ADD PRODUCT MODAL LOGIC
     // -------------------------------------------------------------
     function openAddModal() {
       modalAddAlert.style.display = 'none';
       formAddProduct.reset();
       
-      // Reset presentations to single row
       presentationsContainer.innerHTML = `
         <div class="presentation-row">
           <input type="text" class="presentation-input" placeholder="Ej. 1 kg" required>
@@ -1729,7 +2069,6 @@
     btnCloseAddModal.addEventListener('click', closeAddModal);
     btnCancelAddModal.addEventListener('click', closeAddModal);
 
-    // Add another presentation row
     btnAddPresentationRow.addEventListener('click', () => {
       const row = document.createElement('div');
       row.className = 'presentation-row';
@@ -1744,7 +2083,6 @@
       row.querySelector('.presentation-input').focus();
     });
 
-    // Submit Add Product Form
     formAddProduct.addEventListener('submit', async (e) => {
       e.preventDefault();
       modalAddAlert.style.display = 'none';
@@ -1752,7 +2090,6 @@
       const name = document.getElementById('add-prod-name').value.trim();
       const desc = document.getElementById('add-prod-desc').value.trim();
 
-      // Collect all presentation inputs
       const presentationInputs = presentationsContainer.querySelectorAll('.presentation-input');
       const presentations = Array.from(presentationInputs)
         .map(input => input.value.trim())
@@ -1775,6 +2112,7 @@
         await productsManager.createProductWithPresentations(name, desc, presentations);
         closeAddModal();
         await loadProductsList();
+        await loadPosCatalog();
       } catch (err) {
         console.error('Error creating product:', err);
         showAddAlert(err.message || 'Error al guardar el producto.');
@@ -1830,7 +2168,6 @@
     btnCloseEditModal.addEventListener('click', closeEditModal);
     btnCancelEditModal.addEventListener('click', closeEditModal);
 
-    // Save changes to name / description
     formEditProduct.addEventListener('submit', async (e) => {
       e.preventDefault();
       modalEditAlert.style.display = 'none';
@@ -1851,6 +2188,7 @@
         await productsManager.updateProductGroup(groupId, name, desc);
         closeEditModal();
         await loadProductsList();
+        await loadPosCatalog();
       } catch (err) {
         showEditAlert(err.message || 'Error al actualizar.');
       } finally {
@@ -1859,7 +2197,6 @@
       }
     });
 
-    // Add new presentation to existing group
     btnSaveNewPres.addEventListener('click', async () => {
       const groupId = editGroupId.value;
       const presName = editNewPresInput.value.trim();
@@ -1876,8 +2213,8 @@
         await productsManager.addPresentationToGroup(groupId, presName);
         editNewPresInput.value = '';
         await loadProductsList();
+        await loadPosCatalog();
         
-        // Refresh modal list
         const updatedGroup = currentLoadedProducts.find(g => g.id === groupId);
         if (updatedGroup) renderEditExistingPresentations(updatedGroup);
       } catch (err) {

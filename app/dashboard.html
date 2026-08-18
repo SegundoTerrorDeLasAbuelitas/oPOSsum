@@ -243,6 +243,69 @@
       font-size: var(--font-size-xs);
       color: #166534;
     }
+
+    /* Floating Required Info Completion Modal */
+    .floating-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: var(--space-4);
+      animation: fadeIn 0.25s ease-out;
+    }
+    .floating-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .floating-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-4);
+    }
+    .floating-icon {
+      width: 44px;
+      height: 44px;
+      background: #fef3c7;
+      color: #d97706;
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .floating-title {
+      font-size: var(--font-size-lg);
+      font-weight: 800;
+      color: var(--navy-900);
+      line-height: 1.3;
+    }
+    .floating-desc {
+      font-size: var(--font-size-sm);
+      color: var(--gray-600);
+      margin-bottom: var(--space-6);
+      line-height: 1.5;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -362,6 +425,46 @@
 
   </main>
 
+  <!-- Floating Missing Info Card Modal -->
+  <div id="missing-info-modal" class="floating-modal-overlay" style="display: none;">
+    <div class="floating-card">
+      <div class="floating-header">
+        <div class="floating-icon">📝</div>
+        <div>
+          <h3 class="floating-title">Completa los datos de tu negocio</h3>
+          <span style="font-size: 11px; font-weight: 700; color: #d97706; text-transform: uppercase;">Información Requerida</span>
+        </div>
+      </div>
+      <p class="floating-desc">Para optimizar tu punto de venta, por favor indica el tipo de negocio o comercio que opera tu instancia.</p>
+
+      <form id="missing-info-form">
+        <div style="margin-bottom: var(--space-4); text-align: left;">
+          <label style="display: block; font-size: 12px; font-weight: 700; color: var(--gray-700); margin-bottom: 6px;" for="modal-biz-type">
+            Tipo de Negocio *
+          </label>
+          <select id="modal-biz-type" required class="form-input" style="width: 100%; padding: 10px 14px; border-radius: var(--radius-lg); border: 1px solid var(--gray-300); font-family: inherit; font-size: 14px; cursor: pointer; background: white;">
+            <option value="" disabled selected>Selecciona tu tipo de negocio...</option>
+            <option value="Abarrotes y Minisúper">🏪 Abarrotes, Minisúper y Tiendita</option>
+            <option value="Ropa y Calzado">👗 Ropa, Calzado y Boutiques</option>
+            <option value="Restaurante y Cafetería">☕ Cafetería, Restaurante o Bar</option>
+            <option value="Farmacia">💊 Farmacia y Salud</option>
+            <option value="Ferretería">🔨 Ferretería y Materiales</option>
+            <option value="Electrónica y Celulares">📱 Electrónica, Celulares y Cómputo</option>
+            <option value="Belleza y Spa">💈 Barbería, Salón de Belleza y Spa</option>
+            <option value="Papelería">📚 Papelería y Regalos</option>
+            <option value="Panadería y Repostería">🥐 Panadería y Repostería</option>
+            <option value="Servicios Profesionales">💼 Servicios Profesionales</option>
+            <option value="Otro Comercio">📦 Otro Tipo de Negocio / Comercio</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-primary" id="btn-save-missing-info" style="width: 100%; padding: 12px; font-size: 14px; font-weight: 700; border-radius: var(--radius-lg); margin-top: 8px;">
+          Guardar y Continuar
+        </button>
+      </form>
+    </div>
+  </div>
+
   <script type="module">
     import { getSupabase } from '../js/supabase-client.js';
     import { tenantManager } from '../js/tenant-context.js';
@@ -387,7 +490,7 @@
       
       // Populate tenant info
       document.getElementById('info-tenant-name').textContent = context.tenant.name;
-      document.getElementById('info-tenant-type').textContent = context.tenant.business_type || 'Comercio General';
+      document.getElementById('info-tenant-type').textContent = context.tenant.business_type || 'Pendiente por definir';
       document.getElementById('info-tenant-slug').textContent = context.tenant.slug;
       document.getElementById('info-tenant-id').textContent = context.tenant.id;
       document.getElementById('active-tenant-id-badge').textContent = context.tenant.id;
@@ -410,9 +513,57 @@
         }
       });
 
+      // Check if required tenant information is missing (e.g. business_type empty or generic default)
+      checkMissingRequiredInfo(context.tenant);
+
       // Load Effective Settings (Global default vs Tenant Override)
       await refreshEffectiveSettings();
     }
+
+    function checkMissingRequiredInfo(tenant) {
+      const modal = document.getElementById('missing-info-modal');
+      const isMissingType = !tenant.business_type || tenant.business_type === 'retail' || tenant.business_type.trim() === '';
+      
+      if (isMissingType) {
+        modal.style.display = 'flex';
+      } else {
+        modal.style.display = 'none';
+      }
+    }
+
+    // Save missing info modal submission
+    document.getElementById('missing-info-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const chosenType = document.getElementById('modal-biz-type').value;
+      const btn = document.getElementById('btn-save-missing-info');
+
+      if (!chosenType) return;
+
+      btn.disabled = true;
+      btn.textContent = 'Guardando información...';
+
+      try {
+        const { error } = await supabase
+          .from('tenants')
+          .update({ business_type: chosenType })
+          .eq('id', tenantManager.currentTenant.id);
+
+        if (error) throw error;
+
+        // Update local context and UI
+        tenantManager.currentTenant.business_type = chosenType;
+        document.getElementById('info-tenant-type').textContent = chosenType;
+
+        // Hide floating card modal
+        document.getElementById('missing-info-modal').style.display = 'none';
+      } catch (err) {
+        console.error('Error updating missing info:', err);
+        alert('Error al guardar: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Guardar y Continuar';
+      }
+    });
 
     async function refreshEffectiveSettings() {
       const colorSetting = await tenantManager.getSetting('theme_primary_color');

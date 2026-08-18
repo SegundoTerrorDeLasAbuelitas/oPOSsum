@@ -1,3 +1,4 @@
+# OS Files
 .DS_Store
 .DS_Store?
 ._*
@@ -6,3 +7,17 @@
 ehthumbs.db
 Thumbs.db
 *.log
+
+# Environment variables & secrets (NEVER commit to git)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+
+# Node
+node_modules/
+dist/
+build/
+

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — oPOSsum Multi-Tenant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --current-tenant-color: #00A4AE;
+    }
+    body {
+      background: #f8fafc;
+      min-height: 100vh;
+      color: var(--navy-900);
+      display: flex;
+      flex-direction: column;
+    }
+    .topbar {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: var(--space-3) var(--space-6);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-xl);
+      font-weight: 800;
+      color: var(--navy-900);
+      text-decoration: none;
+    }
+    .tenant-selector-wrapper {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      background: var(--gray-100);
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--gray-200);
+    }
+    .tenant-select {
+      background: transparent;
+      border: none;
+      font-size: var(--font-size-sm);
+      font-weight: 700;
+      color: var(--navy-900);
+      outline: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .role-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .user-pill {
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      color: var(--gray-600);
+    }
+    .main-content {
+      flex: 1;
+      padding: var(--space-8) var(--space-6);
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .dashboard-header {
+      margin-bottom: var(--space-8);
+    }
+    .dashboard-title {
+      font-size: var(--font-size-3xl);
+      font-weight: 800;
+      color: var(--navy-900);
+      margin-bottom: var(--space-2);
+    }
+    .dashboard-subtitle {
+      font-size: var(--font-size-base);
+      color: var(--gray-500);
+    }
+    .grid-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+    @media (min-width: 768px) {
+      .grid-cards {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .dash-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: var(--space-6);
+      box-shadow: var(--shadow-sm);
+    }
+    .dash-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-4);
+      padding-bottom: var(--space-3);
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .dash-card-title {
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      color: var(--navy-900);
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    .tag-status {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      background: #dcfce7;
+      color: #15803d;
+    }
+    .info-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      font-size: var(--font-size-sm);
+    }
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-2) 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    .info-label {
+      color: var(--gray-500);
+      font-weight: 500;
+    }
+    .info-val {
+      font-weight: 700;
+      color: var(--navy-900);
+    }
+    .color-preview-box {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-300);
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .setting-override-control {
+      margin-top: var(--space-4);
+      padding: var(--space-4);
+      background: var(--gray-50);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200);
+    }
+    .btn-action {
+      padding: 8px 16px;
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      border: none;
+      transition: all var(--transition-fast);
+    }
+    .btn-action-primary {
+      background: var(--brand-500);
+      color: white;
+    }
+    .btn-action-primary:hover {
+      background: var(--brand-600);
+    }
+    .btn-action-secondary {
+      background: white;
+      color: var(--gray-700);
+      border: 1px solid var(--gray-300);
+    }
+    .btn-action-secondary:hover {
+      background: var(--gray-100);
+    }
+    .rls-banner {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: var(--radius-xl);
+      padding: var(--space-4) var(--space-6);
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+      margin-bottom: var(--space-6);
+    }
+    .rls-icon {
+      width: 36px;
+      height: 36px;
+      background: #22c55e;
+      color: white;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .rls-text h4 {
+      font-size: var(--font-size-sm);
+      font-weight: 800;
+      color: #15803d;
+      margin-bottom: 2px;
+    }
+    .rls-text p {
+      font-size: var(--font-size-xs);
+      color: #166534;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <a href="../" class="brand-logo">
+        <span>🐾 oPOS<span style="color:var(--brand-500);">sum</span></span>
+      </a>
+
+      <!-- Tenant Selector -->
+      <div class="tenant-selector-wrapper">
+        <span>🏢</span>
+        <select id="tenant-select" class="tenant-select" aria-label="Seleccionar Negocio">
+          <option value="">Cargando negocio...</option>
+        </select>
+        <span id="role-badge" class="role-badge">Owner</span>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <a href="onboarding.html" class="btn-action btn-action-secondary">+ Nuevo Negocio</a>
+      <span class="user-pill" id="user-email">usuario@correo.com</span>
+      <button class="btn-action btn-action-secondary" id="btn-logout">Cerrar Sesión</button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-content">
+    
+    <div class="dashboard-header">
+      <h1 class="dashboard-title" id="welcome-title">Bienvenido a tu POS</h1>
+      <p class="dashboard-subtitle">Arquitectura Multi-Tenant y Seguridad RLS activa en Supabase.</p>
+    </div>
+
+    <!-- Security RLS Active Banner -->
+    <div class="rls-banner">
+      <div class="rls-icon">🛡️</div>
+      <div class="rls-text">
+        <h4>Aislamiento Estructural por Row Level Security (RLS)</h4>
+        <p>Cualquier consulta o mutación está aislada exclusivamente al Tenant ID <code id="active-tenant-id-badge" style="font-weight:700;">...</code> por el motor PostgreSQL.</p>
+      </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid-cards">
+      
+      <!-- Card 1: Tenant Identity -->
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title">🏢 Información del Tenant Activo</div>
+          <span class="tag-status">Aislado</span>
+        </div>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Nombre Comercial:</span>
+            <span class="info-val" id="info-tenant-name">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Identificador (Slug):</span>
+            <span class="info-val" id="info-tenant-slug">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">ID Único (UUID):</span>
+            <span class="info-val" id="info-tenant-id" style="font-family:monospace; font-size:12px;">-</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Tu Rol en este Tenant:</span>
+            <span class="info-val" id="info-tenant-role">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Settings Hierarchy (Global Default vs Tenant Specific Override) -->
+      <div class="dash-card">
+        <div class="dash-card-header">
+          <div class="dash-card-title">⚙️ Configuración (Default Global vs Override)</div>
+          <span class="tag-status" id="override-status-tag">Default Global</span>
+        </div>
+        <div class="info-list">
+          <div class="info-item">
+            <span class="info-label">Nombre del Sistema (Global):</span>
+            <span class="info-val" id="setting-app-name">oPOSsum</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Moneda Operativa (Global):</span>
+            <span class="info-val" id="setting-currency">MXN</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Color Primario Efectivo:</span>
+            <span class="info-val">
+              <span id="setting-color-val">#00A4AE</span>
+              <span class="color-preview-box" id="color-box" style="background:#00A4AE;"></span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Setting Override Playground -->
+        <div class="setting-override-control">
+          <div style="font-size:12px; font-weight:700; color:var(--gray-700); margin-bottom:8px;">
+            Probar Override para este Negocio:
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="color" id="override-color-picker" value="#00A4AE" style="width:40px; height:32px; border:none; cursor:pointer; border-radius:4px;">
+            <button class="btn-action btn-action-primary" id="btn-save-override">Guardar Color para este Tenant</button>
+            <button class="btn-action btn-action-secondary" id="btn-reset-override">Restablecer a Global</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script type="module">
+    import { getSupabase } from '../js/supabase-client.js';
+    import { tenantManager } from '../js/tenant-context.js';
+
+    const supabase = getSupabase();
+
+    async function loadDashboard() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = 'auth.html';
+        return;
+      }
+
+      const context = await tenantManager.init();
+      if (context.needsOnboarding || !context.tenant) {
+        window.location.href = 'onboarding.html';
+        return;
+      }
+
+      // Populate user info
+      document.getElementById('user-email').textContent = context.user.email;
+      document.getElementById('welcome-title').textContent = `Panel de ${context.tenant.name}`;
+      
+      // Populate tenant info
+      document.getElementById('info-tenant-name').textContent = context.tenant.name;
+      document.getElementById('info-tenant-slug').textContent = context.tenant.slug;
+      document.getElementById('info-tenant-id').textContent = context.tenant.id;
+      document.getElementById('active-tenant-id-badge').textContent = context.tenant.id;
+      document.getElementById('info-tenant-role').textContent = context.role;
+      document.getElementById('role-badge').textContent = context.role;
+
+      // Populate tenant selector dropdown
+      const select = document.getElementById('tenant-select');
+      select.innerHTML = context.tenants.map(t => `
+        <option value="${t.id}" ${t.id === context.tenant.id ? 'selected' : ''}>
+          ${t.name} (${t.role})
+        </option>
+      `).join('');
+
+      select.addEventListener('change', async (e) => {
+        const newId = e.target.value;
+        if (newId && newId !== context.tenant.id) {
+          await tenantManager.switchTenant(newId);
+          window.location.reload();
+        }
+      });
+
+      // Load Effective Settings (Global default vs Tenant Override)
+      await refreshEffectiveSettings();
+    }
+
+    async function refreshEffectiveSettings() {
+      const colorSetting = await tenantManager.getSetting('theme_primary_color');
+      const effectiveColor = colorSetting || '#00A4AE';
+
+      document.getElementById('setting-color-val').textContent = effectiveColor;
+      document.getElementById('color-box').style.background = effectiveColor;
+      document.getElementById('override-color-picker').value = effectiveColor;
+
+      // Check if this tenant has an explicit override in tenant_settings table
+      const { data: tenantOverride } = await supabase
+        .from('tenant_settings')
+        .select('value')
+        .eq('tenant_id', tenantManager.currentTenant.id)
+        .eq('key', 'theme_primary_color')
+        .maybeSingle();
+
+      const tag = document.getElementById('override-status-tag');
+      if (tenantOverride) {
+        tag.textContent = 'Override de Tenant Activo';
+        tag.style.background = '#fef3c7';
+        tag.style.color = '#92400e';
+      } else {
+        tag.textContent = 'Default Global';
+        tag.style.background = '#dcfce7';
+        tag.style.color = '#15803d';
+      }
+    }
+
+    // Setting Override Actions
+    document.getElementById('btn-save-override').addEventListener('click', async () => {
+      const chosenColor = document.getElementById('override-color-picker').value;
+      try {
+        await tenantManager.setTenantOverride('theme_primary_color', JSON.stringify(chosenColor));
+        await refreshEffectiveSettings();
+      } catch (err) {
+        alert('Error al guardar override: ' + err.message);
+      }
+    });
+
+    document.getElementById('btn-reset-override').addEventListener('click', async () => {
+      try {
+        await tenantManager.removeTenantOverride('theme_primary_color');
+        await refreshEffectiveSettings();
+      } catch (err) {
+        alert('Error al restablecer override: ' + err.message);
+      }
+    });
+
+    // Logout
+    document.getElementById('btn-logout').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      tenantManager.clearContext();
+      window.location.href = '../';
+    });
+
+    loadDashboard();
+  </script>
+</body>
+</html>

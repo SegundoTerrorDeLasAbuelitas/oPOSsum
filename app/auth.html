@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso — oPOSsum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  
+  <!-- Supabase JS SDK CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      background: #f8fafc;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: var(--space-4);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-2xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-xl);
+    }
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      font-size: var(--font-size-2xl);
+      font-weight: 800;
+      color: var(--navy-900);
+      margin-bottom: var(--space-6);
+      text-decoration: none;
+    }
+    .auth-logo-icon {
+      width: 38px;
+      height: 38px;
+      background: var(--brand-500);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+    .auth-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--gray-200);
+      margin-bottom: var(--space-6);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: var(--space-3) 0;
+      text-align: center;
+      font-size: var(--font-size-sm);
+      font-weight: 600;
+      color: var(--gray-500);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all var(--transition-fast);
+    }
+    .auth-tab.active {
+      color: var(--brand-600);
+      border-bottom-color: var(--brand-600);
+    }
+    .form-group {
+      margin-bottom: var(--space-4);
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-700);
+      margin-bottom: var(--space-1);
+    }
+    .form-input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-sm);
+      font-family: inherit;
+      outline: none;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .form-input:focus {
+      border-color: var(--brand-500);
+      box-shadow: 0 0 0 3px rgba(0, 164, 174, 0.15);
+    }
+    .btn-submit {
+      width: 100%;
+      padding: var(--space-3);
+      font-size: var(--font-size-base);
+      font-weight: 700;
+      margin-top: var(--space-4);
+    }
+    .auth-alert {
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-lg);
+      font-size: var(--font-size-xs);
+      margin-bottom: var(--space-4);
+      display: none;
+      line-height: 1.5;
+    }
+    .auth-alert.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      display: block;
+    }
+    .auth-alert.success {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="auth-card">
+    <a href="../" class="auth-logo">
+      <div class="auth-logo-icon">🐾</div>
+      <span>oPOS<span style="color:var(--brand-500);">sum</span></span>
+    </a>
+
+    <div class="auth-tabs">
+      <div class="auth-tab active" id="tab-login">Iniciar Sesión</div>
+      <div class="auth-tab" id="tab-register">Crear Cuenta</div>
+    </div>
+
+    <div id="auth-alert" class="auth-alert"></div>
+
+    <form id="auth-form">
+      <div class="form-group" id="name-group" style="display: none;">
+        <label class="form-label" for="full-name">Nombre Completo</label>
+        <input class="form-input" type="text" id="full-name" placeholder="Ej. Juan Pérez" autocomplete="name">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Correo Electrónico</label>
+        <input class="form-input" type="email" id="email" required placeholder="tu@negocio.com" autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Contraseña</label>
+        <input class="form-input" type="password" id="password" required placeholder="Mínimo 6 caracteres" autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="btn-primary btn-submit" id="btn-submit">
+        Iniciar Sesión
+      </button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { getSupabase } from '../js/supabase-client.js';
+    import { tenantManager } from '../js/tenant-context.js';
+
+    const supabase = getSupabase();
+    let mode = 'login'; // 'login' | 'register'
+
+    // Check if user is already logged in
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const context = await tenantManager.init();
+        if (context.needsOnboarding) {
+          window.location.href = 'onboarding.html';
+        } else {
+          window.location.href = 'dashboard.html';
+        }
+      }
+    }
+    checkSession();
+
+    // Elements
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const nameGroup = document.getElementById('name-group');
+    const btnSubmit = document.getElementById('btn-submit');
+    const authForm = document.getElementById('auth-form');
+    const authAlert = document.getElementById('auth-alert');
+
+    function showAlert(message, type = 'error') {
+      authAlert.textContent = message;
+      authAlert.className = `auth-alert ${type}`;
+    }
+
+    function hideAlert() {
+      authAlert.style.display = 'none';
+      authAlert.className = 'auth-alert';
+    }
+
+    tabLogin.addEventListener('click', () => {
+      mode = 'login';
+      tabLogin.classList.add('active');
+      tabRegister.classList.remove('active');
+      nameGroup.style.display = 'none';
+      btnSubmit.textContent = 'Iniciar Sesión';
+      hideAlert();
+    });
+
+    tabRegister.addEventListener('click', () => {
+      mode = 'register';
+      tabRegister.classList.add('active');
+      tabLogin.classList.remove('active');
+      nameGroup.style.display = 'block';
+      btnSubmit.textContent = 'Crear Cuenta Gratis';
+      hideAlert();
+    });
+
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      btnSubmit.disabled = true;
+      btnSubmit.textContent = 'Procesando...';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const fullName = document.getElementById('full-name').value.trim();
+
+      try {
+        if (mode === 'register') {
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name: fullName }
+            }
+          });
+
+          if (error) throw error;
+
+          if (data.session) {
+            // Direct session
+            const context = await tenantManager.init();
+            window.location.href = context.needsOnboarding ? 'onboarding.html' : 'dashboard.html';
+          } else {
+            showAlert('Cuenta creada exitosamente. Por favor verifica tu correo para confirmar.', 'success');
+          }
+        } else {
+          // Login
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) throw error;
+
+          const context = await tenantManager.init();
+          if (context.needsOnboarding) {
+            window.location.href = 'onboarding.html';
+          } else {
+            window.location.href = 'dashboard.html';
+          }
+        }
+      } catch (err) {
+        console.error('Auth error:', err);
+        showAlert(err.message || 'Ocurrió un error en la autenticación.');
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = mode === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta Gratis';
+      }
+    });
+  </script>
+</body>
+</html>

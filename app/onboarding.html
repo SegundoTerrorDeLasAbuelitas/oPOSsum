@@ -124,6 +124,24 @@
       </div>
 
       <div class="form-group">
+        <label class="form-label" for="biz-type">Tipo de Negocio *</label>
+        <select class="form-input" id="biz-type" required style="cursor: pointer; background: white;">
+          <option value="" disabled selected>Selecciona tu tipo de negocio...</option>
+          <option value="Abarrotes y Minisúper">🏪 Abarrotes, Minisúper y Tiendita</option>
+          <option value="Ropa y Calzado">👗 Ropa, Calzado y Boutiques</option>
+          <option value="Restaurante y Cafetería">☕ Cafetería, Restaurante o Bar</option>
+          <option value="Farmacia">💊 Farmacia y Salud</option>
+          <option value="Ferretería">🔨 Ferretería y Materiales</option>
+          <option value="Electrónica y Celulares">📱 Electrónica, Celulares y Cómputo</option>
+          <option value="Belleza y Spa">💈 Barbería, Salón de Belleza y Spa</option>
+          <option value="Papelería">📚 Papelería y Regalos</option>
+          <option value="Panadería y Repostería">🥐 Panadería y Repostería</option>
+          <option value="Servicios Profesionales">💼 Servicios Profesionales</option>
+          <option value="Otro Comercio">📦 Otro Tipo de Negocio / Comercio</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label class="form-label" for="biz-slug">Identificador Único (Slug)</label>
         <input class="form-input" type="text" id="biz-slug" required placeholder="cafeteria-la-sierra">
         <div class="slug-preview">Identificador: <strong id="slug-text">cafeteria-la-sierra</strong></div>
@@ -159,6 +177,7 @@
 
     // Auto-generate slug from name
     const bizNameInput = document.getElementById('biz-name');
+    const bizTypeInput = document.getElementById('biz-type');
     const bizSlugInput = document.getElementById('biz-slug');
     const slugText = document.getElementById('slug-text');
     const alertBox = document.getElementById('alert');
@@ -188,17 +207,33 @@
     document.getElementById('onboard-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       alertBox.style.display = 'none';
+
+      const name = bizNameInput.value.trim();
+      const type = bizTypeInput.value;
+      const slug = cleanSlug(bizSlugInput.value.trim());
+
+      if (!name) {
+        alertBox.textContent = 'Por favor ingresa el nombre de tu negocio.';
+        alertBox.className = 'alert-box error';
+        return;
+      }
+
+      if (!type) {
+        alertBox.textContent = 'Por favor selecciona el tipo de negocio (campo obligatorio).';
+        alertBox.className = 'alert-box error';
+        return;
+      }
+
+      if (!slug) {
+        alertBox.textContent = 'Por favor ingresa un identificador para tu negocio.';
+        alertBox.className = 'alert-box error';
+        return;
+      }
+
       btnCreate.disabled = true;
       btnCreate.textContent = 'Creando entorno aislado...';
 
-      const name = bizNameInput.value.trim();
-      const slug = cleanSlug(bizSlugInput.value.trim());
-
       try {
-        if (!name || !slug) {
-          throw new Error('Por favor completa todos los campos.');
-        }
-
         // Verify session before creating
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
@@ -206,7 +241,7 @@
           return;
         }
 
-        const result = await tenantManager.createTenant(name, slug);
+        const result = await tenantManager.createTenant(name, slug, type);
         btnCreate.textContent = '¡Negocio creado! Entrando...';
         window.location.href = 'dashboard.html';
       } catch (err) {

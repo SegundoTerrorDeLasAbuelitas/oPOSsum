@@ -303,6 +303,10 @@
             <span class="info-val" id="info-tenant-name">-</span>
           </div>
           <div class="info-item">
+            <span class="info-label">Tipo de Negocio:</span>
+            <span class="info-val" id="info-tenant-type">-</span>
+          </div>
+          <div class="info-item">
             <span class="info-label">Identificador (Slug):</span>
             <span class="info-val" id="info-tenant-slug">-</span>
           </div>
@@ -383,6 +387,7 @@
       
       // Populate tenant info
       document.getElementById('info-tenant-name').textContent = context.tenant.name;
+      document.getElementById('info-tenant-type').textContent = context.tenant.business_type || 'Comercio General';
       document.getElementById('info-tenant-slug').textContent = context.tenant.slug;
       document.getElementById('info-tenant-id').textContent = context.tenant.id;
       document.getElementById('active-tenant-id-badge').textContent = context.tenant.id;

@@ -39,6 +39,7 @@ export class TenantManager {
           id,
           name,
           slug,
+          business_type,
           status
         )
       `)
@@ -111,10 +112,11 @@ export class TenantManager {
   /**
    * Create a new tenant with the current user as Owner
    */
-  async createTenant(businessName, businessSlug) {
+  async createTenant(businessName, businessSlug, businessType = 'retail') {
     const { data, error } = await this.supabase.rpc('create_tenant_with_owner', {
       p_name: businessName,
-      p_slug: businessSlug
+      p_slug: businessSlug,
+      p_business_type: businessType
     });
 
     if (error) {

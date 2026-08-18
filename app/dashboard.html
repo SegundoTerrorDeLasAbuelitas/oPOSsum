@@ -209,9 +209,15 @@
     .top-utility-bar {
       display: flex;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: space-between;
       gap: 1rem;
       margin-bottom: 1.25rem;
+    }
+
+    .user-greeting {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
     }
 
     .branch-badge {
@@ -405,122 +411,398 @@
     }
 
     .product-thumb {
-      width: 42px;
-      height: 42px;
-      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
       border: 1px solid #f1f5f9;
-      object-fit: contain;
-      background: #fafafa;
-      padding: 2px;
-      flex-shrink: 0;
-    }
-
-    .product-name {
-      font-weight: 600;
-      color: #1e293b;
-      font-size: 0.88rem;
-    }
-
-    .stock-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 0.3rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .stock-badge.in-stock {
-      background-color: var(--stock-green-bg);
-      color: var(--stock-green-text);
-    }
-
-    .stock-badge.low-stock {
-      background-color: var(--stock-red-bg);
-      color: var(--stock-red-text);
-    }
-
-    .low-stock-dot {
-      width: 6px;
-      height: 6px;
-      background-color: var(--stock-red-text);
-      border-radius: 50%;
-      display: inline-block;
-    }
-
-    .price-cell, .cost-cell {
-      font-weight: 500;
-      color: #334155;
-    }
-
-    .action-edit {
-      color: #0284c7;
-      font-weight: 600;
-      text-decoration: none;
-      font-size: 0.86rem;
-      cursor: pointer;
-    }
-
-    .action-edit:hover {
-      text-decoration: underline;
-    }
-
-    .pagination-wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 1.5rem;
-      margin-top: 0.5rem;
-      border-top: 1px solid var(--border-light);
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .page-nav-btn {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-weight: 600;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.3rem;
-      cursor: pointer;
-    }
-
-    .page-numbers {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-    }
-
-    .page-num {
-      width: 32px;
-      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 6px;
+      background: #f8fafc;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .product-group-title {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 0.92rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .product-group-desc {
+      font-size: 0.75rem;
       color: var(--text-muted);
-      text-decoration: none;
+      margin-top: 2px;
+    }
+
+    .presentations-chips-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.35rem;
+    }
+
+    .presentation-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0.2rem 0.6rem;
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.75rem;
       font-weight: 600;
-      font-size: 0.85rem;
     }
 
-    .page-num.active {
-      color: var(--brand-primary);
-      position: relative;
+    .presentation-chip .chip-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--brand-primary);
+      border-radius: 50%;
+    }
+
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.65rem;
+      background: #f0fdf4;
+      color: #166534;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .action-edit-btn {
+      color: #0284c7;
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.86rem;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-family: inherit;
+    }
+
+    .action-edit-btn:hover {
+      text-decoration: underline;
+      color: #0369a1;
+    }
+
+    /* Empty state */
+    .empty-products-state {
+      padding: 3.5rem 1rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 1rem;
+    }
+
+    .empty-title {
+      font-size: 1.1rem;
       font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
     }
 
-    .page-num.active::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 6px;
-      right: 6px;
-      height: 2px;
-      background-color: var(--brand-primary);
-      border-radius: 2px;
+    .empty-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      max-width: 360px;
+      margin-bottom: 1.25rem;
+      line-height: 1.5;
+    }
+
+    /* ================= MODALS ================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      padding: 1.75rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .modal-header-icon {
+      width: 38px;
+      height: 38px;
+      background: #e6fdf6;
+      color: #00aa79;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .modal-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .modal-close-btn:hover {
+      color: #0f172a;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(0, 229, 163, 0.2);
+    }
+
+    /* Presentations Sub-section */
+    .presentations-section {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .presentations-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .presentations-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .presentations-help {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .presentation-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .presentation-input {
+      flex: 1;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      background: white;
+      outline: none;
+    }
+
+    .presentation-input:focus {
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(0, 229, 163, 0.2);
+    }
+
+    .btn-remove-presentation {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: background 0.15s ease;
+    }
+
+    .btn-remove-presentation:hover {
+      background: #fecaca;
+    }
+
+    .btn-add-presentation-row {
+      background: white;
+      border: 1px dashed #cbd5e1;
+      color: #0f172a;
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: inherit;
+      margin-top: 0.25rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-add-presentation-row:hover {
+      border-color: var(--brand-primary);
+      color: #00aa79;
+      background: #f0fdf9;
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-cancel {
+      background: white;
+      border: 1px solid var(--border-color);
+      color: #475569;
+      padding: 0.7rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-cancel:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-save-modal {
+      background: var(--brand-primary);
+      color: #091335;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0, 229, 163, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-save-modal:hover {
+      background: var(--brand-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .modal-alert {
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .modal-alert.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      display: block;
     }
 
     /* ================= LIENZO 2: PUNTO DE VENTA (NUEVA VENTA) ================= */
@@ -537,7 +819,6 @@
       }
     }
 
-    /* Left POS Column */
     .pos-catalog-panel {
       display: flex;
       flex-direction: column;
@@ -600,7 +881,6 @@
       color: var(--text-main);
     }
 
-    /* Printer Status Badge */
     .printer-status-box {
       display: inline-flex;
       align-items: center;
@@ -634,7 +914,6 @@
       border-radius: 9999px;
     }
 
-    /* Right POS Column: Cart & Totals */
     .pos-cart-panel {
       background: white;
       border: 1px solid var(--border-color);
@@ -693,7 +972,6 @@
       color: #ef4444;
     }
 
-    /* Customer Tag */
     .customer-pill {
       display: flex;
       align-items: center;
@@ -728,7 +1006,6 @@
       color: #64748b;
     }
 
-    /* Cart Items */
     .cart-items-list {
       display: flex;
       flex-direction: column;
@@ -794,7 +1071,6 @@
       background: #f8fafc;
     }
 
-    /* Cart Totals */
     .cart-totals {
       border-top: 1px solid var(--border-light);
       padding-top: 1rem;
@@ -951,10 +1227,11 @@
     
     <!-- Top Utility Bar with Branch selector -->
     <div class="top-utility-bar">
-      <div class="branch-badge">
+      <div class="user-greeting" id="user-greeting">oPOSsum Multi-Tenant</div>
+      <div class="branch-badge" id="btn-switch-branch">
         <div class="branch-icon-box">🏢</div>
         <div class="branch-info">
-          <div class="branch-name" id="branch-title">Sucursal Polanco ▾</div>
+          <div class="branch-name" id="branch-title">Cargando negocio... ▾</div>
           <div class="branch-sub" id="branch-pos-title">Caja Principal</div>
         </div>
       </div>
@@ -968,7 +1245,7 @@
       <!-- Content Header -->
       <div class="content-header">
         <h1 class="page-title">Productos</h1>
-        <button class="btn-add-product">
+        <button class="btn-add-product" id="btn-open-add-product">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Agregar producto
         </button>
@@ -980,146 +1257,29 @@
         <!-- Search Bar -->
         <div class="search-wrapper">
           <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="search-input" placeholder="Filtrar productos">
+          <input type="text" class="search-input" id="search-products-input" placeholder="Filtrar productos por nombre o descripción">
         </div>
 
-        <!-- Table -->
+        <!-- Dynamic Products Table -->
         <div class="table-responsive">
           <table class="products-table">
             <thead>
               <tr>
                 <th class="checkbox-col"><div class="custom-checkbox"></div></th>
-                <th>Producto</th>
-                <th>Stock</th>
-                <th>Precio</th>
-                <th>Costo</th>
+                <th>Producto y Descripción</th>
+                <th>Presentaciones</th>
+                <th>Cantidad</th>
                 <th>Acciones</th>
               </tr>
             </thead>
-            <tbody>
-              
-              <!-- Row 1: Café Nescafé Clásico -->
+            <tbody id="products-table-body">
               <tr>
-                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-                <td>
-                  <div class="product-cell">
-                    <img class="product-thumb" src="https://images.unsplash.com/photo-1559056199-641a0ac8b55e?w=100&auto=format&fit=crop&q=60" alt="Café Nescafé Clásico">
-                    <span class="product-name">Café Nescafé Clásico</span>
-                  </div>
+                <td colspan="5" style="text-align: center; padding: 2rem; color: #64748b;">
+                  Cargando productos...
                 </td>
-                <td><span class="stock-badge in-stock">33 unidades</span></td>
-                <td class="price-cell">$15</td>
-                <td class="cost-cell">$12</td>
-                <td><a href="#" class="action-edit">Editar</a></td>
               </tr>
-
-              <!-- Row 2: Pan blanco Bimbo -->
-              <tr>
-                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-                <td>
-                  <div class="product-cell">
-                    <img class="product-thumb" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=100&auto=format&fit=crop&q=60" alt="Pan blanco Bimbo">
-                    <span class="product-name">Pan blanco Bimbo</span>
-                  </div>
-                </td>
-                <td><span class="stock-badge low-stock"><span class="low-stock-dot"></span> 2 unidades</span></td>
-                <td class="price-cell">$19</td>
-                <td class="cost-cell">$13</td>
-                <td><a href="#" class="action-edit">Editar</a></td>
-              </tr>
-
-              <!-- Row 3: Nesquik Chocolate -->
-              <tr>
-                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-                <td>
-                  <div class="product-cell">
-                    <img class="product-thumb" src="https://images.unsplash.com/photo-1541658016709-82535e94bc69?w=100&auto=format&fit=crop&q=60" alt="Nesquik Chocolate">
-                    <span class="product-name">Nesquik Chocolate</span>
-                  </div>
-                </td>
-                <td><span class="stock-badge in-stock">14 unidades</span></td>
-                <td class="price-cell">$20</td>
-                <td class="cost-cell">$14</td>
-                <td><a href="#" class="action-edit">Editar</a></td>
-              </tr>
-
-              <!-- Row 4: Galletas Oreo Chocolate -->
-              <tr>
-                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-                <td>
-                  <div class="product-cell">
-                    <img class="product-thumb" src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=100&auto=format&fit=crop&q=60" alt="Galletas Oreo Chocolate">
-                    <span class="product-name">Galletas Oreo Chocolate</span>
-                  </div>
-                </td>
-                <td><span class="stock-badge in-stock">72 unidades</span></td>
-                <td class="price-cell">$12</td>
-                <td class="cost-cell">$10</td>
-                <td><a href="#" class="action-edit">Editar</a></td>
-              </tr>
-
-              <!-- Row 5: Pasta Barilla Fusilli -->
-              <tr>
-                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-                <td>
-                  <div class="product-cell">
-                    <img class="product-thumb" src="https://images.unsplash.com/photo-1551462147-ff29053bfc14?w=100&auto=format&fit=crop&q=60" alt="Pasta Barilla Fusilli">
-                    <span class="product-name">Pasta Barilla Fusilli</span>
-                  </div>
-                </td>
-                <td><span class="stock-badge in-stock">26 unidades</span></td>
-                <td class="price-cell">$21</td>
-                <td class="cost-cell">$17</td>
-                <td><a href="#" class="action-edit">Editar</a></td>
-              </tr>
-
-              <!-- Row 6: Nutella 650 g -->
-              <tr>
-                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-                <td>
-                  <div class="product-cell">
-                    <img class="product-thumb" src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=100&auto=format&fit=crop&q=60" alt="Nutella 650 g">
-                    <span class="product-name">Nutella 650 g</span>
-                  </div>
-                </td>
-                <td><span class="stock-badge in-stock">31 unidades</span></td>
-                <td class="price-cell">$18</td>
-                <td class="cost-cell">$10</td>
-                <td><a href="#" class="action-edit">Editar</a></td>
-              </tr>
-
-              <!-- Row 7: Galletas Marías -->
-              <tr>
-                <td class="checkbox-col"><div class="custom-checkbox"></div></td>
-                <td>
-                  <div class="product-cell">
-                    <img class="product-thumb" src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=100&auto=format&fit=crop&q=60" alt="Galletas Marías">
-                    <span class="product-name">Galletas Marías</span>
-                  </div>
-                </td>
-                <td><span class="stock-badge in-stock">74 unidades</span></td>
-                <td class="price-cell">$52</td>
-                <td class="cost-cell">$36</td>
-                <td><a href="#" class="action-edit">Editar</a></td>
-              </tr>
-
             </tbody>
           </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="pagination-wrapper">
-          <a href="#" class="page-nav-btn">← Previous</a>
-          <div class="page-numbers">
-            <a href="#" class="page-num">1</a>
-            <a href="#" class="page-num active">2</a>
-            <a href="#" class="page-num">3</a>
-            <span class="page-dots">...</span>
-            <a href="#" class="page-num">8</a>
-            <a href="#" class="page-num">9</a>
-            <a href="#" class="page-num">10</a>
-          </div>
-          <a href="#" class="page-nav-btn">Next →</a>
         </div>
 
       </div>
@@ -1143,7 +1303,7 @@
           <!-- Quick Action 2x2 Cards -->
           <div class="quick-actions-grid">
             
-            <div class="quick-action-card">
+            <div class="quick-action-card" id="quick-action-add-prod">
               <div class="action-card-icon icon-mint">➕</div>
               <span class="action-card-text">Crear Producto</span>
             </div>
@@ -1204,8 +1364,6 @@
 
           <!-- Cart items list -->
           <div class="cart-items-list">
-            
-            <!-- Item 1 -->
             <div class="cart-item">
               <div class="cart-item-left">
                 <div class="item-icon-box" style="background:#f1f5f9;">👕</div>
@@ -1219,7 +1377,6 @@
               <div class="qty-box">2</div>
             </div>
 
-            <!-- Item 2 -->
             <div class="cart-item">
               <div class="cart-item-left">
                 <div class="item-icon-box" style="background:#e0f2fe;">👕</div>
@@ -1231,7 +1388,6 @@
               <div class="qty-box">2</div>
             </div>
 
-            <!-- Item 3: Discount -->
             <div class="cart-item">
               <div class="cart-item-left">
                 <div class="item-icon-box" style="background:#f3e8ff;">🏷️</div>
@@ -1242,7 +1398,6 @@
               </div>
               <div style="font-size:0.85rem; font-weight:700; color:#9333ea;">- $20.00</div>
             </div>
-
           </div>
 
           <!-- Totals -->
@@ -1269,14 +1424,137 @@
 
   </main>
 
-  <!-- ================= SCRIPT & NAVIGATION CONTROLLER ================= -->
+  <!-- ========================================================================= -->
+  <!-- MODAL: AGREGAR PRODUCTO (GRUPO + PRESENTACIONES)                         -->
+  <!-- ========================================================================= -->
+  <div id="modal-add-product" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon">📦</div>
+          <div>
+            <h3 class="modal-title">Agregar Producto</h3>
+            <p class="modal-subtitle">Registra tu producto y sus presentaciones.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-add-modal">&times;</button>
+      </div>
+
+      <div id="modal-add-alert" class="modal-alert"></div>
+
+      <form id="form-add-product">
+        <div class="form-group">
+          <label class="form-label" for="add-prod-name">Producto (Nombre) *</label>
+          <input type="text" id="add-prod-name" class="form-input" required placeholder="Ej. Nescafé">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="add-prod-desc">Descripción (opcional)</label>
+          <input type="text" id="add-prod-desc" class="form-input" placeholder="Ej. Café soluble clásico">
+        </div>
+
+        <!-- Presentations Section -->
+        <div class="presentations-section">
+          <div class="presentations-header">
+            <span class="presentations-title">🏷️ Presentaciones *</span>
+          </div>
+          <p class="presentations-help">
+            Agrega las presentaciones que vendes (ej. 1 kg, 500 g, Pieza). Cada una tendrá su propio inventario.
+          </p>
+
+          <div id="presentations-container">
+            <!-- Row 1 (Default) -->
+            <div class="presentation-row">
+              <input type="text" class="presentation-input" placeholder="Ej. 1 kg" required>
+            </div>
+          </div>
+
+          <button type="button" class="btn-add-presentation-row" id="btn-add-presentation-row">
+            + Agregar otra presentación
+          </button>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btn-cancel-add-modal">Cancelar</button>
+          <button type="submit" class="btn-save-modal" id="btn-submit-add-product">
+            Guardar producto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: EDITAR PRODUCTO & AGREGAR PRESENTACIONES                           -->
+  <!-- ========================================================================= -->
+  <div id="modal-edit-product" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" style="background:#e0f2fe; color:#0284c7;">✏️</div>
+          <div>
+            <h3 class="modal-title">Editar Producto</h3>
+            <p class="modal-subtitle" id="edit-modal-subtitle">Modifica datos o añade presentaciones.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-edit-modal">&times;</button>
+      </div>
+
+      <div id="modal-edit-alert" class="modal-alert"></div>
+
+      <form id="form-edit-product">
+        <input type="hidden" id="edit-group-id">
+
+        <div class="form-group">
+          <label class="form-label" for="edit-prod-name">Nombre del Producto *</label>
+          <input type="text" id="edit-prod-name" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="edit-prod-desc">Descripción (opcional)</label>
+          <input type="text" id="edit-prod-desc" class="form-input">
+        </div>
+
+        <!-- Current Presentations -->
+        <div class="presentations-section">
+          <div class="presentations-header">
+            <span class="presentations-title">🏷️ Presentaciones Registradas</span>
+          </div>
+
+          <div id="edit-existing-presentations" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+            <!-- Rendered dynamically -->
+          </div>
+
+          <!-- Add new presentation to existing group -->
+          <label class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Agregar nueva presentación a este grupo:</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" id="edit-new-pres-input" class="presentation-input" placeholder="Ej. 250 g">
+            <button type="button" class="btn-save-modal" id="btn-save-new-pres" style="padding: 0.6rem 1rem; font-size: 0.8rem; white-space: nowrap;">
+              + Añadir
+            </button>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btn-cancel-edit-modal">Cerrar</button>
+          <button type="submit" class="btn-save-modal" id="btn-submit-edit-product">
+            Guardar Cambios
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= SCRIPT & CONTROLLER ================= -->
   <script type="module">
     import { getSupabase } from '../js/supabase-client.js';
     import { tenantManager } from '../js/tenant-context.js';
+    import { productsManager } from '../js/products-manager.js';
 
     const supabase = getSupabase();
+    let currentLoadedProducts = [];
 
-    // Elements
+    // Views Elements
     const viewProductos = document.getElementById('view-productos');
     const viewPos = document.getElementById('view-pos');
     
@@ -1285,6 +1563,34 @@
     const navInicio = document.getElementById('nav-inicio');
     const btnQuickNewSale = document.getElementById('btn-quick-new-sale');
 
+    // Modals Elements
+    const modalAddProduct = document.getElementById('modal-add-product');
+    const btnOpenAddProduct = document.getElementById('btn-open-add-product');
+    const btnCloseAddModal = document.getElementById('btn-close-add-modal');
+    const btnCancelAddModal = document.getElementById('btn-cancel-add-modal');
+    const btnAddPresentationRow = document.getElementById('btn-add-presentation-row');
+    const presentationsContainer = document.getElementById('presentations-container');
+    const formAddProduct = document.getElementById('form-add-product');
+    const modalAddAlert = document.getElementById('modal-add-alert');
+    const btnSubmitAddProduct = document.getElementById('btn-submit-add-product');
+
+    const modalEditProduct = document.getElementById('modal-edit-product');
+    const btnCloseEditModal = document.getElementById('btn-close-edit-modal');
+    const btnCancelEditModal = document.getElementById('btn-cancel-edit-modal');
+    const formEditProduct = document.getElementById('form-edit-product');
+    const editGroupId = document.getElementById('edit-group-id');
+    const editProdName = document.getElementById('edit-prod-name');
+    const editProdDesc = document.getElementById('edit-prod-desc');
+    const editExistingPres = document.getElementById('edit-existing-presentations');
+    const editNewPresInput = document.getElementById('edit-new-pres-input');
+    const btnSaveNewPres = document.getElementById('btn-save-new-pres');
+    const modalEditAlert = document.getElementById('modal-edit-alert');
+    const btnSubmitEditProduct = document.getElementById('btn-submit-edit-product');
+
+    const productsTableBody = document.getElementById('products-table-body');
+    const searchProductsInput = document.getElementById('search-products-input');
+
+    // View Switching
     function switchView(viewName) {
       if (viewName === 'pos') {
         viewProductos.classList.remove('active');
@@ -1300,38 +1606,359 @@
         navVentas.classList.remove('active');
         navProductos.classList.add('active');
         window.location.hash = 'productos';
+        loadProductsList();
       }
     }
 
-    // Navigation events
-    navProductos.addEventListener('click', (e) => {
-      e.preventDefault();
+    navProductos.addEventListener('click', (e) => { e.preventDefault(); switchView('productos'); });
+    navVentas.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
+    navInicio.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
+    btnQuickNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
+    document.getElementById('quick-action-add-prod').addEventListener('click', () => {
       switchView('productos');
+      openAddModal();
     });
 
-    navVentas.addEventListener('click', (e) => {
+    // -------------------------------------------------------------
+    // PRODUCTS DATA RENDERING
+    // -------------------------------------------------------------
+    async function loadProductsList() {
+      try {
+        productsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align:center; padding: 2rem; color: #64748b;">
+              Cargando productos...
+            </td>
+          </tr>
+        `;
+
+        const groups = await productsManager.getProductGroupsWithPresentations();
+        currentLoadedProducts = groups || [];
+
+        renderProductsTable(currentLoadedProducts);
+      } catch (err) {
+        console.error('Error loading products:', err);
+        productsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align:center; padding: 2rem; color: #ef4444;">
+              Error al cargar productos: ${err.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function renderProductsTable(groups) {
+      if (!groups || groups.length === 0) {
+        productsTableBody.innerHTML = `
+          <tr>
+            <td colspan="5">
+              <div class="empty-products-state">
+                <div class="empty-icon">📦</div>
+                <h3 class="empty-title">Aún no tienes productos registrados</h3>
+                <p class="empty-desc">Comienza registrando tu primer producto y sus diferentes presentaciones para tu negocio.</p>
+                <button class="btn-add-product" id="btn-empty-add-product">
+                  + Agregar primer producto
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        document.getElementById('btn-empty-add-product')?.addEventListener('click', openAddModal);
+        return;
+      }
+
+      productsTableBody.innerHTML = groups.map(g => {
+        const presList = g.products || [];
+        const presChips = presList.map(p => `
+          <span class="presentation-chip">
+            <span class="chip-dot"></span>
+            ${escapeHtml(p.name)}
+          </span>
+        `).join('');
+
+        return `
+          <tr>
+            <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+            <td>
+              <div class="product-cell">
+                <div class="product-thumb">📦</div>
+                <div>
+                  <div class="product-group-title">${escapeHtml(g.name)}</div>
+                  ${g.description ? `<div class="product-group-desc">${escapeHtml(g.description)}</div>` : ''}
+                  <div class="presentations-chips-wrapper">
+                    ${presChips || '<span style="font-size:11px; color:#94a3b8;">Sin presentaciones</span>'}
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div style="font-size: 0.82rem; color: #334155;">
+                ${presList.map(p => escapeHtml(p.name)).join(', ')}
+              </div>
+            </td>
+            <td>
+              <span class="count-badge">${presList.length} ${presList.length === 1 ? 'presentación' : 'presentaciones'}</span>
+            </td>
+            <td>
+              <button class="action-edit-btn" data-group-id="${g.id}">Editar</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // Attach click events to Edit buttons
+      document.querySelectorAll('.action-edit-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const groupId = e.target.getAttribute('data-group-id');
+          openEditModal(groupId);
+        });
+      });
+    }
+
+    // Search filter
+    searchProductsInput.addEventListener('input', () => {
+      const q = searchProductsInput.value.toLowerCase().trim();
+      if (!q) {
+        renderProductsTable(currentLoadedProducts);
+        return;
+      }
+
+      const filtered = currentLoadedProducts.filter(g => {
+        const matchName = g.name.toLowerCase().includes(q);
+        const matchDesc = (g.description || '').toLowerCase().includes(q);
+        const matchPres = (g.products || []).some(p => p.name.toLowerCase().includes(q));
+        return matchName || matchDesc || matchPres;
+      });
+
+      renderProductsTable(filtered);
+    });
+
+    // -------------------------------------------------------------
+    // ADD PRODUCT MODAL LOGIC
+    // -------------------------------------------------------------
+    function openAddModal() {
+      modalAddAlert.style.display = 'none';
+      formAddProduct.reset();
+      
+      // Reset presentations to single row
+      presentationsContainer.innerHTML = `
+        <div class="presentation-row">
+          <input type="text" class="presentation-input" placeholder="Ej. 1 kg" required>
+        </div>
+      `;
+
+      modalAddProduct.classList.add('active');
+      document.getElementById('add-prod-name').focus();
+    }
+
+    function closeAddModal() {
+      modalAddProduct.classList.remove('active');
+    }
+
+    btnOpenAddProduct.addEventListener('click', openAddModal);
+    btnCloseAddModal.addEventListener('click', closeAddModal);
+    btnCancelAddModal.addEventListener('click', closeAddModal);
+
+    // Add another presentation row
+    btnAddPresentationRow.addEventListener('click', () => {
+      const row = document.createElement('div');
+      row.className = 'presentation-row';
+      row.innerHTML = `
+        <input type="text" class="presentation-input" placeholder="Ej. 500 g" required>
+        <button type="button" class="btn-remove-presentation" title="Eliminar">&times;</button>
+      `;
+      row.querySelector('.btn-remove-presentation').addEventListener('click', () => {
+        row.remove();
+      });
+      presentationsContainer.appendChild(row);
+      row.querySelector('.presentation-input').focus();
+    });
+
+    // Submit Add Product Form
+    formAddProduct.addEventListener('submit', async (e) => {
       e.preventDefault();
-      switchView('pos');
+      modalAddAlert.style.display = 'none';
+
+      const name = document.getElementById('add-prod-name').value.trim();
+      const desc = document.getElementById('add-prod-desc').value.trim();
+
+      // Collect all presentation inputs
+      const presentationInputs = presentationsContainer.querySelectorAll('.presentation-input');
+      const presentations = Array.from(presentationInputs)
+        .map(input => input.value.trim())
+        .filter(val => val.length > 0);
+
+      if (!name) {
+        showAddAlert('Por favor ingresa el nombre del producto.');
+        return;
+      }
+
+      if (presentations.length === 0) {
+        showAddAlert('Debes agregar al menos una presentación (ej. 1 kg, Pieza).');
+        return;
+      }
+
+      btnSubmitAddProduct.disabled = true;
+      btnSubmitAddProduct.textContent = 'Guardando...';
+
+      try {
+        await productsManager.createProductWithPresentations(name, desc, presentations);
+        closeAddModal();
+        await loadProductsList();
+      } catch (err) {
+        console.error('Error creating product:', err);
+        showAddAlert(err.message || 'Error al guardar el producto.');
+      } finally {
+        btnSubmitAddProduct.disabled = false;
+        btnSubmitAddProduct.textContent = 'Guardar producto';
+      }
     });
 
-    navInicio.addEventListener('click', (e) => {
+    function showAddAlert(msg) {
+      modalAddAlert.textContent = msg;
+      modalAddAlert.className = 'modal-alert error';
+      modalAddAlert.style.display = 'block';
+    }
+
+    // -------------------------------------------------------------
+    // EDIT PRODUCT MODAL LOGIC
+    // -------------------------------------------------------------
+    function openEditModal(groupId) {
+      const group = currentLoadedProducts.find(g => g.id === groupId);
+      if (!group) return;
+
+      modalEditAlert.style.display = 'none';
+      editGroupId.value = group.id;
+      editProdName.value = group.name;
+      editProdDesc.value = group.description || '';
+      editNewPresInput.value = '';
+
+      renderEditExistingPresentations(group);
+
+      modalEditProduct.classList.add('active');
+    }
+
+    function renderEditExistingPresentations(group) {
+      const presList = group.products || [];
+      if (presList.length === 0) {
+        editExistingPres.innerHTML = '<span style="font-size:12px; color:#94a3b8;">No hay presentaciones registradas.</span>';
+        return;
+      }
+
+      editExistingPres.innerHTML = presList.map(p => `
+        <span class="presentation-chip" style="font-size:13px; padding: 4px 10px;">
+          <span class="chip-dot"></span>
+          <strong>${escapeHtml(p.name)}</strong>
+        </span>
+      `).join('');
+    }
+
+    function closeEditModal() {
+      modalEditProduct.classList.remove('active');
+    }
+
+    btnCloseEditModal.addEventListener('click', closeEditModal);
+    btnCancelEditModal.addEventListener('click', closeEditModal);
+
+    // Save changes to name / description
+    formEditProduct.addEventListener('submit', async (e) => {
       e.preventDefault();
-      switchView('pos');
+      modalEditAlert.style.display = 'none';
+
+      const groupId = editGroupId.value;
+      const name = editProdName.value.trim();
+      const desc = editProdDesc.value.trim();
+
+      if (!name) {
+        showEditAlert('El nombre del producto es obligatorio.');
+        return;
+      }
+
+      btnSubmitEditProduct.disabled = true;
+      btnSubmitEditProduct.textContent = 'Guardando...';
+
+      try {
+        await productsManager.updateProductGroup(groupId, name, desc);
+        closeEditModal();
+        await loadProductsList();
+      } catch (err) {
+        showEditAlert(err.message || 'Error al actualizar.');
+      } finally {
+        btnSubmitEditProduct.disabled = false;
+        btnSubmitEditProduct.textContent = 'Guardar Cambios';
+      }
     });
 
-    btnQuickNewSale.addEventListener('click', (e) => {
-      e.preventDefault();
-      switchView('pos');
+    // Add new presentation to existing group
+    btnSaveNewPres.addEventListener('click', async () => {
+      const groupId = editGroupId.value;
+      const presName = editNewPresInput.value.trim();
+
+      if (!presName) {
+        showEditAlert('Escribe el nombre de la presentación (ej. 250 g).');
+        return;
+      }
+
+      btnSaveNewPres.disabled = true;
+      btnSaveNewPres.textContent = 'Añadiendo...';
+
+      try {
+        await productsManager.addPresentationToGroup(groupId, presName);
+        editNewPresInput.value = '';
+        await loadProductsList();
+        
+        // Refresh modal list
+        const updatedGroup = currentLoadedProducts.find(g => g.id === groupId);
+        if (updatedGroup) renderEditExistingPresentations(updatedGroup);
+      } catch (err) {
+        showEditAlert(err.message || 'Error al añadir presentación.');
+      } finally {
+        btnSaveNewPres.disabled = false;
+        btnSaveNewPres.textContent = '+ Añadir';
+      }
     });
 
-    // Check URL hash on load
-    window.addEventListener('load', () => {
+    function showEditAlert(msg) {
+      modalEditAlert.textContent = msg;
+      modalEditAlert.className = 'modal-alert error';
+      modalEditAlert.style.display = 'block';
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // -------------------------------------------------------------
+    // INITIALIZATION
+    // -------------------------------------------------------------
+    async function init() {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          const context = await tenantManager.init();
+          if (context.tenant) {
+            document.getElementById('branch-title').textContent = `${context.tenant.name} ▾`;
+            document.getElementById('user-greeting').textContent = `Negocio: ${context.tenant.name} (${context.role})`;
+          }
+        }
+      } catch (err) {
+        console.log('Session context loaded');
+      }
+
+      // Check URL hash on load
       if (window.location.hash === '#pos') {
         switchView('pos');
       } else {
         switchView('productos');
       }
-    });
+    }
 
     window.addEventListener('hashchange', () => {
       if (window.location.hash === '#pos') {
@@ -1341,21 +1968,7 @@
       }
     });
 
-    // Initialize tenant context
-    async function initSession() {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          const context = await tenantManager.init();
-          if (context.tenant) {
-            document.getElementById('branch-title').textContent = `${context.tenant.name} ▾`;
-          }
-        }
-      } catch (err) {
-        console.log('Session context loaded in canvas mode');
-      }
-    }
-    initSession();
+    init();
   </script>
 
 </body>

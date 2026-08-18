@@ -30,6 +30,11 @@
       
       --stock-green-bg: #d1fae5;
       --stock-green-text: #059669;
+
+      --danger-color: #ef4444;
+      --danger-hover: #dc2626;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
     }
 
     * {
@@ -90,7 +95,6 @@
       color: var(--brand-primary);
     }
 
-    /* Button: Nueva Venta */
     .sidebar-quick-btn {
       width: 100%;
       background: var(--brand-primary);
@@ -488,6 +492,37 @@
       justify-content: center;
       font-size: 28px;
       margin-bottom: 1rem;
+    }
+
+    /* Notification Banner */
+    .toast-notification {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: #0f172a;
+      color: white;
+      padding: 0.85rem 1.25rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 20000;
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .toast-notification.success {
+      background: #064e3b;
+      border: 1px solid #059669;
+      color: #a7f3d0;
+    }
+
+    .toast-notification.error {
+      background: #7f1d1d;
+      border: 1px solid #dc2626;
+      color: #fecaca;
     }
 
     /* ================= NUEVA VENTA (POS) ================= */
@@ -1181,9 +1216,9 @@
     }
 
     .btn-remove-presentation {
-      background: #fee2e2;
-      color: #dc2626;
-      border: none;
+      background: var(--danger-bg);
+      color: var(--danger-color);
+      border: 1px solid var(--danger-border);
       border-radius: 8px;
       width: 36px;
       height: 36px;
@@ -1193,12 +1228,13 @@
       cursor: pointer;
       font-size: 14px;
       flex-shrink: 0;
-      transition: background 0.15s ease;
+      transition: all 0.15s ease;
       margin-top: 14px;
     }
 
     .btn-remove-presentation:hover {
-      background: #fecaca;
+      background: var(--danger-color);
+      color: white;
     }
 
     .btn-add-presentation-row {
@@ -1222,6 +1258,14 @@
       border-color: var(--brand-primary);
       color: #00aa79;
       background: #f0fdf9;
+    }
+
+    .modal-actions-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
     }
 
     .modal-actions {
@@ -1267,6 +1311,25 @@
       transform: translateY(-1px);
     }
 
+    .btn-danger-link {
+      background: transparent;
+      border: none;
+      color: var(--danger-color);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.5rem 0;
+    }
+
+    .btn-danger-link:hover {
+      color: var(--danger-hover);
+      text-decoration: underline;
+    }
+
     .modal-alert {
       padding: 0.65rem 0.85rem;
       border-radius: 8px;
@@ -1276,10 +1339,102 @@
     }
 
     .modal-alert.error {
-      background: #fef2f2;
+      background: var(--danger-bg);
       color: #991b1b;
-      border: 1px solid #fecaca;
+      border: 1px solid var(--danger-border);
       display: block;
+    }
+
+    /* Floating Confirmation Delete Modal */
+    .confirm-delete-box {
+      text-align: center;
+    }
+
+    .confirm-delete-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--danger-bg);
+      color: var(--danger-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      margin: 0 auto 1rem;
+    }
+
+    .confirm-delete-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 0.35rem;
+    }
+
+    .confirm-delete-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+      line-height: 1.4;
+    }
+
+    .confirm-instruction-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 0.5rem;
+      display: block;
+      text-align: left;
+    }
+
+    .confirm-target-word {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #0f172a;
+      font-family: monospace;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 800;
+    }
+
+    .input-confirm-word {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      text-align: center;
+      font-weight: 700;
+      outline: none;
+      margin-bottom: 1.25rem;
+      transition: border-color 0.15s ease;
+    }
+
+    .input-confirm-word:focus {
+      border-color: var(--danger-color);
+    }
+
+    .btn-delete-confirmed {
+      background: var(--danger-color);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .btn-delete-confirmed:hover:not(:disabled) {
+      background: var(--danger-hover);
+    }
+
+    .btn-delete-confirmed:disabled {
+      background: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
     }
 
     /* Sale Detail Items List in Modal */
@@ -1293,6 +1448,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Toast Notification -->
+  <div id="toast-notification" class="toast-notification"></div>
 
   <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar">
@@ -1428,7 +1586,7 @@
       <div class="content-header">
         <div>
           <h1 class="page-title">Productos</h1>
-          <p class="page-subtitle">Administra tu catálogo, categorías y presentaciones.</p>
+          <p class="page-subtitle">Administra tu catálogo, categorías y presentaciones con precios.</p>
         </div>
         <button class="btn-action-primary" id="btn-open-add-product">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1729,7 +1887,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: EDITAR PRODUCTO                                                   -->
+  <!-- MODAL: EDITAR PRODUCTO & PRESENTACIONES                                  -->
   <!-- ========================================================================= -->
   <div id="modal-edit-product" class="modal-overlay">
     <div class="modal-card">
@@ -1738,7 +1896,7 @@
           <div class="modal-header-icon" style="background:#e0f2fe; color:#0284c7;">✏️</div>
           <div>
             <h3 class="modal-title">Editar Producto</h3>
-            <p class="modal-subtitle" id="edit-modal-subtitle">Modifica datos o añade presentaciones con precio.</p>
+            <p class="modal-subtitle">Modifica la información, presentaciones o elimina el producto.</p>
           </div>
         </div>
         <button class="modal-close-btn" id="btn-close-edit-modal">&times;</button>
@@ -1750,9 +1908,9 @@
         <input type="hidden" id="edit-group-id">
 
         <div class="form-group">
-          <label class="form-label" for="edit-prod-category">Categoría</label>
-          <select id="edit-prod-category" class="form-select">
-            <option value="">Sin categoría</option>
+          <label class="form-label" for="edit-prod-category">Categoría *</label>
+          <select id="edit-prod-category" class="form-select" required>
+            <option value="">Selecciona una categoría...</option>
           </select>
         </div>
 
@@ -1768,28 +1926,64 @@
 
         <div class="presentations-section">
           <div class="presentations-header">
-            <span class="presentations-title">🏷️ Presentaciones Registradas</span>
+            <span class="presentations-title">🏷️ Presentaciones y Precios</span>
+          </div>
+          <p class="presentations-help">
+            Modifica el nombre o precio de cada presentación existente, o agrega nuevas presentaciones.
+          </p>
+
+          <!-- List of editable presentation rows -->
+          <div id="edit-presentations-list">
+            <!-- Rendered dynamically -->
           </div>
 
-          <div id="edit-existing-presentations" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;"></div>
+          <!-- Add new presentation row trigger -->
+          <button type="button" class="btn-add-presentation-row" id="btn-add-edit-pres-row">
+            + Agregar otra presentación
+          </button>
+        </div>
 
-          <label class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Agregar nueva presentación a este grupo:</label>
-          <div style="display: grid; grid-template-columns: 1.5fr 1fr auto; gap: 0.5rem;">
-            <input type="text" id="edit-new-pres-name" class="presentation-input" placeholder="Ej. 250 g">
-            <input type="number" step="0.01" min="0" id="edit-new-pres-price" class="presentation-input" placeholder="Precio $">
-            <button type="button" class="btn-save-modal" id="btn-save-new-pres" style="padding: 0.5rem 1rem; font-size: 0.8rem; white-space: nowrap;">
-              + Añadir
+        <div class="modal-actions-between">
+          <button type="button" class="btn-danger-link" id="btn-trigger-delete-product">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Eliminar producto
+          </button>
+          <div style="display:flex; gap:0.75rem;">
+            <button type="button" class="btn-cancel" id="btn-cancel-edit-modal">Cancelar</button>
+            <button type="submit" class="btn-save-modal" id="btn-submit-edit-product">
+              Guardar cambios
             </button>
           </div>
         </div>
+      </form>
+    </div>
+  </div>
 
-        <div class="modal-actions">
-          <button type="button" class="btn-cancel" id="btn-cancel-edit-modal">Cerrar</button>
-          <button type="submit" class="btn-save-modal" id="btn-submit-edit-product">
-            Guardar Cambios
+  <!-- ========================================================================= -->
+  <!-- MODAL: CONFIRMAR ELIMINACIÓN DESTRUCTIVA (COINCIDENCIA EXACTA: "eliminar") -->
+  <!-- ========================================================================= -->
+  <div id="modal-confirm-delete" class="modal-overlay">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="confirm-delete-box">
+        <div class="confirm-delete-icon">⚠️</div>
+        <h3 class="confirm-delete-title" id="confirm-delete-title">Eliminar elemento</h3>
+        <p class="confirm-delete-desc" id="confirm-delete-desc">
+          Esta acción no se puede deshacer.
+        </p>
+
+        <label class="confirm-instruction-label" for="input-confirm-word">
+          Para continuar escribe exactamente: <span class="confirm-target-word">eliminar</span>
+        </label>
+        
+        <input type="text" id="input-confirm-word" class="input-confirm-word" placeholder="eliminar" autocomplete="off">
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
+          <button type="button" class="btn-cancel" id="btn-cancel-delete">Cancelar</button>
+          <button type="button" class="btn-delete-confirmed" id="btn-execute-delete" disabled>
+            Eliminar
           </button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -1831,9 +2025,7 @@
       </div>
 
       <h4 style="font-size: 0.88rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">Productos Vendidos</h4>
-      <div id="detail-items-container" style="margin-bottom: 1.25rem; max-height: 200px; overflow-y: auto;">
-        <!-- Dynamic Line Items -->
-      </div>
+      <div id="detail-items-container" style="margin-bottom: 1.25rem; max-height: 200px; overflow-y: auto;"></div>
 
       <div style="border-top: 1.5px solid var(--border-color); padding-top: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
         <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #64748b;">
@@ -1870,6 +2062,20 @@
     let currentCartItems = [];
     let activeCategoryFilter = 'all';
 
+    // Pending deletion state
+    let pendingDeletion = null; // { type: 'presentation' | 'product_group', id: string, name: string, groupId?: string }
+
+    // Toast
+    const toastNotification = document.getElementById('toast-notification');
+    function showToast(msg, type = 'success') {
+      toastNotification.textContent = msg;
+      toastNotification.className = `toast-notification ${type}`;
+      toastNotification.style.display = 'flex';
+      setTimeout(() => {
+        toastNotification.style.display = 'none';
+      }, 3500);
+    }
+
     // Views Elements
     const viewProductos = document.getElementById('view-productos');
     const viewNuevaVenta = document.getElementById('view-nueva-venta');
@@ -1897,6 +2103,7 @@
     const inputNewCatName = document.getElementById('input-new-cat-name');
     const btnSaveInlineCat = document.getElementById('btn-save-inline-cat');
 
+    // Edit Modal Elements
     const modalEditProduct = document.getElementById('modal-edit-product');
     const btnCloseEditModal = document.getElementById('btn-close-edit-modal');
     const btnCancelEditModal = document.getElementById('btn-cancel-edit-modal');
@@ -1905,12 +2112,19 @@
     const editProdName = document.getElementById('edit-prod-name');
     const editProdDesc = document.getElementById('edit-prod-desc');
     const editProdCategory = document.getElementById('edit-prod-category');
-    const editExistingPres = document.getElementById('edit-existing-presentations');
-    const editNewPresName = document.getElementById('edit-new-pres-name');
-    const editNewPresPrice = document.getElementById('edit-new-pres-price');
-    const btnSaveNewPres = document.getElementById('btn-save-new-pres');
+    const editPresentationsList = document.getElementById('edit-presentations-list');
+    const btnAddEditPresRow = document.getElementById('btn-add-edit-pres-row');
+    const btnTriggerDeleteProduct = document.getElementById('btn-trigger-delete-product');
     const modalEditAlert = document.getElementById('modal-edit-alert');
     const btnSubmitEditProduct = document.getElementById('btn-submit-edit-product');
+
+    // Delete Confirmation Modal Elements
+    const modalConfirmDelete = document.getElementById('modal-confirm-delete');
+    const confirmDeleteTitle = document.getElementById('confirm-delete-title');
+    const confirmDeleteDesc = document.getElementById('confirm-delete-desc');
+    const inputConfirmWord = document.getElementById('input-confirm-word');
+    const btnCancelDelete = document.getElementById('btn-cancel-delete');
+    const btnExecuteDelete = document.getElementById('btn-execute-delete');
 
     // Sales Modal Elements
     const modalSaleDetail = document.getElementById('modal-sale-detail');
@@ -1942,7 +2156,7 @@
     const btnClearPosCart = document.getElementById('btn-clear-pos-cart');
 
     // -------------------------------------------------------------
-    // ROUTING & VIEW SWITCHING (PRODUCTOS vs NUEVA VENTA vs VENTAS)
+    // ROUTING & VIEW SWITCHING
     // -------------------------------------------------------------
     function switchView(viewName) {
       viewProductos.classList.remove('active');
@@ -2001,7 +2215,7 @@
         categories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
       
       addProdCategory.innerHTML = optionsHtml;
-      editProdCategory.innerHTML = '<option value="">Sin categoría</option>' + 
+      editProdCategory.innerHTML = '<option value="">Selecciona una categoría...</option>' + 
         categories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('');
     }
 
@@ -2058,7 +2272,7 @@
     });
 
     // -------------------------------------------------------------
-    // PRODUCTS DATA RENDERING (PRODUCTOS TABLE)
+    // PRODUCTS DATA RENDERING
     // -------------------------------------------------------------
     async function loadProductsList() {
       try {
@@ -2181,10 +2395,24 @@
         await loadCategories();
         const groups = await productsManager.getProductGroupsWithPresentations();
         currentLoadedProducts = groups || [];
+        
+        // Clean cart of any products that no longer exist
+        validateCartItemsAgainstCatalog();
+        
         filterPosCards();
       } catch (err) {
         console.error('Error loading POS catalog:', err);
       }
+    }
+
+    function validateCartItemsAgainstCatalog() {
+      const validPresentationIds = new Set();
+      currentLoadedProducts.forEach(g => {
+        (g.products || []).forEach(p => validPresentationIds.add(p.id));
+      });
+
+      currentCartItems = currentCartItems.filter(item => validPresentationIds.has(item.id));
+      renderPosCart();
     }
 
     function filterPosCards() {
@@ -2639,6 +2867,7 @@
       try {
         await productsManager.createProductWithPresentations(name, desc, categoryId, presentations);
         closeAddModal();
+        showToast('Producto creado correctamente.');
         await loadProductsList();
         await loadPosCatalog();
       } catch (err) {
@@ -2657,7 +2886,7 @@
     }
 
     // -------------------------------------------------------------
-    // EDIT PRODUCT MODAL LOGIC
+    // UNIFIED EDIT PRODUCT & PRESENTATIONS MODAL LOGIC
     // -------------------------------------------------------------
     function openEditModal(groupId) {
       const group = currentLoadedProducts.find(g => g.id === groupId);
@@ -2668,28 +2897,80 @@
       editProdName.value = group.name;
       editProdDesc.value = group.description || '';
       editProdCategory.value = group.category_id || '';
-      editNewPresName.value = '';
-      editNewPresPrice.value = '';
 
-      renderEditExistingPresentations(group);
+      renderEditPresentationsList(group);
 
       modalEditProduct.classList.add('active');
     }
 
-    function renderEditExistingPresentations(group) {
+    function renderEditPresentationsList(group) {
       const presList = group.products || [];
+      
       if (presList.length === 0) {
-        editExistingPres.innerHTML = '<span style="font-size:12px; color:#94a3b8;">No hay presentaciones registradas.</span>';
+        editPresentationsList.innerHTML = `
+          <div class="presentation-card-row new-pres-row">
+            <div>
+              <span class="field-sublabel">Presentación *</span>
+              <input type="text" class="presentation-input edit-pres-name" placeholder="Ej. 1 kg" required>
+            </div>
+            <div>
+              <span class="field-sublabel">Precio ($) *</span>
+              <input type="number" step="0.01" min="0" class="presentation-input edit-pres-price" placeholder="250.00" required>
+            </div>
+            <div></div>
+          </div>
+        `;
         return;
       }
 
-      editExistingPres.innerHTML = presList.map(p => `
-        <span class="presentation-chip" style="font-size:13px; padding: 5px 12px;">
-          <strong>${escapeHtml(p.name)}</strong>
-          <span class="chip-price">$${parseFloat(p.price || 0).toFixed(2)}</span>
-        </span>
+      editPresentationsList.innerHTML = presList.map(p => `
+        <div class="presentation-card-row" data-pres-id="${p.id}">
+          <div>
+            <span class="field-sublabel">Presentación *</span>
+            <input type="text" class="presentation-input edit-pres-name" value="${escapeHtml(p.name)}" required>
+          </div>
+          <div>
+            <span class="field-sublabel">Precio ($) *</span>
+            <input type="number" step="0.01" min="0" class="presentation-input edit-pres-price" value="${parseFloat(p.price || 0).toFixed(2)}" required>
+          </div>
+          <div>
+            <button type="button" class="btn-remove-presentation btn-delete-pres-trigger" data-pres-id="${p.id}" data-pres-name="${escapeHtml(p.name)}" title="Eliminar presentación">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+          </div>
+        </div>
       `).join('');
+
+      // Wire individual presentation delete buttons
+      editPresentationsList.querySelectorAll('.btn-delete-pres-trigger').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const presId = btn.getAttribute('data-pres-id');
+          const presName = btn.getAttribute('data-pres-name');
+          promptDeleteConfirmation('presentation', presId, presName, group.id);
+        });
+      });
     }
+
+    btnAddEditPresRow.addEventListener('click', () => {
+      const row = document.createElement('div');
+      row.className = 'presentation-card-row new-pres-row';
+      row.innerHTML = `
+        <div>
+          <span class="field-sublabel">Nueva Presentación *</span>
+          <input type="text" class="presentation-input edit-pres-name" placeholder="Ej. 250 g" required>
+        </div>
+        <div>
+          <span class="field-sublabel">Precio ($) *</span>
+          <input type="number" step="0.01" min="0" class="presentation-input edit-pres-price" placeholder="100.00" required>
+        </div>
+        <div>
+          <button type="button" class="btn-remove-presentation btn-remove-unsaved-row" title="Quitar">&times;</button>
+        </div>
+      `;
+      row.querySelector('.btn-remove-unsaved-row').addEventListener('click', () => row.remove());
+      editPresentationsList.appendChild(row);
+      row.querySelector('.edit-pres-name').focus();
+    });
 
     function closeEditModal() {
       modalEditProduct.classList.remove('active');
@@ -2698,6 +2979,7 @@
     btnCloseEditModal.addEventListener('click', closeEditModal);
     btnCancelEditModal.addEventListener('click', closeEditModal);
 
+    // Save All Edits (Product group details + Presentations updates + New presentations addition)
     formEditProduct.addEventListener('submit', async (e) => {
       e.preventDefault();
       modalEditAlert.style.display = 'none';
@@ -2705,10 +2987,21 @@
       const groupId = editGroupId.value;
       const name = editProdName.value.trim();
       const desc = editProdDesc.value.trim();
-      const categoryId = editProdCategory.value || null;
+      const categoryId = editProdCategory.value;
 
       if (!name) {
         showEditAlert('El nombre del producto es obligatorio.');
+        return;
+      }
+
+      if (!categoryId) {
+        showEditAlert('Selecciona una categoría.');
+        return;
+      }
+
+      const rows = editPresentationsList.querySelectorAll('.presentation-card-row');
+      if (rows.length === 0) {
+        showEditAlert('Debes tener al menos una presentación registrada.');
         return;
       }
 
@@ -2716,50 +3009,49 @@
       btnSubmitEditProduct.textContent = 'Guardando...';
 
       try {
+        // 1. Update Product Group Header
         await productsManager.updateProductGroup(groupId, name, desc, categoryId);
+
+        // 2. Process all presentation rows
+        for (const row of rows) {
+          const presId = row.getAttribute('data-pres-id');
+          const presName = row.querySelector('.edit-pres-name').value.trim();
+          const presPrice = parseFloat(row.querySelector('.edit-pres-price').value);
+
+          if (!presName) {
+            throw new Error('Todas las presentaciones deben tener nombre.');
+          }
+          if (isNaN(presPrice) || presPrice < 0) {
+            throw new Error(`El precio de "${presName}" debe ser mayor o igual a 0.`);
+          }
+
+          if (presId) {
+            // Existing presentation -> UPDATE
+            await productsManager.updatePresentation(presId, presName, presPrice);
+          } else {
+            // Newly added row -> INSERT
+            await productsManager.addPresentationToGroup(groupId, presName, presPrice);
+          }
+        }
+
         closeEditModal();
+        showToast('Producto y presentaciones actualizados correctamente.');
         await loadProductsList();
         await loadPosCatalog();
       } catch (err) {
-        showEditAlert(err.message || 'Error al actualizar.');
+        console.error('Error saving edits:', err);
+        showEditAlert(err.message || 'Error al guardar los cambios.');
       } finally {
         btnSubmitEditProduct.disabled = false;
-        btnSubmitEditProduct.textContent = 'Guardar Cambios';
+        btnSubmitEditProduct.textContent = 'Guardar cambios';
       }
     });
 
-    btnSaveNewPres.addEventListener('click', async () => {
+    // Delete Product Group trigger inside Edit Modal
+    btnTriggerDeleteProduct.addEventListener('click', () => {
       const groupId = editGroupId.value;
-      const presName = editNewPresName.value.trim();
-      const presPrice = parseFloat(editNewPresPrice.value);
-
-      if (!presName) {
-        showEditAlert('Escribe el nombre de la presentación (ej. 250 g).');
-        return;
-      }
-      if (isNaN(presPrice) || presPrice < 0) {
-        showEditAlert('Ingresa un precio válido mayor o igual a 0.');
-        return;
-      }
-
-      btnSaveNewPres.disabled = true;
-      btnSaveNewPres.textContent = 'Añadiendo...';
-
-      try {
-        await productsManager.addPresentationToGroup(groupId, presName, presPrice);
-        editNewPresName.value = '';
-        editNewPresPrice.value = '';
-        await loadProductsList();
-        await loadPosCatalog();
-        
-        const updatedGroup = currentLoadedProducts.find(g => g.id === groupId);
-        if (updatedGroup) renderEditExistingPresentations(updatedGroup);
-      } catch (err) {
-        showEditAlert(err.message || 'Error al añadir presentación.');
-      } finally {
-        btnSaveNewPres.disabled = false;
-        btnSaveNewPres.textContent = '+ Añadir';
-      }
+      const groupName = editProdName.value.trim();
+      promptDeleteConfirmation('product_group', groupId, groupName);
     });
 
     function showEditAlert(msg) {
@@ -2767,6 +3059,87 @@
       modalEditAlert.className = 'modal-alert error';
       modalEditAlert.style.display = 'block';
     }
+
+    // -------------------------------------------------------------
+    // FLOATING CONFIRMATION MODAL WITH EXACT MATCH "eliminar"
+    // -------------------------------------------------------------
+    function promptDeleteConfirmation(type, id, name, groupId = null) {
+      pendingDeletion = { type, id, name, groupId };
+      
+      inputConfirmWord.value = '';
+      btnExecuteDelete.disabled = true;
+
+      if (type === 'presentation') {
+        confirmDeleteTitle.textContent = 'Eliminar presentación';
+        confirmDeleteDesc.textContent = `Esta acción eliminará permanentemente la presentación "${name}".`;
+      } else {
+        confirmDeleteTitle.textContent = 'Eliminar producto';
+        confirmDeleteDesc.textContent = `Esta acción eliminará permanentemente el producto "${name}" y todas sus presentaciones asociadas.`;
+      }
+
+      modalConfirmDelete.classList.add('active');
+      setTimeout(() => inputConfirmWord.focus(), 100);
+    }
+
+    function closeDeleteConfirmationModal() {
+      modalConfirmDelete.classList.remove('active');
+      pendingDeletion = null;
+    }
+
+    btnCancelDelete.addEventListener('click', closeDeleteConfirmationModal);
+
+    // Exact match verification on "eliminar"
+    inputConfirmWord.addEventListener('input', () => {
+      const val = inputConfirmWord.value;
+      if (val === 'eliminar') {
+        btnExecuteDelete.disabled = false;
+      } else {
+        btnExecuteDelete.disabled = true;
+      }
+    });
+
+    btnExecuteDelete.addEventListener('click', async () => {
+      if (!pendingDeletion || inputConfirmWord.value !== 'eliminar') return;
+
+      const { type, id, groupId } = pendingDeletion;
+      btnExecuteDelete.disabled = true;
+      btnExecuteDelete.textContent = 'Eliminando...';
+
+      try {
+        if (type === 'presentation') {
+          await productsManager.deletePresentation(id);
+          closeDeleteConfirmationModal();
+          showToast('Presentación eliminada correctamente.');
+          
+          await loadProductsList();
+          await loadPosCatalog();
+
+          // If edit modal is open, refresh its presentation rows
+          if (modalEditProduct.classList.contains('active') && groupId) {
+            const updatedGroup = currentLoadedProducts.find(g => g.id === groupId);
+            if (updatedGroup) {
+              renderEditPresentationsList(updatedGroup);
+            } else {
+              closeEditModal();
+            }
+          }
+        } else if (type === 'product_group') {
+          await productsManager.deleteProductGroup(id);
+          closeDeleteConfirmationModal();
+          closeEditModal();
+          showToast('Producto eliminado correctamente.');
+
+          await loadProductsList();
+          await loadPosCatalog();
+        }
+      } catch (err) {
+        console.error('Error during deletion:', err);
+        alert(err.message || 'No fue posible eliminar el producto. Inténtalo nuevamente.');
+      } finally {
+        btnExecuteDelete.disabled = false;
+        btnExecuteDelete.textContent = 'Eliminar';
+      }
+    });
 
     function escapeHtml(str) {
       if (!str) return '';

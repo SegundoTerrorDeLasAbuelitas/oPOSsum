@@ -202,6 +202,13 @@ export class ProductsManager {
    * Update Product Group details (Name, Description, Category)
    */
   async updateProductGroup(groupId, name, description, categoryId = null) {
+    if (!tenantManager.currentTenant) {
+      await tenantManager.init();
+    }
+
+    const tenantId = tenantManager.currentTenant?.id;
+    if (!tenantId) throw new Error('No hay tenant activo.');
+
     const { data, error } = await this.supabase
       .from('product_groups')
       .update({
@@ -211,6 +218,7 @@ export class ProductsManager {
         updated_at: new Date().toISOString()
       })
       .eq('id', groupId)
+      .eq('tenant_id', tenantId)
       .select()
       .single();
 
@@ -220,6 +228,96 @@ export class ProductsManager {
     }
 
     return data;
+  }
+
+  /**
+   * Update an existing presentation's name and price
+   */
+  async updatePresentation(presentationId, name, price, cost = 0) {
+    if (!tenantManager.currentTenant) {
+      await tenantManager.init();
+    }
+
+    const tenantId = tenantManager.currentTenant?.id;
+    if (!tenantId) throw new Error('No hay tenant activo.');
+
+    const cleanName = name ? name.trim() : '';
+    if (!cleanName) throw new Error('El nombre de la presentación no puede estar vacío.');
+
+    const parsedPrice = parseFloat(price);
+    if (isNaN(parsedPrice) || parsedPrice < 0) {
+      throw new Error('El precio debe ser un número mayor o igual a 0.');
+    }
+
+    const { data, error } = await this.supabase
+      .from('products')
+      .update({
+        name: cleanName,
+        price: parsedPrice,
+        cost: parseFloat(cost) || 0,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', presentationId)
+      .eq('tenant_id', tenantId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating presentation:', error);
+      throw new Error(error.message || 'Error al actualizar la presentación.');
+    }
+
+    return data;
+  }
+
+  /**
+   * Delete a presentation physically from the database
+   */
+  async deletePresentation(presentationId) {
+    if (!tenantManager.currentTenant) {
+      await tenantManager.init();
+    }
+
+    const tenantId = tenantManager.currentTenant?.id;
+    if (!tenantId) throw new Error('No hay tenant activo.');
+
+    const { error } = await this.supabase
+      .from('products')
+      .delete()
+      .eq('id', presentationId)
+      .eq('tenant_id', tenantId);
+
+    if (error) {
+      console.error('Error deleting presentation:', error);
+      throw new Error(error.message || 'No fue posible eliminar la presentación. Inténtalo nuevamente.');
+    }
+
+    return true;
+  }
+
+  /**
+   * Delete a product group and its associated presentations from the database
+   */
+  async deleteProductGroup(groupId) {
+    if (!tenantManager.currentTenant) {
+      await tenantManager.init();
+    }
+
+    const tenantId = tenantManager.currentTenant?.id;
+    if (!tenantId) throw new Error('No hay tenant activo.');
+
+    const { error } = await this.supabase
+      .from('product_groups')
+      .delete()
+      .eq('id', groupId)
+      .eq('tenant_id', tenantId);
+
+    if (error) {
+      console.error('Error deleting product group:', error);
+      throw new Error(error.message || 'No fue posible eliminar el producto. Inténtalo nuevamente.');
+    }
+
+    return true;
   }
 }
 

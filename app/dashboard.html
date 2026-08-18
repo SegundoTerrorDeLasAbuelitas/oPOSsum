@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>oPOSsum — Productos & POS</title>
+  <title>oPOSsum — Punto de Venta, Productos & Ventas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -90,6 +90,7 @@
       color: var(--brand-primary);
     }
 
+    /* Button: Nueva Venta */
     .sidebar-quick-btn {
       width: 100%;
       background: var(--brand-primary);
@@ -271,7 +272,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ================= LIENZO 1: PRODUCTOS ================= */
+    /* Common Card & Tables */
     .content-header {
       display: flex;
       align-items: center;
@@ -286,7 +287,13 @@
       letter-spacing: -0.02em;
     }
 
-    .btn-add-product {
+    .page-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-action-primary {
       background-color: var(--brand-primary);
       color: #091335;
       border: none;
@@ -302,12 +309,12 @@
       transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
     }
 
-    .btn-add-product:hover {
+    .btn-action-primary:hover {
       background-color: var(--brand-primary-hover);
       box-shadow: 0 4px 12px rgba(0, 229, 163, 0.35);
     }
 
-    .products-card {
+    .data-card {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: 16px;
@@ -348,21 +355,17 @@
       box-shadow: 0 0 0 3px rgba(0, 229, 163, 0.2);
     }
 
-    .search-input::placeholder {
-      color: #94a3b8;
-    }
-
     .table-responsive {
       overflow-x: auto;
     }
 
-    .products-table {
+    .app-table {
       width: 100%;
       border-collapse: collapse;
       text-align: left;
     }
 
-    .products-table th {
+    .app-table th {
       padding: 0.85rem 1rem;
       font-size: 0.82rem;
       font-weight: 700;
@@ -370,7 +373,7 @@
       border-bottom: 1px solid var(--border-color);
     }
 
-    .products-table td {
+    .app-table td {
       padding: 0.95rem 1rem;
       font-size: 0.88rem;
       color: var(--text-main);
@@ -378,7 +381,7 @@
       vertical-align: middle;
     }
 
-    .products-table tr:last-child td {
+    .app-table tr:last-child td {
       border-bottom: none;
     }
 
@@ -399,34 +402,6 @@
       background: white;
     }
 
-    .product-cell {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-    }
-
-    .product-thumb {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
-      border: 1px solid #f1f5f9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f8fafc;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-
-    .product-group-title {
-      font-weight: 700;
-      color: #0f172a;
-      font-size: 0.92rem;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
     .category-tag {
       background: #e0f2fe;
       color: #0369a1;
@@ -434,19 +409,6 @@
       font-weight: 800;
       padding: 1px 6px;
       border-radius: 4px;
-    }
-
-    .product-group-desc {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .presentations-chips-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.4rem;
-      margin-top: 0.35rem;
     }
 
     .presentation-chip {
@@ -478,7 +440,19 @@
       font-weight: 700;
     }
 
-    .action-edit-btn {
+    .status-pill-completed {
+      background: #dcfce7;
+      color: #15803d;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .action-btn-link {
       color: #0284c7;
       font-weight: 700;
       text-decoration: none;
@@ -489,13 +463,12 @@
       font-family: inherit;
     }
 
-    .action-edit-btn:hover {
+    .action-btn-link:hover {
       text-decoration: underline;
       color: #0369a1;
     }
 
-    /* Empty state */
-    .empty-products-state {
+    .empty-state-box {
       padding: 3.5rem 1rem;
       text-align: center;
       display: flex;
@@ -504,7 +477,7 @@
       justify-content: center;
     }
 
-    .empty-icon {
+    .empty-state-icon {
       width: 64px;
       height: 64px;
       border-radius: 50%;
@@ -517,351 +490,7 @@
       margin-bottom: 1rem;
     }
 
-    .empty-title {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--text-main);
-      margin-bottom: 0.35rem;
-    }
-
-    .empty-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      max-width: 360px;
-      margin-bottom: 1.25rem;
-      line-height: 1.5;
-    }
-
-    /* ================= MODALS ================= */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(5px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      padding: 1rem;
-      animation: fadeIn 0.2s ease-out;
-    }
-
-    .modal-overlay.active {
-      display: flex;
-    }
-
-    .modal-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 20px;
-      width: 100%;
-      max-width: 540px;
-      padding: 1.75rem;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    @keyframes modalSlideUp {
-      from { opacity: 0; transform: translateY(16px) scale(0.97); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.75rem;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .modal-header-left {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-    }
-
-    .modal-header-icon {
-      width: 38px;
-      height: 38px;
-      background: #e6fdf6;
-      color: #00aa79;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-    }
-
-    .modal-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--text-main);
-    }
-
-    .modal-subtitle {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .modal-close-btn {
-      background: transparent;
-      border: none;
-      font-size: 1.4rem;
-      color: #94a3b8;
-      cursor: pointer;
-      padding: 4px;
-      line-height: 1;
-    }
-
-    .modal-close-btn:hover {
-      color: #0f172a;
-    }
-
-    .form-group {
-      margin-bottom: 1.15rem;
-      text-align: left;
-    }
-
-    .form-label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #334155;
-      margin-bottom: 0.35rem;
-    }
-
-    .form-input, .form-select {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      font-size: 0.88rem;
-      font-family: inherit;
-      color: var(--text-main);
-      outline: none;
-      background: white;
-      transition: all 0.15s ease;
-    }
-
-    .form-input:focus, .form-select:focus {
-      border-color: var(--brand-primary);
-      box-shadow: 0 0 0 3px rgba(0, 229, 163, 0.2);
-    }
-
-    .category-select-wrapper {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .btn-create-cat-trigger {
-      background: #f1f5f9;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0 0.85rem;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #0f172a;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.15s ease;
-    }
-
-    .btn-create-cat-trigger:hover {
-      background: var(--brand-primary);
-      border-color: var(--brand-primary);
-      color: #091335;
-    }
-
-    .inline-cat-creator {
-      display: none;
-      background: #f0fdf9;
-      border: 1px solid #99f5db;
-      border-radius: 10px;
-      padding: 0.75rem;
-      margin-top: 0.5rem;
-      animation: fadeIn 0.15s ease-out;
-    }
-
-    .inline-cat-creator.active {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    /* Presentations Section */
-    .presentations-section {
-      background: #f8fafc;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .presentations-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-    }
-
-    .presentations-title {
-      font-size: 0.85rem;
-      font-weight: 800;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .presentations-help {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
-      line-height: 1.4;
-    }
-
-    .presentation-card-row {
-      background: white;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 0.75rem;
-      display: grid;
-      grid-template-columns: 1.5fr 1fr 36px;
-      gap: 0.5rem;
-      align-items: center;
-      margin-bottom: 0.6rem;
-      animation: fadeIn 0.15s ease-out;
-    }
-
-    .field-sublabel {
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: #64748b;
-      margin-bottom: 2px;
-      display: block;
-    }
-
-    .presentation-input {
-      width: 100%;
-      padding: 0.55rem 0.75rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-family: inherit;
-      background: white;
-      outline: none;
-    }
-
-    .presentation-input:focus {
-      border-color: var(--brand-primary);
-      box-shadow: 0 0 0 2px rgba(0, 229, 163, 0.2);
-    }
-
-    .btn-remove-presentation {
-      background: #fee2e2;
-      color: #dc2626;
-      border: none;
-      border-radius: 8px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      font-size: 14px;
-      flex-shrink: 0;
-      transition: background 0.15s ease;
-      margin-top: 14px;
-    }
-
-    .btn-remove-presentation:hover {
-      background: #fecaca;
-    }
-
-    .btn-add-presentation-row {
-      background: white;
-      border: 1px dashed #cbd5e1;
-      color: #0f172a;
-      border-radius: 8px;
-      padding: 0.5rem 0.85rem;
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-      font-family: inherit;
-      margin-top: 0.25rem;
-      transition: all 0.15s ease;
-    }
-
-    .btn-add-presentation-row:hover {
-      border-color: var(--brand-primary);
-      color: #00aa79;
-      background: #f0fdf9;
-    }
-
-    .modal-actions {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 0.75rem;
-      margin-top: 1.5rem;
-    }
-
-    .btn-cancel {
-      background: white;
-      border: 1px solid var(--border-color);
-      color: #475569;
-      padding: 0.7rem 1.25rem;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .btn-cancel:hover {
-      background: #f1f5f9;
-    }
-
-    .btn-save-modal {
-      background: var(--brand-primary);
-      color: #091335;
-      border: none;
-      padding: 0.7rem 1.5rem;
-      border-radius: 10px;
-      font-size: 0.88rem;
-      font-weight: 800;
-      cursor: pointer;
-      font-family: inherit;
-      box-shadow: 0 4px 12px rgba(0, 229, 163, 0.35);
-      transition: all 0.15s ease;
-    }
-
-    .btn-save-modal:hover {
-      background: var(--brand-primary-hover);
-      transform: translateY(-1px);
-    }
-
-    .modal-alert {
-      padding: 0.65rem 0.85rem;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      margin-bottom: 1rem;
-      display: none;
-    }
-
-    .modal-alert.error {
-      background: #fef2f2;
-      color: #991b1b;
-      border: 1px solid #fecaca;
-      display: block;
-    }
-
-    /* ================= LIENZO 2: PUNTO DE VENTA (NUEVA VENTA) ================= */
+    /* ================= NUEVA VENTA (POS) ================= */
     .pos-layout {
       display: grid;
       grid-template-columns: 1.15fr 0.85fr;
@@ -879,12 +508,6 @@
       display: flex;
       flex-direction: column;
       gap: 1.25rem;
-    }
-
-    .pos-section-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--text-main);
     }
 
     .quick-actions-grid {
@@ -937,7 +560,6 @@
       color: var(--text-main);
     }
 
-    /* POS Product Catalog & Category Filters */
     .pos-catalog-section {
       background: white;
       border: 1px solid var(--border-color);
@@ -1331,6 +953,343 @@
       background: var(--brand-primary-hover);
       transform: translateY(-1px);
     }
+
+    /* ================= MODALS ================= */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      padding: 1rem;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 540px;
+      padding: 1.75rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes modalSlideUp {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .modal-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .modal-header-icon {
+      width: 38px;
+      height: 38px;
+      background: #e6fdf6;
+      color: #00aa79;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--text-main);
+    }
+
+    .modal-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .modal-close-btn:hover {
+      color: #0f172a;
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+      text-align: left;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      color: var(--text-main);
+      outline: none;
+      background: white;
+      transition: all 0.15s ease;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 3px rgba(0, 229, 163, 0.2);
+    }
+
+    .category-select-wrapper {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-create-cat-trigger {
+      background: #f1f5f9;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0 0.85rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #0f172a;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+
+    .btn-create-cat-trigger:hover {
+      background: var(--brand-primary);
+      border-color: var(--brand-primary);
+      color: #091335;
+    }
+
+    .inline-cat-creator {
+      display: none;
+      background: #f0fdf9;
+      border: 1px solid #99f5db;
+      border-radius: 10px;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .inline-cat-creator.active {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .presentations-section {
+      background: #f8fafc;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .presentations-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .presentations-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .presentations-help {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+
+    .presentation-card-row {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.75rem;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 36px;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      animation: fadeIn 0.15s ease-out;
+    }
+
+    .field-sublabel {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-bottom: 2px;
+      display: block;
+    }
+
+    .presentation-input {
+      width: 100%;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-family: inherit;
+      background: white;
+      outline: none;
+    }
+
+    .presentation-input:focus {
+      border-color: var(--brand-primary);
+      box-shadow: 0 0 0 2px rgba(0, 229, 163, 0.2);
+    }
+
+    .btn-remove-presentation {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: background 0.15s ease;
+      margin-top: 14px;
+    }
+
+    .btn-remove-presentation:hover {
+      background: #fecaca;
+    }
+
+    .btn-add-presentation-row {
+      background: white;
+      border: 1px dashed #cbd5e1;
+      color: #0f172a;
+      border-radius: 8px;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: inherit;
+      margin-top: 0.25rem;
+      transition: all 0.15s ease;
+    }
+
+    .btn-add-presentation-row:hover {
+      border-color: var(--brand-primary);
+      color: #00aa79;
+      background: #f0fdf9;
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn-cancel {
+      background: white;
+      border: 1px solid var(--border-color);
+      color: #475569;
+      padding: 0.7rem 1.25rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .btn-cancel:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-save-modal {
+      background: var(--brand-primary);
+      color: #091335;
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0, 229, 163, 0.35);
+      transition: all 0.15s ease;
+    }
+
+    .btn-save-modal:hover {
+      background: var(--brand-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .modal-alert {
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .modal-alert.error {
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fecaca;
+      display: block;
+    }
+
+    /* Sale Detail Items List in Modal */
+    .sale-detail-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
   </style>
 </head>
 <body>
@@ -1353,7 +1312,7 @@
       <!-- Navigation Links -->
       <ul class="sidebar-nav">
         <li class="nav-item" id="nav-inicio">
-          <a href="#pos">
+          <a href="#nueva-venta">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
               Inicio
@@ -1380,7 +1339,7 @@
         </li>
 
         <li class="nav-item" id="nav-ventas">
-          <a href="#pos">
+          <a href="#ventas">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
               Ventas
@@ -1389,7 +1348,7 @@
         </li>
 
         <li class="nav-item" id="nav-estadisticas">
-          <a href="#productos">
+          <a href="#ventas">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
               Estadísticas
@@ -1408,7 +1367,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="#pos">
+          <a href="#nueva-venta">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
               Caja
@@ -1467,14 +1426,17 @@
     <div id="view-productos" class="canvas-view active">
       
       <div class="content-header">
-        <h1 class="page-title">Productos</h1>
-        <button class="btn-add-product" id="btn-open-add-product">
+        <div>
+          <h1 class="page-title">Productos</h1>
+          <p class="page-subtitle">Administra tu catálogo, categorías y presentaciones.</p>
+        </div>
+        <button class="btn-action-primary" id="btn-open-add-product">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Agregar producto
         </button>
       </div>
 
-      <div class="products-card">
+      <div class="data-card">
         
         <div class="search-wrapper">
           <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1482,7 +1444,7 @@
         </div>
 
         <div class="table-responsive">
-          <table class="products-table">
+          <table class="app-table">
             <thead>
               <tr>
                 <th class="checkbox-col"><div class="custom-checkbox"></div></th>
@@ -1506,14 +1468,14 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- LIENZO 2: PUNTO DE VENTA (NUEVA VENTA)                                    -->
+    <!-- LIENZO 2: NUEVA VENTA (POS OPERATIVO)                                     -->
     <!-- ========================================================================= -->
-    <div id="view-pos" class="canvas-view">
+    <div id="view-nueva-venta" class="canvas-view">
       <div class="pos-layout">
         
         <!-- Left: Search, Category Filters & Real Product Cards -->
         <div class="pos-catalog-panel">
-          <h2 class="pos-section-title">Buscar Productos</h2>
+          <h2 class="pos-section-title">Nueva Venta</h2>
           
           <div class="search-wrapper" style="margin-bottom: 0;">
             <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1581,7 +1543,7 @@
         <div class="pos-cart-panel">
           
           <div class="cart-header">
-            <h2 class="cart-title">Venta</h2>
+            <h2 class="cart-title">Venta en Curso</h2>
             <div class="cart-header-actions">
               <div class="price-type-select">🏷️ Precio Público ▾</div>
               <button class="btn-clear-cart" id="btn-clear-pos-cart">
@@ -1595,7 +1557,7 @@
           <div class="customer-pill">
             <div class="customer-avatar">👤</div>
             <div>
-              <div class="customer-name">Cliente Mostrador</div>
+              <div class="customer-name" id="pos-customer-name">Cliente Mostrador</div>
               <div class="customer-meta">Venta rápida</div>
             </div>
           </div>
@@ -1629,10 +1591,59 @@
       </div>
     </div>
 
+    <!-- ========================================================================= -->
+    <!-- LIENZO 3: VENTAS (HISTORIAL ADMINISTRATIVO)                              -->
+    <!-- ========================================================================= -->
+    <div id="view-ventas" class="canvas-view">
+      
+      <div class="content-header">
+        <div>
+          <h1 class="page-title">Ventas</h1>
+          <p class="page-subtitle">Consulta el historial de tus ventas realizadas.</p>
+        </div>
+        <button class="btn-action-primary" id="btn-go-to-new-sale">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          + Nueva venta
+        </button>
+      </div>
+
+      <div class="data-card">
+        
+        <div class="search-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" id="search-sales-input" placeholder="Buscar por folio (ej. V-000001) o cliente...">
+        </div>
+
+        <div class="table-responsive">
+          <table class="app-table">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Folio</th>
+                <th>Cliente</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="sales-table-body">
+              <tr>
+                <td colspan="7" style="text-align: center; padding: 2.5rem; color: #64748b;">
+                  Consultando historial de ventas...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
   </main>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: AGREGAR PRODUCTO (CATEGORÍA + GRUPO + PRESENTACIONES & PRECIOS)    -->
+  <!-- MODAL: AGREGAR PRODUCTO                                                  -->
   <!-- ========================================================================= -->
   <div id="modal-add-product" class="modal-overlay">
     <div class="modal-card">
@@ -1651,7 +1662,6 @@
 
       <form id="form-add-product">
         
-        <!-- Category Selector with inline creator -->
         <div class="form-group">
           <label class="form-label" for="add-prod-category">Categoría *</label>
           <div class="category-select-wrapper">
@@ -1663,7 +1673,6 @@
             </button>
           </div>
 
-          <!-- Inline Category Creator -->
           <div class="inline-cat-creator" id="inline-cat-creator">
             <input type="text" id="input-new-cat-name" class="form-input" placeholder="Nombre de la nueva categoría (ej. Café)" style="padding: 0.5rem 0.75rem; font-size: 0.82rem;">
             <button type="button" class="btn-save-modal" id="btn-save-inline-cat" style="padding: 0.5rem 0.85rem; font-size: 0.82rem; white-space: nowrap;">
@@ -1682,7 +1691,6 @@
           <input type="text" id="add-prod-desc" class="form-input" placeholder="Ej. Café soluble clásico">
         </div>
 
-        <!-- Presentations Section with Mandatory Prices -->
         <div class="presentations-section">
           <div class="presentations-header">
             <span class="presentations-title">🏷️ Presentaciones y Precios *</span>
@@ -1692,7 +1700,6 @@
           </p>
 
           <div id="presentations-container">
-            <!-- Row 1 (Default) -->
             <div class="presentation-card-row">
               <div>
                 <span class="field-sublabel">Presentación *</span>
@@ -1722,7 +1729,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- MODAL: EDITAR PRODUCTO & AGREGAR PRESENTACIONES                           -->
+  <!-- MODAL: EDITAR PRODUCTO                                                   -->
   <!-- ========================================================================= -->
   <div id="modal-edit-product" class="modal-overlay">
     <div class="modal-card">
@@ -1759,17 +1766,13 @@
           <input type="text" id="edit-prod-desc" class="form-input">
         </div>
 
-        <!-- Current Presentations -->
         <div class="presentations-section">
           <div class="presentations-header">
             <span class="presentations-title">🏷️ Presentaciones Registradas</span>
           </div>
 
-          <div id="edit-existing-presentations" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
-            <!-- Rendered dynamically -->
-          </div>
+          <div id="edit-existing-presentations" style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;"></div>
 
-          <!-- Add new presentation to existing group -->
           <label class="form-label" style="font-size: 0.75rem; margin-bottom: 4px;">Agregar nueva presentación a este grupo:</label>
           <div style="display: grid; grid-template-columns: 1.5fr 1fr auto; gap: 0.5rem;">
             <input type="text" id="edit-new-pres-name" class="presentation-input" placeholder="Ej. 250 g">
@@ -1790,26 +1793,93 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL: DETALLE DE VENTA                                                   -->
+  <!-- ========================================================================= -->
+  <div id="modal-sale-detail" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" style="background:#dcfce7; color:#15803d;">🧾</div>
+          <div>
+            <h3 class="modal-title" id="detail-folio-title">Venta V-000000</h3>
+            <p class="modal-subtitle" id="detail-date-subtitle">Detalle de la transacción</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-detail-modal">&times;</button>
+      </div>
+
+      <div style="background:#f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+          <div>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 700; display: block;">Cliente</span>
+            <strong id="detail-customer-name" style="color: #0f172a;">Cliente Mostrador</strong>
+          </div>
+          <div>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 700; display: block;">Estado</span>
+            <span class="status-pill-completed">✓ Completada</span>
+          </div>
+          <div>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 700; display: block;">Fecha y Hora</span>
+            <span id="detail-datetime" style="color: #0f172a; font-weight: 600;">--/--/---- --:--</span>
+          </div>
+          <div>
+            <span style="color: #64748b; font-size: 0.75rem; font-weight: 700; display: block;">Método de Pago</span>
+            <span id="detail-payment-method" style="color: #0f172a; font-weight: 600;">Efectivo</span>
+          </div>
+        </div>
+      </div>
+
+      <h4 style="font-size: 0.88rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">Productos Vendidos</h4>
+      <div id="detail-items-container" style="margin-bottom: 1.25rem; max-height: 200px; overflow-y: auto;">
+        <!-- Dynamic Line Items -->
+      </div>
+
+      <div style="border-top: 1.5px solid var(--border-color); padding-top: 0.75rem; display: flex; flex-direction: column; gap: 0.4rem;">
+        <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #64748b;">
+          <span>Subtotal</span>
+          <span id="detail-subtotal">$0.00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.88rem; color: #9333ea;">
+          <span>Descuento</span>
+          <span id="detail-discount">- $0.00</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #0f172a; margin-top: 0.35rem;">
+          <span>Total</span>
+          <span id="detail-total" style="color: #00aa79;">$0.00</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="btn-close-detail-modal-btn">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= SCRIPT & CONTROLLER ================= -->
   <script type="module">
     import { getSupabase } from '../js/supabase-client.js';
     import { tenantManager } from '../js/tenant-context.js';
     import { productsManager } from '../js/products-manager.js';
+    import { salesManager } from '../js/sales-manager.js';
 
     const supabase = getSupabase();
     let currentLoadedProducts = [];
     let currentLoadedCategories = [];
+    let currentLoadedSales = [];
     let currentCartItems = [];
     let activeCategoryFilter = 'all';
 
     // Views Elements
     const viewProductos = document.getElementById('view-productos');
-    const viewPos = document.getElementById('view-pos');
+    const viewNuevaVenta = document.getElementById('view-nueva-venta');
+    const viewVentas = document.getElementById('view-ventas');
     
     const navProductos = document.getElementById('nav-productos');
     const navVentas = document.getElementById('nav-ventas');
     const navInicio = document.getElementById('nav-inicio');
     const btnQuickNewSale = document.getElementById('btn-quick-new-sale');
+    const btnGoToNewSale = document.getElementById('btn-go-to-new-sale');
 
     // Modals Elements
     const modalAddProduct = document.getElementById('modal-add-product');
@@ -1842,8 +1912,24 @@
     const modalEditAlert = document.getElementById('modal-edit-alert');
     const btnSubmitEditProduct = document.getElementById('btn-submit-edit-product');
 
+    // Sales Modal Elements
+    const modalSaleDetail = document.getElementById('modal-sale-detail');
+    const btnCloseDetailModal = document.getElementById('btn-close-detail-modal');
+    const btnCloseDetailModalBtn = document.getElementById('btn-close-detail-modal-btn');
+    const detailFolioTitle = document.getElementById('detail-folio-title');
+    const detailDateSubtitle = document.getElementById('detail-date-subtitle');
+    const detailCustomerName = document.getElementById('detail-customer-name');
+    const detailDatetime = document.getElementById('detail-datetime');
+    const detailPaymentMethod = document.getElementById('detail-payment-method');
+    const detailItemsContainer = document.getElementById('detail-items-container');
+    const detailSubtotal = document.getElementById('detail-subtotal');
+    const detailDiscount = document.getElementById('detail-discount');
+    const detailTotal = document.getElementById('detail-total');
+
     const productsTableBody = document.getElementById('products-table-body');
+    const salesTableBody = document.getElementById('sales-table-body');
     const searchProductsInput = document.getElementById('search-products-input');
+    const searchSalesInput = document.getElementById('search-sales-input');
 
     // POS Elements
     const quickActionSearchProd = document.getElementById('quick-action-search-prod');
@@ -1855,21 +1941,30 @@
     const btnPosCheckout = document.getElementById('btn-pos-checkout');
     const btnClearPosCart = document.getElementById('btn-clear-pos-cart');
 
-    // View Switching
+    // -------------------------------------------------------------
+    // ROUTING & VIEW SWITCHING (PRODUCTOS vs NUEVA VENTA vs VENTAS)
+    // -------------------------------------------------------------
     function switchView(viewName) {
-      if (viewName === 'pos') {
-        viewProductos.classList.remove('active');
-        viewPos.classList.add('active');
+      viewProductos.classList.remove('active');
+      viewNuevaVenta.classList.remove('active');
+      viewVentas.classList.remove('active');
 
-        navProductos.classList.remove('active');
-        navVentas.classList.add('active');
-        window.location.hash = 'pos';
+      navProductos.classList.remove('active');
+      navVentas.classList.remove('active');
+      navInicio.classList.remove('active');
+
+      if (viewName === 'nueva-venta' || viewName === 'pos') {
+        viewNuevaVenta.classList.add('active');
+        navInicio.classList.add('active');
+        window.location.hash = 'nueva-venta';
         loadPosCatalog();
+      } else if (viewName === 'ventas') {
+        viewVentas.classList.add('active');
+        navVentas.classList.add('active');
+        window.location.hash = 'ventas';
+        loadSalesHistory();
       } else {
-        viewPos.classList.remove('active');
         viewProductos.classList.add('active');
-
-        navVentas.classList.remove('active');
         navProductos.classList.add('active');
         window.location.hash = 'productos';
         loadProductsList();
@@ -1877,12 +1972,11 @@
     }
 
     navProductos.addEventListener('click', (e) => { e.preventDefault(); switchView('productos'); });
-    navVentas.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
-    navInicio.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
-    btnQuickNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('pos'); });
-    document.getElementById('quick-action-add-prod').addEventListener('click', () => {
-      openAddModal();
-    });
+    navVentas.addEventListener('click', (e) => { e.preventDefault(); switchView('ventas'); });
+    navInicio.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
+    btnQuickNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
+    btnGoToNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
+    document.getElementById('quick-action-add-prod').addEventListener('click', openAddModal);
 
     quickActionSearchProd.addEventListener('click', () => {
       posSearchInput.focus();
@@ -1936,9 +2030,7 @@
 
     btnToggleInlineCat.addEventListener('click', () => {
       inlineCatCreator.classList.toggle('active');
-      if (inlineCatCreator.classList.contains('active')) {
-        inputNewCatName.focus();
-      }
+      if (inlineCatCreator.classList.contains('active')) inputNewCatName.focus();
     });
 
     btnSaveInlineCat.addEventListener('click', async () => {
@@ -1956,7 +2048,7 @@
         inputNewCatName.value = '';
         inlineCatCreator.classList.remove('active');
         await loadCategories();
-        addProdCategory.value = newCat.id; // Auto select!
+        addProdCategory.value = newCat.id;
       } catch (err) {
         showAddAlert(err.message || 'Error al crear la categoría.');
       } finally {
@@ -2000,11 +2092,11 @@
         productsTableBody.innerHTML = `
           <tr>
             <td colspan="5">
-              <div class="empty-products-state">
-                <div class="empty-icon">📦</div>
-                <h3 class="empty-title">0 productos registrados</h3>
-                <p class="empty-desc">Aún no tienes productos en tu catálogo. Haz clic en '+ Agregar producto' para registrar el primero con categoría y presentaciones con precio.</p>
-                <button class="btn-add-product" id="btn-empty-add-product" style="margin-top: 0.5rem;">
+              <div class="empty-state-box">
+                <div class="empty-state-icon">📦</div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">0 productos registrados</h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">Aún no tienes productos en tu catálogo. Haz clic en '+ Agregar producto' para registrar el primero con categoría y presentaciones con precio.</p>
+                <button class="btn-action-primary" id="btn-empty-add-product">
                   + Agregar primer producto
                 </button>
               </div>
@@ -2029,19 +2121,19 @@
           <tr>
             <td class="checkbox-col"><div class="custom-checkbox"></div></td>
             <td>
-              <div class="product-cell">
-                <div class="product-thumb">☕</div>
+              <div style="display:flex; align-items:center; gap:0.9rem;">
+                <div style="width:44px; height:44px; border-radius:10px; background:#f8fafc; border:1px solid #f1f5f9; display:flex; align-items:center; justify-content:center; font-size:20px;">☕</div>
                 <div>
-                  <div class="product-group-title">
+                  <div style="font-weight:700; font-size:0.92rem; display:flex; align-items:center; gap:0.4rem;">
                     ${escapeHtml(g.name)}
                     ${catName ? `<span class="category-tag">${escapeHtml(catName)}</span>` : ''}
                   </div>
-                  ${g.description ? `<div class="product-group-desc">${escapeHtml(g.description)}</div>` : ''}
+                  ${g.description ? `<div style="font-size:0.75rem; color:#64748b; margin-top:2px;">${escapeHtml(g.description)}</div>` : ''}
                 </div>
               </div>
             </td>
             <td>
-              <div class="presentations-chips-wrapper">
+              <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
                 ${presChips || '<span style="font-size:11px; color:#94a3b8;">Sin presentaciones</span>'}
               </div>
             </td>
@@ -2049,13 +2141,13 @@
               <span class="count-badge">${presList.length} ${presList.length === 1 ? 'presentación' : 'presentaciones'}</span>
             </td>
             <td>
-              <button class="action-edit-btn" data-group-id="${g.id}">Editar</button>
+              <button class="action-btn-link action-edit-prod" data-group-id="${g.id}">Editar</button>
             </td>
           </tr>
         `;
       }).join('');
 
-      document.querySelectorAll('.action-edit-btn').forEach(btn => {
+      document.querySelectorAll('.action-edit-prod').forEach(btn => {
         btn.addEventListener('click', (e) => {
           const groupId = e.target.getAttribute('data-group-id');
           openEditModal(groupId);
@@ -2097,22 +2189,18 @@
 
     function filterPosCards() {
       const q = posSearchInput.value.toLowerCase().trim();
-
       let filtered = currentLoadedProducts;
 
-      // Filter by category
       if (activeCategoryFilter !== 'all') {
         filtered = filtered.filter(g => g.category_id === activeCategoryFilter);
       }
 
-      // Filter by query (Name, Category, Presentation or Combination)
       if (q) {
         filtered = filtered.filter(g => {
           const groupName = g.name.toLowerCase();
           const catName = (g.categories?.name || '').toLowerCase();
           const desc = (g.description || '').toLowerCase();
 
-          // Check if any presentation matches query or combination "Group Presentation"
           const presMatch = (g.products || []).some(p => {
             const presName = p.name.toLowerCase();
             const combo = `${groupName} ${presName}`;
@@ -2176,7 +2264,6 @@
         `;
       }).join('');
 
-      // Add presentation to cart
       posCardsGrid.querySelectorAll('.pos-pres-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           const groupName = btn.getAttribute('data-group-name');
@@ -2192,7 +2279,7 @@
     posSearchInput.addEventListener('input', filterPosCards);
 
     // -------------------------------------------------------------
-    // POS CART & TICKET LOGIC
+    // POS CART & CHECKOUT TRANSACTION
     // -------------------------------------------------------------
     function addItemToCart(id, name, price) {
       const existing = currentCartItems.find(item => item.id === id);
@@ -2268,15 +2355,184 @@
       renderPosCart();
     });
 
-    btnPosCheckout.addEventListener('click', () => {
+    btnPosCheckout.addEventListener('click', async () => {
       if (currentCartItems.length === 0) {
         alert('Agrega al menos una presentación al carrito para cobrar.');
         return;
       }
-      alert(`¡Venta realizada con éxito! Total cobrado: ${posSubtotalDisplay.textContent}`);
-      currentCartItems = [];
-      renderPosCart();
+
+      btnPosCheckout.disabled = true;
+      btnPosCheckout.textContent = 'Procesando venta...';
+
+      try {
+        const checkoutPayload = currentCartItems.map(item => ({
+          product_id: item.id,
+          product_name: item.name,
+          quantity: item.qty,
+          unit_price: item.price
+        }));
+
+        const result = await salesManager.checkoutSale(checkoutPayload, 'Cliente Mostrador', 0, 'cash');
+
+        alert(`✅ ¡Venta ${result.folio} registrada con éxito!\nTotal cobrado: $${result.total.toFixed(2)}`);
+        
+        currentCartItems = [];
+        renderPosCart();
+      } catch (err) {
+        console.error('Error in checkout:', err);
+        alert(`Error al procesar la venta: ${err.message}`);
+      } finally {
+        btnPosCheckout.disabled = false;
+        renderPosCart();
+      }
     });
+
+    // -------------------------------------------------------------
+    // SALES HISTORY RENDERING (VENTAS TABLE)
+    // -------------------------------------------------------------
+    async function loadSalesHistory() {
+      try {
+        salesTableBody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align:center; padding: 2.5rem; color: #64748b;">
+              Consultando historial de ventas...
+            </td>
+          </tr>
+        `;
+
+        currentLoadedSales = await salesManager.getSalesHistory();
+        renderSalesTable(currentLoadedSales);
+      } catch (err) {
+        console.error('Error loading sales history:', err);
+        salesTableBody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align:center; padding: 2.5rem; color: #ef4444;">
+              Error al cargar ventas: ${err.message}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function renderSalesTable(sales) {
+      if (!sales || sales.length === 0) {
+        salesTableBody.innerHTML = `
+          <tr>
+            <td colspan="7">
+              <div class="empty-state-box">
+                <div class="empty-state-icon">🧾</div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">0 ventas registradas</h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">Aún no has realizado ninguna venta en este negocio. Crea tu primera venta desde Nueva Venta.</p>
+                <button class="btn-action-primary" id="btn-empty-create-sale">
+                  + Crear primera venta
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        document.getElementById('btn-empty-create-sale')?.addEventListener('click', () => switchView('nueva-venta'));
+        return;
+      }
+
+      salesTableBody.innerHTML = sales.map(s => {
+        const dateObj = new Date(s.created_at);
+        const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const timeStr = dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        return `
+          <tr>
+            <td style="font-weight: 700; color: #1e293b;">${dateStr}</td>
+            <td style="color: #64748b; font-size: 0.82rem;">${timeStr}</td>
+            <td><strong style="color: #0f172a; letter-spacing: 0.02em;">${escapeHtml(s.folio || `V-${String(s.folio_number || 1).padStart(6, '0')}`)}</strong></td>
+            <td style="color: #334155;">${escapeHtml(s.customer_name || 'Cliente Mostrador')}</td>
+            <td style="font-weight: 800; color: #00aa79; font-size: 0.95rem;">$${parseFloat(s.total || 0).toFixed(2)}</td>
+            <td>
+              <span class="status-pill-completed">✓ Completada</span>
+            </td>
+            <td>
+              <button class="action-btn-link btn-view-sale-detail" data-sale-id="${s.id}">Ver detalle</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      salesTableBody.querySelectorAll('.btn-view-sale-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const saleId = btn.getAttribute('data-sale-id');
+          openSaleDetailModal(saleId);
+        });
+      });
+    }
+
+    searchSalesInput.addEventListener('input', () => {
+      const q = searchSalesInput.value.toLowerCase().trim();
+      if (!q) {
+        renderSalesTable(currentLoadedSales);
+        return;
+      }
+
+      const filtered = currentLoadedSales.filter(s => {
+        const folio = (s.folio || '').toLowerCase();
+        const cust = (s.customer_name || '').toLowerCase();
+        return folio.includes(q) || cust.includes(q);
+      });
+
+      renderSalesTable(filtered);
+    });
+
+    // -------------------------------------------------------------
+    // SALE DETAIL MODAL
+    // -------------------------------------------------------------
+    async function openSaleDetailModal(saleId) {
+      try {
+        detailItemsContainer.innerHTML = '<div style="text-align:center; padding:1rem; color:#64748b;">Cargando partidas de la venta...</div>';
+        modalSaleDetail.classList.add('active');
+
+        const sale = await salesManager.getSaleDetail(saleId);
+        const dateObj = new Date(sale.created_at);
+        const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const timeStr = dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        detailFolioTitle.textContent = `Venta ${sale.folio}`;
+        detailDateSubtitle.textContent = `Realizada el ${dateStr} a las ${timeStr}`;
+        detailCustomerName.textContent = sale.customer_name || 'Cliente Mostrador';
+        detailDatetime.textContent = `${dateStr} ${timeStr}`;
+        detailPaymentMethod.textContent = sale.payment_method === 'cash' ? 'Efectivo' : 'Tarjeta / Electrónico';
+
+        const items = sale.sale_items || [];
+        if (items.length === 0) {
+          detailItemsContainer.innerHTML = '<div style="color:#94a3b8; font-size:0.8rem;">No hay productos registrados en esta venta.</div>';
+        } else {
+          detailItemsContainer.innerHTML = items.map(item => `
+            <div class="sale-detail-item">
+              <div>
+                <strong style="color: #0f172a; font-size: 0.88rem;">${escapeHtml(item.product_name)}</strong>
+                <div style="font-size: 0.75rem; color: #64748b;">
+                  ${item.quantity} × $${parseFloat(item.unit_price).toFixed(2)}
+                </div>
+              </div>
+              <strong style="color: #0f172a; font-size: 0.9rem;">
+                $${parseFloat(item.subtotal).toFixed(2)}
+              </strong>
+            </div>
+          `).join('');
+        }
+
+        detailSubtotal.textContent = `$${parseFloat(sale.subtotal || 0).toFixed(2)}`;
+        detailDiscount.textContent = `- $${parseFloat(sale.discount_amount || 0).toFixed(2)}`;
+        detailTotal.textContent = `$${parseFloat(sale.total || 0).toFixed(2)}`;
+      } catch (err) {
+        console.error('Error loading sale detail:', err);
+        detailItemsContainer.innerHTML = `<div style="color:#ef4444; font-size:0.8rem;">Error al cargar detalle: ${err.message}</div>`;
+      }
+    }
+
+    function closeSaleDetailModal() {
+      modalSaleDetail.classList.remove('active');
+    }
+
+    btnCloseDetailModal.addEventListener('click', closeSaleDetailModal);
+    btnCloseDetailModalBtn.addEventListener('click', closeSaleDetailModal);
 
     // -------------------------------------------------------------
     // ADD PRODUCT MODAL LOGIC
@@ -2353,7 +2609,6 @@
         return;
       }
 
-      // Collect all presentation rows
       const rows = presentationsContainer.querySelectorAll('.presentation-card-row');
       const presentations = [];
 
@@ -2524,7 +2779,7 @@
     }
 
     // -------------------------------------------------------------
-    // INITIALIZATION
+    // INITIALIZATION & URL ROUTING
     // -------------------------------------------------------------
     async function init() {
       try {
@@ -2540,20 +2795,21 @@
         console.log('Session context loaded');
       }
 
-      if (window.location.hash === '#pos') {
-        switchView('pos');
+      handleRoute();
+    }
+
+    function handleRoute() {
+      const hash = window.location.hash;
+      if (hash === '#ventas') {
+        switchView('ventas');
+      } else if (hash === '#nueva-venta' || hash === '#pos') {
+        switchView('nueva-venta');
       } else {
         switchView('productos');
       }
     }
 
-    window.addEventListener('hashchange', () => {
-      if (window.location.hash === '#pos') {
-        switchView('pos');
-      } else {
-        switchView('productos');
-      }
-    });
+    window.addEventListener('hashchange', handleRoute);
 
     init();
   </script>

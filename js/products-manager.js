@@ -144,18 +144,35 @@ export class ProductsManager {
       .map(p => {
         const presName = typeof p === 'string' ? p.trim() : p.name?.trim();
         const price = typeof p === 'object' ? parseFloat(p.price) : 0;
-        const cost = typeof p === 'object' ? parseFloat(p.cost || 0) : 0;
-        const supplierId = typeof p === 'object' ? p.supplier_id : null;
-        const supplierIds = typeof p === 'object' && Array.isArray(p.supplier_ids) 
-          ? p.supplier_ids 
-          : (supplierId ? [supplierId] : []);
+        
+        let suppliersList = [];
+        if (typeof p === 'object' && Array.isArray(p.suppliers) && p.suppliers.length > 0) {
+          suppliersList = p.suppliers
+            .filter(s => s && s.supplier_id)
+            .map(s => ({
+              supplier_id: s.supplier_id,
+              cost: isNaN(parseFloat(s.cost)) ? 0 : parseFloat(s.cost)
+            }));
+        } else if (typeof p === 'object' && p.supplier_id) {
+          suppliersList = [{
+            supplier_id: p.supplier_id,
+            cost: isNaN(parseFloat(p.cost)) ? 0 : parseFloat(p.cost)
+          }];
+        } else if (typeof p === 'object' && Array.isArray(p.supplier_ids) && p.supplier_ids.length > 0) {
+          suppliersList = p.supplier_ids.filter(Boolean).map(id => ({
+            supplier_id: id,
+            cost: isNaN(parseFloat(p.cost)) ? 0 : parseFloat(p.cost)
+          }));
+        }
+
+        const primaryCost = suppliersList[0]?.cost || (typeof p === 'object' ? parseFloat(p.cost || 0) : 0);
 
         return { 
           name: presName, 
           price: isNaN(price) ? 0 : price, 
-          cost: isNaN(cost) ? 0 : cost,
-          supplier_id: supplierId || (supplierIds[0] || null),
-          supplier_ids: supplierIds
+          cost: isNaN(primaryCost) ? 0 : primaryCost,
+          suppliers: suppliersList,
+          supplier_id: suppliersList[0]?.supplier_id || null
         };
       })
       .filter(p => p.name && p.name.length > 0);
@@ -168,7 +185,7 @@ export class ProductsManager {
       if (p.price < 0) {
         throw new Error(`El precio de "${p.name}" no puede ser negativo.`);
       }
-      if (!p.supplier_id && (!p.supplier_ids || p.supplier_ids.length === 0)) {
+      if (!p.suppliers || p.suppliers.length === 0) {
         throw new Error(`Selecciona al menos un proveedor para la presentación "${p.name}".`);
       }
     }
@@ -228,6 +245,7 @@ export class ProductsManager {
           tenant_id: tenantId,
           supplier_id: supplierId,
           product_id: data.id,
+          last_purchase_cost: parseFloat(cost) || 0,
           is_primary: true
         });
     }
@@ -236,9 +254,9 @@ export class ProductsManager {
   }
 
   /**
-   * Update or assign supplier for an existing presentation
+   * Update or assign supplier and purchase cost for an existing presentation
    */
-  async updatePresentationSupplier(presentationId, newSupplierId) {
+  async updatePresentationSupplier(presentationId, newSupplierId, cost = 0) {
     if (!tenantManager.currentTenant) {
       await tenantManager.init();
     }
@@ -253,10 +271,16 @@ export class ProductsManager {
       .eq('product_id', presentationId)
       .eq('tenant_id', tenantId);
 
+    const parsedCost = parseFloat(cost) || 0;
+
     if (existing && existing.length > 0) {
       await this.supabase
         .from('supplier_presentations')
-        .update({ supplier_id: newSupplierId, updated_at: new Date().toISOString() })
+        .update({
+          supplier_id: newSupplierId,
+          last_purchase_cost: parsedCost,
+          updated_at: new Date().toISOString()
+        })
         .eq('id', existing[0].id)
         .eq('tenant_id', tenantId);
     } else {
@@ -266,6 +290,7 @@ export class ProductsManager {
           tenant_id: tenantId,
           supplier_id: newSupplierId,
           product_id: presentationId,
+          last_purchase_cost: parsedCost,
           is_primary: true
         });
     }

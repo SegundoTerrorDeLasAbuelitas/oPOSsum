@@ -1519,6 +1519,291 @@
       background: #f0fdf9;
     }
 
+    /* ========================================================================= */
+    /* WIZARD: AGREGAR PRODUCTO EN 2 PASOS & EDIT MODAL                          */
+    /* ========================================================================= */
+    #modal-add-product .modal-card,
+    #modal-edit-product .modal-card {
+      max-width: 660px;
+    }
+
+    .wizard-steps-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.85rem;
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      border-radius: 12px;
+      margin-bottom: 1.35rem;
+      border: 1px solid #e2e8f0;
+    }
+
+    .wizard-step-node {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #94a3b8;
+      transition: all 0.2s ease;
+    }
+
+    .wizard-step-node.active {
+      color: #0284c7;
+      font-weight: 800;
+    }
+
+    .wizard-step-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      font-weight: 800;
+      transition: all 0.2s ease;
+    }
+
+    .wizard-step-node.active .wizard-step-circle {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+
+    .wizard-step-connector {
+      flex: 0 0 36px;
+      height: 2px;
+      background: #e2e8f0;
+      border-radius: 2px;
+    }
+
+    .wizard-field-error {
+      color: #dc2626;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-top: 4px;
+      display: none;
+    }
+
+    .wizard-summary-ribbon {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.65rem 0.95rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      margin-bottom: 1.15rem;
+      flex-wrap: wrap;
+    }
+
+    .wizard-summary-col {
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
+      font-size: 0.88rem;
+    }
+
+    .wizard-summary-lbl {
+      color: #166534;
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .wizard-summary-val {
+      color: #14532d;
+      font-weight: 800;
+    }
+
+    .wizard-summary-divider {
+      width: 1px;
+      height: 16px;
+      background: #86efac;
+    }
+
+    .wizard-pres-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 1.15rem;
+      margin-bottom: 1.15rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      transition: border-color 0.2s ease;
+    }
+
+    .wizard-pres-card:hover {
+      border-color: #cbd5e1;
+    }
+
+    .wizard-pres-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.65rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .wizard-pres-badge {
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .btn-remove-pres-card {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: all 0.15s;
+    }
+
+    .btn-remove-pres-card:hover {
+      background: #fef2f2;
+    }
+
+    .wizard-pres-fields-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .wizard-suppliers-subpanel {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 0.85rem;
+    }
+
+    .wizard-suppliers-subpanel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.65rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .wizard-card-suppliers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .wizard-supplier-row {
+      display: grid;
+      grid-template-columns: 1.4fr 1.1fr 34px;
+      gap: 0.65rem;
+      align-items: flex-end;
+      background: #ffffff;
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .wizard-cost-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .wizard-cost-symbol {
+      position: absolute;
+      left: 10px;
+      color: #64748b;
+      font-weight: 700;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .wizard-supplier-cost-input {
+      padding-left: 1.45rem !important;
+    }
+
+    .btn-remove-supplier-row {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-size: 1.25rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.35rem 0.45rem;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+
+    .btn-remove-supplier-row:hover {
+      color: #ef4444;
+      background: #fef2f2;
+    }
+
+    .btn-add-supplier-row-trigger {
+      background: transparent;
+      border: 1px dashed #cbd5e1;
+      color: #0284c7;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      cursor: pointer;
+      margin-top: 0.65rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-add-supplier-row-trigger:hover {
+      background: #f0f9ff;
+      border-color: #0284c7;
+    }
+
+    @media (max-width: 640px) {
+      .wizard-pres-fields-grid {
+        grid-template-columns: 1fr;
+      }
+      .wizard-supplier-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+      }
+      .wizard-supplier-row .wizard-cost-input-wrap {
+        width: 100%;
+      }
+      .btn-remove-supplier-row {
+        align-self: flex-end;
+      }
+      .wizard-steps-track {
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0.65rem 0.5rem;
+      }
+      .wizard-step-node {
+        font-size: 0.78rem;
+      }
+      .wizard-step-connector {
+        flex: 0 0 20px;
+      }
+    }
+
     .modal-actions-between {
       display: flex;
       align-items: center;
@@ -2170,76 +2455,111 @@
 
       <div id="modal-add-alert" class="modal-alert"></div>
 
-      <form id="form-add-product">
+      <!-- WIZARD STEP TRACKER -->
+      <div class="wizard-steps-track">
+        <div class="wizard-step-node active" id="wizard-node-1">
+          <span class="wizard-step-circle">1</span>
+          <span class="wizard-step-label">Producto</span>
+        </div>
+        <div class="wizard-step-connector" id="wizard-connector"></div>
+        <div class="wizard-step-node" id="wizard-node-2">
+          <span class="wizard-step-circle">2</span>
+          <span class="wizard-step-label">Presentaciones</span>
+        </div>
+      </div>
+
+      <form id="form-add-product" novalidate>
         
-        <div class="form-group">
-          <label class="form-label" for="add-prod-category">Categoría *</label>
-          <div class="category-select-wrapper">
-            <select id="add-prod-category" class="form-select" required>
-              <option value="">Selecciona una categoría...</option>
-            </select>
-            <button type="button" class="btn-create-cat-trigger" id="btn-toggle-inline-cat">
-              + Crear categoría
-            </button>
+        <!-- ============================================================= -->
+        <!-- PASO 1: INFORMACIÓN DEL PRODUCTO                              -->
+        <!-- ============================================================= -->
+        <div id="wizard-step-1" class="wizard-step-content">
+          <div class="form-group">
+            <label class="form-label" for="add-prod-name">Nombre del producto *</label>
+            <input type="text" id="add-prod-name" class="form-input" placeholder="Ej. Nescafé" autocomplete="off">
+            <div class="wizard-field-error" id="error-add-prod-name">Por favor ingresa el nombre del producto.</div>
           </div>
 
-          <div class="inline-cat-creator" id="inline-cat-creator">
-            <input type="text" id="input-new-cat-name" class="form-input" placeholder="Nombre de la nueva categoría (ej. Café)" style="padding: 0.5rem 0.75rem; font-size: 0.82rem;">
-            <button type="button" class="btn-save-modal" id="btn-save-inline-cat" style="padding: 0.5rem 0.85rem; font-size: 0.82rem; white-space: nowrap;">
-              Crear
-            </button>
-          </div>
-        </div>
+          <div class="form-group">
+            <label class="form-label" for="add-prod-category">Categoría *</label>
+            <div class="category-select-wrapper">
+              <select id="add-prod-category" class="form-select">
+                <option value="">Selecciona una categoría...</option>
+              </select>
+              <button type="button" class="btn-create-cat-trigger" id="btn-toggle-inline-cat">
+                + Crear categoría
+              </button>
+            </div>
+            <div class="wizard-field-error" id="error-add-prod-category">Por favor selecciona o crea una categoría.</div>
 
-        <div class="form-group">
-          <label class="form-label" for="add-prod-name">Producto (Nombre) *</label>
-          <input type="text" id="add-prod-name" class="form-input" required placeholder="Ej. Nescafé">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="add-prod-desc">Descripción (opcional)</label>
-          <input type="text" id="add-prod-desc" class="form-input" placeholder="Ej. Café soluble clásico">
-        </div>
-
-        <div class="presentations-section">
-          <div class="presentations-header">
-            <span class="presentations-title">🏷️ Presentaciones y Precios *</span>
-          </div>
-          <p class="presentations-help">
-            Cada presentación se venderá por separado y tendrá su propio inventario. Asigna su precio correspondiente.
-          </p>
-
-          <div id="presentations-container">
-            <div class="presentation-card-row">
-              <div>
-                <span class="field-sublabel">Presentación *</span>
-                <input type="text" class="presentation-input pres-name-input" placeholder="Ej. 1 kg" required>
-              </div>
-              <div>
-                <span class="field-sublabel">Precio Venta ($) *</span>
-                <input type="number" step="0.01" min="0" class="presentation-input pres-price-input" placeholder="250.00" required>
-              </div>
-              <div>
-                <span class="field-sublabel">Proveedor Asignado *</span>
-                <select class="presentation-input pres-supplier-select" required>
-                  <option value="">Selecciona proveedor *</option>
-                </select>
-              </div>
-              <div></div>
+            <div class="inline-cat-creator" id="inline-cat-creator">
+              <input type="text" id="input-new-cat-name" class="form-input" placeholder="Nombre de la nueva categoría (ej. Café soluble)" style="padding: 0.5rem 0.75rem; font-size: 0.82rem;">
+              <button type="button" class="btn-save-modal" id="btn-save-inline-cat" style="padding: 0.5rem 0.85rem; font-size: 0.82rem; white-space: nowrap;">
+                Crear
+              </button>
             </div>
           </div>
 
-          <button type="button" class="btn-add-presentation-row" id="btn-add-presentation-row">
-            + Agregar otra presentación
-          </button>
+          <div class="form-group">
+            <label class="form-label" for="add-prod-desc">Descripción (opcional)</label>
+            <input type="text" id="add-prod-desc" class="form-input" placeholder="Ej. Café soluble clásico de tueste medio">
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1.5rem;">
+            <button type="button" class="btn-cancel" id="btn-cancel-wizard-1">Cancelar</button>
+            <button type="button" class="btn-save-modal" id="btn-next-wizard-1">
+              Siguiente →
+            </button>
+          </div>
         </div>
 
-        <div class="modal-actions">
-          <button type="button" class="btn-cancel" id="btn-cancel-add-modal">Cancelar</button>
-          <button type="submit" class="btn-save-modal" id="btn-submit-add-product">
-            Guardar producto
-          </button>
+        <!-- ============================================================= -->
+        <!-- PASO 2: PRESENTACIONES, PROVEEDORES Y COSTOS                  -->
+        <!-- ============================================================= -->
+        <div id="wizard-step-2" class="wizard-step-content" style="display: none;">
+          <!-- Resumen Contextual del Producto -->
+          <div class="wizard-summary-ribbon">
+            <div class="wizard-summary-col">
+              <span class="wizard-summary-lbl">Producto:</span>
+              <strong class="wizard-summary-val" id="wizard-summary-prod-name">—</strong>
+            </div>
+            <div class="wizard-summary-divider"></div>
+            <div class="wizard-summary-col">
+              <span class="wizard-summary-lbl">Categoría:</span>
+              <span class="wizard-summary-val" id="wizard-summary-prod-cat">—</span>
+            </div>
+          </div>
+
+          <div class="wizard-presentations-wrapper">
+            <div style="margin-bottom: 0.75rem;">
+              <h4 style="margin:0; font-size:0.95rem; font-weight:800; color:var(--text-main);">🏷️ Presentaciones y Costos</h4>
+              <p style="margin:2px 0 0 0; font-size:0.78rem; color:#64748b;">
+                Ingresa el precio de venta al público y el costo de compra correspondiente a cada proveedor.
+              </p>
+            </div>
+
+            <div id="wizard-presentations-container">
+              <!-- Tarjetas dinámicas de presentaciones -->
+            </div>
+
+            <button type="button" class="btn-add-presentation-row" id="btn-wizard-add-presentation" style="margin-top: 0.5rem;">
+              + Agregar presentación
+            </button>
+          </div>
+
+          <div class="modal-actions" style="margin-top: 1.5rem; justify-content: space-between;">
+            <button type="button" class="btn-cancel" id="btn-prev-wizard-2">
+              ← Volver
+            </button>
+            <div style="display: flex; gap: 0.75rem;">
+              <button type="button" class="btn-cancel" id="btn-cancel-wizard-2">Cancelar</button>
+              <button type="submit" class="btn-save-modal" id="btn-submit-wizard-product">
+                Guardar producto
+              </button>
+            </div>
+          </div>
         </div>
+
       </form>
     </div>
   </div>
@@ -3309,10 +3629,13 @@
     }
 
     function refreshAllSupplierSelects(newSelectedId = null, targetSelectEl = null) {
-      document.querySelectorAll('.pres-supplier-select, .edit-pres-supplier-select').forEach(sel => {
+      document.querySelectorAll('.pres-supplier-select, .edit-pres-supplier-select, .wizard-supplier-select').forEach(sel => {
         const currentVal = targetSelectEl === sel && newSelectedId ? newSelectedId : sel.value;
         sel.innerHTML = renderSupplierSelectOptions(currentVal);
       });
+      if (newSelectedId) {
+        lastSelectedSupplierId = newSelectedId;
+      }
     }
 
     function wireSupplierSelectElement(selectEl) {
@@ -3324,6 +3647,9 @@
           openAddSupplierModal(selectEl);
         } else {
           selectEl.setAttribute('data-prev-val', selectEl.value);
+          if (selectEl.value) {
+            lastSelectedSupplierId = selectEl.value;
+          }
         }
       });
     }
@@ -3797,14 +4123,62 @@
     // -------------------------------------------------------------
     // ADD PRODUCT MODAL LOGIC (REUSABLE WITH CONTEXT: PRODUCTOS / COMPRAS)
     // -------------------------------------------------------------
+    // -------------------------------------------------------------
+    // SEQUENTIAL WIZARD: AGREGAR PRODUCTO EN 2 PASOS
+    // -------------------------------------------------------------
+    let wizardCurrentStep = 1;
+    let lastSelectedSupplierId = '';
+
+    const wizardNode1 = document.getElementById('wizard-node-1');
+    const wizardNode2 = document.getElementById('wizard-node-2');
+    const wizardStep1 = document.getElementById('wizard-step-1');
+    const wizardStep2 = document.getElementById('wizard-step-2');
+    const addProdName = document.getElementById('add-prod-name');
+    const addProdDesc = document.getElementById('add-prod-desc');
+    const errorAddProdName = document.getElementById('error-add-prod-name');
+    const errorAddProdCategory = document.getElementById('error-add-prod-category');
+    const btnCancelWizard1 = document.getElementById('btn-cancel-wizard-1');
+    const btnNextWizard1 = document.getElementById('btn-next-wizard-1');
+    const wizardSummaryProdName = document.getElementById('wizard-summary-prod-name');
+    const wizardSummaryProdCat = document.getElementById('wizard-summary-prod-cat');
+    const wizardPresentationsContainer = document.getElementById('wizard-presentations-container');
+    const btnWizardAddPresentation = document.getElementById('btn-wizard-add-presentation');
+    const btnPrevWizard2 = document.getElementById('btn-prev-wizard-2');
+    const btnCancelWizard2 = document.getElementById('btn-cancel-wizard-2');
+    const btnSubmitWizardProduct = document.getElementById('btn-submit-wizard-product');
+
+    function setWizardStep(step) {
+      wizardCurrentStep = step;
+      if (step === 1) {
+        if (wizardStep1) wizardStep1.style.display = 'block';
+        if (wizardStep2) wizardStep2.style.display = 'none';
+        if (wizardNode1) wizardNode1.classList.add('active');
+        if (wizardNode2) wizardNode2.classList.remove('active');
+        if (modalAddAlert) modalAddAlert.style.display = 'none';
+      } else {
+        if (wizardStep1) wizardStep1.style.display = 'none';
+        if (wizardStep2) wizardStep2.style.display = 'block';
+        if (wizardNode1) wizardNode1.classList.remove('active');
+        if (wizardNode2) wizardNode2.classList.add('active');
+        if (modalAddAlert) modalAddAlert.style.display = 'none';
+      }
+    }
+
     async function openAddModal(context = 'productos') {
       currentModalContext = typeof context === 'string' ? context : 'productos';
-      modalAddAlert.style.display = 'none';
+      if (modalAddAlert) modalAddAlert.style.display = 'none';
       formAddProduct.reset();
-      inlineCatCreator.classList.remove('active');
+      if (inlineCatCreator) inlineCatCreator.classList.remove('active');
+      if (errorAddProdName) errorAddProdName.style.display = 'none';
+      if (errorAddProdCategory) errorAddProdCategory.style.display = 'none';
 
       if (currentLoadedSuppliers.length === 0) {
         await loadSuppliers();
+      }
+
+      // Default last selected supplier to first active supplier if not already set
+      if (!lastSelectedSupplierId && currentLoadedSuppliers.length > 0) {
+        lastSelectedSupplierId = currentLoadedSuppliers[0].id;
       }
 
       const titleEl = document.getElementById('modal-add-title');
@@ -3817,125 +4191,320 @@
         if (titleEl) titleEl.textContent = 'Agregar Producto';
         if (subtitleEl) subtitleEl.textContent = 'Registra tu producto, categoría y presentaciones con precio.';
       }
-      
-      presentationsContainer.innerHTML = `
-        <div class="presentation-card-row">
-          <div>
-            <span class="field-sublabel">Presentación *</span>
-            <input type="text" class="presentation-input pres-name-input" placeholder="Ej. 1 kg" required>
-          </div>
-          <div>
-            <span class="field-sublabel">Precio Venta ($) *</span>
-            <input type="number" step="0.01" min="0" class="presentation-input pres-price-input" placeholder="250.00" required>
-          </div>
-          <div>
-            <span class="field-sublabel">Proveedor Asignado *</span>
-            <select class="presentation-input pres-supplier-select" required>
-              ${renderSupplierSelectOptions()}
-            </select>
-          </div>
-          <div></div>
-        </div>
-      `;
 
-      const initialSelect = presentationsContainer.querySelector('.pres-supplier-select');
-      if (initialSelect) wireSupplierSelectElement(initialSelect);
+      // Reset to Step 1
+      setWizardStep(1);
+
+      // Initialize Step 2 with first presentation card
+      if (wizardPresentationsContainer) {
+        wizardPresentationsContainer.innerHTML = '';
+        addWizardPresentationCard('1 kg', '', lastSelectedSupplierId, '');
+      }
 
       modalAddProduct.classList.add('active');
-      document.getElementById('add-prod-name').focus();
+      setTimeout(() => {
+        if (addProdName) addProdName.focus();
+      }, 80);
     }
 
     function closeAddModal() {
       modalAddProduct.classList.remove('active');
+      setWizardStep(1);
     }
 
-    btnOpenAddProduct.addEventListener('click', () => openAddModal('productos'));
-    btnCloseAddModal.addEventListener('click', closeAddModal);
-    btnCancelAddModal.addEventListener('click', closeAddModal);
+    btnOpenAddProduct?.addEventListener('click', () => openAddModal('productos'));
+    btnCloseAddModal?.addEventListener('click', closeAddModal);
+    btnCancelWizard1?.addEventListener('click', closeAddModal);
+    btnCancelWizard2?.addEventListener('click', closeAddModal);
 
-    btnAddPresentationRow.addEventListener('click', () => {
-      const row = document.createElement('div');
-      row.className = 'presentation-card-row';
-      row.innerHTML = `
-        <div>
-          <span class="field-sublabel">Presentación *</span>
-          <input type="text" class="presentation-input pres-name-input" placeholder="Ej. 500 g" required>
-        </div>
-        <div>
-          <span class="field-sublabel">Precio Venta ($) *</span>
-          <input type="number" step="0.01" min="0" class="presentation-input pres-price-input" placeholder="140.00" required>
-        </div>
-        <div>
-          <span class="field-sublabel">Proveedor Asignado *</span>
-          <select class="presentation-input pres-supplier-select" required>
-            ${renderSupplierSelectOptions()}
-          </select>
-        </div>
-        <div>
-          <button type="button" class="btn-remove-presentation" title="Eliminar">&times;</button>
-        </div>
-      `;
-      row.querySelector('.btn-remove-presentation').addEventListener('click', () => {
-        row.remove();
-      });
-      const newSelect = row.querySelector('.pres-supplier-select');
-      if (newSelect) wireSupplierSelectElement(newSelect);
-      presentationsContainer.appendChild(row);
-      row.querySelector('.pres-name-input').focus();
+    // Step 1 Validation & Transition to Step 2
+    btnNextWizard1?.addEventListener('click', () => {
+      if (errorAddProdName) errorAddProdName.style.display = 'none';
+      if (errorAddProdCategory) errorAddProdCategory.style.display = 'none';
+      if (modalAddAlert) modalAddAlert.style.display = 'none';
+
+      const nameVal = addProdName?.value.trim() || '';
+      const catVal = addProdCategory?.value || '';
+
+      let hasError = false;
+
+      if (!nameVal) {
+        if (errorAddProdName) errorAddProdName.style.display = 'block';
+        addProdName?.focus();
+        hasError = true;
+      }
+
+      if (!catVal) {
+        if (errorAddProdCategory) errorAddProdCategory.style.display = 'block';
+        if (!hasError) addProdCategory?.focus();
+        hasError = true;
+      }
+
+      if (hasError) return;
+
+      // Update Summary in Step 2
+      if (wizardSummaryProdName) wizardSummaryProdName.textContent = nameVal;
+      const selectedCatOption = addProdCategory?.options[addProdCategory.selectedIndex];
+      if (wizardSummaryProdCat) {
+        wizardSummaryProdCat.textContent = selectedCatOption ? selectedCatOption.textContent : 'Sin categoría';
+      }
+
+      // Advance to Step 2 (NO data saved in database yet)
+      setWizardStep(2);
+
+      const firstInput = wizardPresentationsContainer?.querySelector('.wizard-pres-name-input');
+      if (firstInput) setTimeout(() => firstInput.focus(), 100);
     });
 
+    // Step 2 Go back to Step 1
+    btnPrevWizard2?.addEventListener('click', () => {
+      setWizardStep(1);
+    });
+
+    // Generate a presentation card in Step 2
+    function addWizardPresentationCard(defaultName = '', defaultPrice = '', initialSupplierId = '', defaultCost = '') {
+      const card = document.createElement('div');
+      card.className = 'wizard-pres-card';
+
+      const supplierToUse = initialSupplierId || lastSelectedSupplierId;
+
+      card.innerHTML = `
+        <div class="wizard-pres-card-header">
+          <div class="wizard-pres-card-title">
+            <span class="wizard-pres-badge">Presentación</span>
+          </div>
+          <button type="button" class="btn-remove-pres-card" title="Eliminar presentación">
+            &times; Quitar
+          </button>
+        </div>
+
+        <div class="wizard-pres-fields-grid">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Presentación *</label>
+            <input type="text" class="form-input wizard-pres-name-input" placeholder="Ej. 1 kg" value="${escapeHtml(defaultName)}" required>
+            <div class="wizard-field-error pres-name-error" style="display:none;">Ingresa el nombre de la presentación.</div>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label">Precio de venta ($) *</label>
+            <input type="number" step="0.01" min="0" class="form-input wizard-pres-price-input" placeholder="250.00" value="${defaultPrice}" required>
+            <div class="wizard-field-error pres-price-error" style="display:none;">Ingresa un precio de venta válido.</div>
+          </div>
+        </div>
+
+        <div class="wizard-suppliers-subpanel">
+          <div class="wizard-suppliers-subpanel-header">
+            <span style="font-size: 0.8rem; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.04em;">
+              🏢 Proveedores y Costo de compra
+            </span>
+            <span style="font-size: 0.74rem; color: #64748b;">(Separado del precio de venta)</span>
+          </div>
+
+          <div class="wizard-card-suppliers-list">
+            <!-- Suppliers list for this presentation -->
+          </div>
+
+          <button type="button" class="btn-add-supplier-row-trigger">
+            + Agregar otro proveedor
+          </button>
+        </div>
+      `;
+
+      // Remove presentation button
+      card.querySelector('.btn-remove-pres-card')?.addEventListener('click', () => {
+        const totalCards = wizardPresentationsContainer?.querySelectorAll('.wizard-pres-card').length || 0;
+        if (totalCards <= 1) {
+          alert('Debes mantener al menos una presentación para el producto.');
+          return;
+        }
+        card.remove();
+        updateWizardPresentationNumbers();
+      });
+
+      // Add initial supplier row with the inherited supplier
+      const suppliersListEl = card.querySelector('.wizard-card-suppliers-list');
+      if (suppliersListEl) {
+        addWizardSupplierRow(suppliersListEl, supplierToUse, defaultCost);
+      }
+
+      // Wire "+ Agregar otro proveedor" button for this presentation
+      card.querySelector('.btn-add-supplier-row-trigger')?.addEventListener('click', () => {
+        if (suppliersListEl) {
+          addWizardSupplierRow(suppliersListEl, lastSelectedSupplierId, '');
+        }
+      });
+
+      wizardPresentationsContainer?.appendChild(card);
+      updateWizardPresentationNumbers();
+      return card;
+    }
+
+    function updateWizardPresentationNumbers() {
+      if (!wizardPresentationsContainer) return;
+      const cards = wizardPresentationsContainer.querySelectorAll('.wizard-pres-card');
+      cards.forEach((card, idx) => {
+        const badge = card.querySelector('.wizard-pres-badge');
+        if (badge) badge.textContent = `Presentación ${idx + 1}`;
+        const removeBtn = card.querySelector('.btn-remove-pres-card');
+        if (removeBtn) {
+          removeBtn.style.display = cards.length > 1 ? 'inline-flex' : 'none';
+        }
+      });
+    }
+
+    // Add a supplier row inside a presentation card
+    function addWizardSupplierRow(container, preselectedSupplierId = '', prefilledCost = '') {
+      const row = document.createElement('div');
+      row.className = 'wizard-supplier-row';
+
+      row.innerHTML = `
+        <div class="wizard-supp-select-col">
+          <label class="field-sublabel">Proveedor *</label>
+          <select class="form-select wizard-supplier-select" required>
+            ${renderSupplierSelectOptions(preselectedSupplierId)}
+          </select>
+        </div>
+        <div class="wizard-supp-cost-col">
+          <label class="field-sublabel">Costo de compra ($) *</label>
+          <div class="wizard-cost-input-wrap">
+            <span class="wizard-cost-symbol">$</span>
+            <input type="number" step="0.01" min="0" class="form-input wizard-supplier-cost-input" placeholder="180.00" value="${prefilledCost}">
+          </div>
+        </div>
+        <div class="wizard-supp-action-col">
+          <button type="button" class="btn-remove-supplier-row" title="Quitar proveedor">&times;</button>
+        </div>
+      `;
+
+      const selectEl = row.querySelector('.wizard-supplier-select');
+      if (selectEl) {
+        wireSupplierSelectElement(selectEl);
+        selectEl.addEventListener('change', () => {
+          if (selectEl.value && selectEl.value !== '__new__') {
+            lastSelectedSupplierId = selectEl.value;
+          }
+        });
+      }
+
+      row.querySelector('.btn-remove-supplier-row')?.addEventListener('click', () => {
+        const totalRows = container.querySelectorAll('.wizard-supplier-row').length;
+        if (totalRows <= 1) {
+          alert('Cada presentación debe tener al menos un proveedor asignado.');
+          return;
+        }
+        row.remove();
+        updateSupplierRowRemoveButtons(container);
+      });
+
+      container.appendChild(row);
+      updateSupplierRowRemoveButtons(container);
+    }
+
+    function updateSupplierRowRemoveButtons(container) {
+      const rows = container.querySelectorAll('.wizard-supplier-row');
+      rows.forEach(r => {
+        const btn = r.querySelector('.btn-remove-supplier-row');
+        if (btn) btn.style.display = rows.length > 1 ? 'inline-block' : 'none';
+      });
+    }
+
+    // Button: "+ Agregar presentación" in Step 2
+    // Automatically inherits lastSelectedSupplierId (Requirements 9 & 10)
+    btnWizardAddPresentation?.addEventListener('click', () => {
+      const nextCard = addWizardPresentationCard('', '', lastSelectedSupplierId, '');
+      const input = nextCard.querySelector('.wizard-pres-name-input');
+      if (input) input.focus();
+    });
+
+    // Form Submit: Atomic Save in Supabase
     formAddProduct.addEventListener('submit', async (e) => {
       e.preventDefault();
       modalAddAlert.style.display = 'none';
 
-      const categoryId = addProdCategory.value;
-      const name = document.getElementById('add-prod-name').value.trim();
-      const desc = document.getElementById('add-prod-desc').value.trim();
+      // 1. Validate Step 1
+      const categoryId = addProdCategory?.value;
+      const name = addProdName?.value.trim() || '';
+      const desc = addProdDesc?.value.trim() || '';
 
-      if (!categoryId) {
-        showAddAlert('Por favor selecciona o crea una categoría.');
+      if (!categoryId || !name) {
+        setWizardStep(1);
+        if (!name && errorAddProdName) errorAddProdName.style.display = 'block';
+        if (!categoryId && errorAddProdCategory) errorAddProdCategory.style.display = 'block';
         return;
       }
 
-      if (!name) {
-        showAddAlert('Por favor ingresa el nombre del producto.');
+      // 2. Validate Step 2 Presentations & Suppliers
+      const cards = wizardPresentationsContainer?.querySelectorAll('.wizard-pres-card') || [];
+      if (cards.length === 0) {
+        showAddAlert('Debes agregar al menos una presentación.');
         return;
       }
 
-      const rows = presentationsContainer.querySelectorAll('.presentation-card-row');
-      const presentations = [];
+      const presentationsPayload = [];
 
-      for (const row of rows) {
-        const presName = row.querySelector('.pres-name-input').value.trim();
-        const presPrice = parseFloat(row.querySelector('.pres-price-input').value);
-        const presSupplier = row.querySelector('.pres-supplier-select')?.value;
+      for (let i = 0; i < cards.length; i++) {
+        const card = cards[i];
+        const nameInput = card.querySelector('.wizard-pres-name-input');
+        const priceInput = card.querySelector('.wizard-pres-price-input');
+        const presName = nameInput?.value.trim() || '';
+        const presPrice = parseFloat(priceInput?.value || 0);
 
         if (!presName) {
-          showAddAlert('Todas las presentaciones deben tener nombre.');
+          nameInput?.focus();
+          showAddAlert(`Por favor ingresa el nombre de la Presentación #${i + 1}.`);
           return;
         }
+
         if (isNaN(presPrice) || presPrice < 0) {
-          showAddAlert(`El precio de "${presName}" debe ser un número válido mayor o igual a 0.`);
-          return;
-        }
-        if (!presSupplier || presSupplier === '__new__') {
-          showAddAlert('Selecciona un proveedor para esta presentación.');
+          priceInput?.focus();
+          showAddAlert(`El precio de venta de "${presName}" debe ser un número válido mayor o igual a 0.`);
           return;
         }
 
-        presentations.push({ name: presName, price: presPrice, cost: 0, supplier_id: presSupplier });
+        const suppRows = card.querySelectorAll('.wizard-supplier-row');
+        if (suppRows.length === 0) {
+          showAddAlert(`Agrega al menos un proveedor para la presentación "${presName}".`);
+          return;
+        }
+
+        const suppliersList = [];
+        for (const sRow of suppRows) {
+          const suppSelect = sRow.querySelector('.wizard-supplier-select');
+          const costInput = sRow.querySelector('.wizard-supplier-cost-input');
+          const suppId = suppSelect?.value;
+          const suppCost = parseFloat(costInput?.value || 0);
+
+          if (!suppId || suppId === '__new__') {
+            suppSelect?.focus();
+            showAddAlert(`Selecciona un proveedor para la presentación "${presName}".`);
+            return;
+          }
+
+          if (isNaN(suppCost) || suppCost < 0) {
+            costInput?.focus();
+            showAddAlert(`El costo de compra con el proveedor en "${presName}" no puede ser negativo.`);
+            return;
+          }
+
+          suppliersList.push({
+            supplier_id: suppId,
+            cost: suppCost
+          });
+        }
+
+        presentationsPayload.push({
+          name: presName,
+          price: presPrice,
+          suppliers: suppliersList
+        });
       }
 
-      if (presentations.length === 0) {
-        showAddAlert('Debes agregar al menos una presentación con su precio.');
-        return;
+      if (btnSubmitWizardProduct) {
+        btnSubmitWizardProduct.disabled = true;
+        btnSubmitWizardProduct.textContent = 'Guardando...';
       }
-
-      btnSubmitAddProduct.disabled = true;
-      btnSubmitAddProduct.textContent = 'Guardando...';
 
       try {
-        await productsManager.createProductWithPresentations(name, desc, categoryId, presentations);
+        await productsManager.createProductWithPresentations(name, desc, categoryId, presentationsPayload);
         closeAddModal();
         const successMsg = currentModalContext === 'compras'
           ? `Producto "${name}" agregado al catálogo y listo para compras.`
@@ -3945,19 +4514,22 @@
         await loadComprasCatalog();
         await loadPosCatalog();
       } catch (err) {
-        console.error('Error creating product:', err);
+        console.error('Error creating product in wizard:', err);
         let friendlyMsg = err.message || 'Error al guardar el producto.';
         if (friendlyMsg.includes('proveedor') || friendlyMsg.includes('supplier')) {
           friendlyMsg = 'Selecciona un proveedor para esta presentación.';
         }
         showAddAlert(friendlyMsg);
       } finally {
-        btnSubmitAddProduct.disabled = false;
-        btnSubmitAddProduct.textContent = 'Guardar producto';
+        if (btnSubmitWizardProduct) {
+          btnSubmitWizardProduct.disabled = false;
+          btnSubmitWizardProduct.textContent = 'Guardar producto';
+        }
       }
     });
 
     function showAddAlert(msg) {
+      if (!modalAddAlert) return;
       modalAddAlert.textContent = msg;
       modalAddAlert.className = 'modal-alert error';
       modalAddAlert.style.display = 'block';
@@ -4010,9 +4582,11 @@
       }
 
       editPresentationsList.innerHTML = presList.map(p => {
-        const assignedSupplierId = p.supplier_presentations?.[0]?.supplier_id || '';
+        const primarySuppRel = p.supplier_presentations?.[0];
+        const assignedSupplierId = primarySuppRel?.supplier_id || '';
+        const currentCost = primarySuppRel?.last_purchase_cost != null ? parseFloat(primarySuppRel.last_purchase_cost) : 0;
         return `
-          <div class="presentation-card-row" data-pres-id="${p.id}">
+          <div class="presentation-card-row" data-pres-id="${p.id}" style="grid-template-columns: 1.1fr 0.85fr 1.1fr 0.85fr 36px;">
             <div>
               <span class="field-sublabel">Presentación *</span>
               <input type="text" class="presentation-input edit-pres-name" value="${escapeHtml(p.name)}" required>
@@ -4026,6 +4600,10 @@
               <select class="presentation-input edit-pres-supplier-select" required>
                 ${renderSupplierSelectOptions(assignedSupplierId)}
               </select>
+            </div>
+            <div>
+              <span class="field-sublabel">Costo Compra ($)</span>
+              <input type="number" step="0.01" min="0" class="presentation-input edit-pres-cost" value="${currentCost.toFixed(2)}">
             </div>
             <div>
               <button type="button" class="btn-remove-presentation btn-delete-pres-trigger" data-pres-id="${p.id}" data-pres-name="${escapeHtml(p.name)}" title="Eliminar presentación">
@@ -4053,6 +4631,7 @@
     btnAddEditPresRow.addEventListener('click', () => {
       const row = document.createElement('div');
       row.className = 'presentation-card-row new-pres-row';
+      row.style.gridTemplateColumns = '1.1fr 0.85fr 1.1fr 0.85fr 36px';
       row.innerHTML = `
         <div>
           <span class="field-sublabel">Nueva Presentación *</span>
@@ -4067,6 +4646,10 @@
           <select class="presentation-input edit-pres-supplier-select" required>
             ${renderSupplierSelectOptions()}
           </select>
+        </div>
+        <div>
+          <span class="field-sublabel">Costo Compra ($)</span>
+          <input type="number" step="0.01" min="0" class="presentation-input edit-pres-cost" placeholder="70.00">
         </div>
         <div>
           <button type="button" class="btn-remove-presentation btn-remove-unsaved-row" title="Quitar">&times;</button>
@@ -4125,6 +4708,7 @@
           const presName = row.querySelector('.edit-pres-name').value.trim();
           const presPrice = parseFloat(row.querySelector('.edit-pres-price').value);
           const presSupplier = row.querySelector('.edit-pres-supplier-select')?.value;
+          const presCost = parseFloat(row.querySelector('.edit-pres-cost')?.value || 0);
 
           if (!presName) {
             throw new Error('Todas las presentaciones deben tener nombre.');
@@ -4137,12 +4721,12 @@
           }
 
           if (presId) {
-            // Existing presentation -> UPDATE info and supplier
-            await productsManager.updatePresentation(presId, presName, presPrice);
-            await productsManager.updatePresentationSupplier(presId, presSupplier);
+            // Existing presentation -> UPDATE info, supplier, and cost
+            await productsManager.updatePresentation(presId, presName, presPrice, presCost);
+            await productsManager.updatePresentationSupplier(presId, presSupplier, presCost);
           } else {
-            // Newly added row -> INSERT with supplier
-            await productsManager.addPresentationToGroup(groupId, presName, presPrice, 0, presSupplier);
+            // Newly added row -> INSERT with supplier and cost
+            await productsManager.addPresentationToGroup(groupId, presName, presPrice, presCost, presSupplier);
           }
         }
 

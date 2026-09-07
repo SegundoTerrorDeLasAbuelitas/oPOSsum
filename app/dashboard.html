@@ -318,6 +318,35 @@
       box-shadow: 0 4px 12px rgba(0, 229, 163, 0.35);
     }
 
+    .btn-action-secondary {
+      background-color: #ffffff;
+      color: var(--text-main);
+      border: 1.5px solid var(--border-color);
+      padding: 0.65rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-action-secondary:hover {
+      background-color: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f172a;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-action-secondary:active,
+    .btn-action-primary:active {
+      transform: translateY(1px);
+    }
+
     .data-card {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
@@ -931,6 +960,19 @@
       }
       .compras-heading-title {
         font-size: 1.18rem;
+      }
+      .compras-header-buttons {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .compras-header-buttons .btn-action-primary,
+      .compras-header-buttons .btn-action-secondary {
+        width: 100%;
+        justify-content: center;
+        padding: 0.72rem 1rem;
+        box-sizing: border-box;
       }
     }
 
@@ -2355,14 +2397,14 @@
           <h1 class="page-title">Compras</h1>
           <p class="page-subtitle">Artículos del catálogo para adquisición a proveedores y suministros del negocio.</p>
         </div>
-        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-          <button class="btn-action-secondary" id="btn-open-add-supplier" style="background: white; border: 1.5px solid var(--border-color); color: var(--text-main); font-weight: 700; padding: 0.62rem 1.1rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Agregar proveedor
-          </button>
-          <button class="btn-action-primary" id="btn-open-add-product-compras">
+        <div class="compras-header-buttons">
+          <button class="btn-action-secondary" id="btn-open-add-product-compras">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Agregar producto
+          </button>
+          <button class="btn-action-primary" id="btn-open-add-compra">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Agregar compra
           </button>
         </div>
       </div>
@@ -2404,9 +2446,15 @@
       <!-- SECTION 2: SUPPLIERS DIRECTORY -->
       <div id="compras-section-suppliers" style="display: none;">
         <div class="data-card">
-          <div class="search-wrapper">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="search-input" id="search-suppliers-input" placeholder="Buscar por nombre, teléfono, correo o notas...">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+            <div class="search-wrapper" style="flex: 1; min-width: 260px; margin-bottom: 0;">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="search-input" id="search-suppliers-input" placeholder="Buscar por nombre, teléfono, correo o notas...">
+            </div>
+            <button class="btn-action-primary" id="btn-open-add-supplier">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Agregar proveedor
+            </button>
           </div>
 
           <div class="table-responsive">
@@ -2777,6 +2825,79 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL: AGREGAR COMPRA                                                    -->
+  <!-- ========================================================================= -->
+  <div id="modal-add-compra" class="modal-overlay">
+    <div class="modal-card" style="max-width: 660px;">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" style="background: #ecfdf5; color: #059669;">🛍️</div>
+          <div>
+            <h3 class="modal-title">Registrar Compra</h3>
+            <p class="modal-subtitle">Adquisición o ingreso de mercancía de proveedores.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-compra-modal">&times;</button>
+      </div>
+
+      <div id="modal-compra-alert" class="modal-alert"></div>
+
+      <form id="form-add-compra">
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="compra-supplier-select">Proveedor *</label>
+            <select id="compra-supplier-select" class="form-input" required>
+              <option value="">Selecciona proveedor...</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="compra-date-input">Fecha de compra *</label>
+            <input type="date" id="compra-date-input" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="compra-reference-input">Folio / Factura / Remisión (opcional)</label>
+          <input type="text" id="compra-reference-input" class="form-input" placeholder="Ej. FAC-9823 o Nota de entrega #14">
+        </div>
+
+        <div style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
+          <label class="form-label" style="margin-bottom: 0;">Artículos a adquirir *</label>
+          <button type="button" id="btn-add-compra-item" style="background: none; border: none; color: #0284c7; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+            + Agregar artículo
+          </button>
+        </div>
+
+        <!-- Items container -->
+        <div id="compra-items-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem;">
+          <!-- Item rows dynamically appended here -->
+        </div>
+
+        <!-- Total summary box -->
+        <div style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 10px; padding: 0.9rem 1.1rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div>
+            <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Total de Compra</span>
+            <div style="font-size: 0.75rem; color: #94a3b8;">Cálculo automático de la orden</div>
+          </div>
+          <div id="compra-total-display" style="font-size: 1.5rem; font-weight: 800; color: #059669;">$0.00</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="compra-notes-input">Notas u observaciones (opcional)</label>
+          <textarea id="compra-notes-input" class="form-input" rows="2" placeholder="Observaciones de entrega, crédito, condiciones..." style="resize: vertical; font-family: inherit;"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btn-cancel-compra-modal">Cancelar</button>
+          <button type="submit" class="btn-save-modal" id="btn-submit-compra">
+            Registrar compra
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ================= SCRIPT & CONTROLLER ================= -->
   <script type="module">
     import { getSupabase } from '../js/supabase-client.js';
@@ -2853,6 +2974,21 @@
     const tabTopComprasDirectory = document.getElementById('tab-top-compras-directory');
     const comprasSectionProducts = document.getElementById('compras-section-products');
     const comprasSectionSuppliers = document.getElementById('compras-section-suppliers');
+
+    // Compra Modal Elements
+    const modalAddCompra = document.getElementById('modal-add-compra');
+    const btnOpenAddCompra = document.getElementById('btn-open-add-compra');
+    const btnCloseCompraModal = document.getElementById('btn-close-compra-modal');
+    const btnCancelCompraModal = document.getElementById('btn-cancel-compra-modal');
+    const formAddCompra = document.getElementById('form-add-compra');
+    const compraSupplierSelect = document.getElementById('compra-supplier-select');
+    const compraDateInput = document.getElementById('compra-date-input');
+    const compraReferenceInput = document.getElementById('compra-reference-input');
+    const compraItemsList = document.getElementById('compra-items-list');
+    const btnAddCompraItem = document.getElementById('btn-add-compra-item');
+    const compraTotalDisplay = document.getElementById('compra-total-display');
+    const modalCompraAlert = document.getElementById('modal-compra-alert');
+    const btnSubmitCompra = document.getElementById('btn-submit-compra');
 
     // Context variable for Add Product modal
     let currentModalContext = 'productos'; // 'productos' | 'compras'
@@ -3742,6 +3878,195 @@
           btnSubmitSupplier.disabled = false;
           btnSubmitSupplier.textContent = 'Guardar proveedor';
         }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // MODAL: AGREGAR COMPRA CONTROLLER & LOGIC
+    // -------------------------------------------------------------
+    function openAddCompraModal() {
+      if (!modalAddCompra) return;
+      if (modalCompraAlert) modalCompraAlert.style.display = 'none';
+      if (formAddCompra) formAddCompra.reset();
+
+      // Set default date to today
+      if (compraDateInput) {
+        compraDateInput.value = new Date().toISOString().split('T')[0];
+      }
+
+      // Populate supplier select
+      if (compraSupplierSelect) {
+        let suppHtml = '<option value="">Selecciona proveedor *</option>';
+        if (currentLoadedSuppliers && currentLoadedSuppliers.length > 0) {
+          suppHtml += currentLoadedSuppliers.map(s => {
+            const sName = s.name ? escapeHtml(s.name) : 'Proveedor sin nombre';
+            return `<option value="${s.id}">${sName}</option>`;
+          }).join('');
+        }
+        compraSupplierSelect.innerHTML = suppHtml;
+      }
+
+      // Populate initial item row
+      if (compraItemsList) {
+        compraItemsList.innerHTML = '';
+        addCompraItemRow();
+      }
+
+      calcCompraTotals();
+      modalAddCompra.classList.add('active');
+    }
+
+    function closeAddCompraModal() {
+      if (modalAddCompra) {
+        modalAddCompra.classList.remove('active');
+      }
+    }
+
+    function buildCompraPresentationOptions(selectedPresId = '') {
+      let html = '<option value="">Selecciona producto / presentación...</option>';
+      if (currentLoadedProducts && currentLoadedProducts.length > 0) {
+        currentLoadedProducts.forEach(group => {
+          const gName = group.name ? escapeHtml(group.name) : 'Producto';
+          const presList = group.products || [];
+          if (presList.length > 0) {
+            html += `<optgroup label="${gName}">`;
+            presList.forEach(p => {
+              const pName = p.name ? escapeHtml(p.name) : 'Estándar';
+              const pCost = p.supplier_presentations && p.supplier_presentations[0] && p.supplier_presentations[0].purchase_cost 
+                ? parseFloat(p.supplier_presentations[0].purchase_cost) 
+                : (p.price ? parseFloat(p.price) : 0);
+              const isSelected = p.id === selectedPresId ? 'selected' : '';
+              html += `<option value="${p.id}" data-cost="${pCost}" ${isSelected}>${gName} - ${pName}</option>`;
+            });
+            html += `</optgroup>`;
+          }
+        });
+      }
+      return html;
+    }
+
+    function addCompraItemRow() {
+      if (!compraItemsList) return;
+      const row = document.createElement('div');
+      row.className = 'compra-item-row';
+      row.style.cssText = 'display: flex; gap: 0.5rem; align-items: center; background: #ffffff; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.6rem 0.75rem; flex-wrap: wrap;';
+
+      row.innerHTML = `
+        <div style="flex: 2; min-width: 170px;">
+          <select class="form-input compra-row-prod" style="padding: 0.45rem 0.6rem; font-size: 0.84rem;" required>
+            ${buildCompraPresentationOptions()}
+          </select>
+        </div>
+        <div style="width: 75px;">
+          <input type="number" class="form-input compra-row-qty" placeholder="Cant." min="1" step="1" value="1" style="padding: 0.45rem 0.6rem; font-size: 0.84rem; text-align: center;" required title="Cantidad">
+        </div>
+        <div style="width: 105px;">
+          <input type="number" class="form-input compra-row-cost" placeholder="Costo unit." min="0" step="0.01" value="0.00" style="padding: 0.45rem 0.6rem; font-size: 0.84rem; text-align: right;" required title="Costo unitario">
+        </div>
+        <div style="width: 85px; text-align: right; font-weight: 700; font-size: 0.88rem; color: var(--text-main);" class="compra-row-subtotal">
+          $0.00
+        </div>
+        <button type="button" class="btn-remove-compra-item" style="background: none; border: none; color: #94a3b8; font-size: 1.25rem; line-height: 1; cursor: pointer; padding: 0 4px;" title="Eliminar artículo">&times;</button>
+      `;
+
+      compraItemsList.appendChild(row);
+
+      const prodSelect = row.querySelector('.compra-row-prod');
+      const qtyInput = row.querySelector('.compra-row-qty');
+      const costInput = row.querySelector('.compra-row-cost');
+      const subtotalEl = row.querySelector('.compra-row-subtotal');
+      const removeBtn = row.querySelector('.btn-remove-compra-item');
+
+      function updateRowSubtotal() {
+        const qty = parseFloat(qtyInput.value) || 0;
+        const cost = parseFloat(costInput.value) || 0;
+        const subtotal = qty * cost;
+        subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+        calcCompraTotals();
+      }
+
+      prodSelect.addEventListener('change', () => {
+        const selectedOpt = prodSelect.options[prodSelect.selectedIndex];
+        if (selectedOpt && selectedOpt.dataset.cost) {
+          costInput.value = parseFloat(selectedOpt.dataset.cost).toFixed(2);
+        }
+        updateRowSubtotal();
+      });
+
+      qtyInput.addEventListener('input', updateRowSubtotal);
+      costInput.addEventListener('input', updateRowSubtotal);
+
+      removeBtn.addEventListener('click', () => {
+        if (compraItemsList.querySelectorAll('.compra-item-row').length > 1) {
+          row.remove();
+        } else {
+          prodSelect.value = '';
+          qtyInput.value = '1';
+          costInput.value = '0.00';
+          subtotalEl.textContent = '$0.00';
+        }
+        calcCompraTotals();
+      });
+
+      updateRowSubtotal();
+    }
+
+    function calcCompraTotals() {
+      if (!compraItemsList || !compraTotalDisplay) return;
+      let grandTotal = 0;
+      compraItemsList.querySelectorAll('.compra-item-row').forEach(row => {
+        const qty = parseFloat(row.querySelector('.compra-row-qty')?.value) || 0;
+        const cost = parseFloat(row.querySelector('.compra-row-cost')?.value) || 0;
+        grandTotal += (qty * cost);
+      });
+      compraTotalDisplay.textContent = `$${grandTotal.toFixed(2)}`;
+    }
+
+    if (btnOpenAddCompra) btnOpenAddCompra.addEventListener('click', openAddCompraModal);
+    if (btnCloseCompraModal) btnCloseCompraModal.addEventListener('click', closeAddCompraModal);
+    if (btnCancelCompraModal) btnCancelCompraModal.addEventListener('click', closeAddCompraModal);
+    if (btnAddCompraItem) btnAddCompraItem.addEventListener('click', () => addCompraItemRow());
+
+    if (modalAddCompra) {
+      modalAddCompra.addEventListener('click', (e) => {
+        if (e.target === modalAddCompra) closeAddCompraModal();
+      });
+    }
+
+    if (formAddCompra) {
+      formAddCompra.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (modalCompraAlert) modalCompraAlert.style.display = 'none';
+
+        const supplierId = compraSupplierSelect ? compraSupplierSelect.value : '';
+        if (!supplierId) {
+          if (modalCompraAlert) {
+            modalCompraAlert.textContent = 'Por favor selecciona un proveedor para la compra.';
+            modalCompraAlert.className = 'modal-alert error';
+            modalCompraAlert.style.display = 'block';
+          }
+          return;
+        }
+
+        const rows = compraItemsList ? compraItemsList.querySelectorAll('.compra-item-row') : [];
+        let hasValidItem = false;
+        rows.forEach(r => {
+          const pVal = r.querySelector('.compra-row-prod')?.value;
+          const qVal = parseFloat(r.querySelector('.compra-row-qty')?.value) || 0;
+          if (pVal && qVal > 0) hasValidItem = true;
+        });
+
+        if (!hasValidItem) {
+          if (modalCompraAlert) {
+            modalCompraAlert.textContent = 'Por favor selecciona al menos un producto a adquirir con cantidad mayor a cero.';
+            modalCompraAlert.className = 'modal-alert error';
+            modalCompraAlert.style.display = 'block';
+          }
+          return;
+        }
+
+        closeAddCompraModal();
+        showToast('Compra registrada exitosamente.');
       });
     }
 

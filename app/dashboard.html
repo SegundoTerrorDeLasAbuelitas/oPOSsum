@@ -2392,6 +2392,7 @@
           <button class="compras-top-tab active" id="tab-top-compras-categories" type="button">Por categoría</button>
           <button class="compras-top-tab" id="tab-top-compras-suppliers" type="button">Por proveedor</button>
           <button class="compras-top-tab" id="tab-top-compras-directory" type="button">Proveedores</button>
+          <button class="compras-top-tab" id="tab-top-compras-history" type="button">Historial de compras</button>
         </div>
         <div class="compras-top-actions">
           <div class="compras-nav-divider"></div>
@@ -2482,6 +2483,47 @@
                 <tr>
                   <td colspan="6" style="text-align: center; padding: 2.5rem; color: #64748b;">
                     Consultando proveedores registrados...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: PURCHASES HISTORY -->
+      <div id="compras-section-history" style="display: none;">
+        <div class="data-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+            <div class="search-wrapper" style="flex: 1; min-width: 260px; margin-bottom: 0;">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" class="search-input" id="search-purchases-input" placeholder="Buscar por folio, proveedor o referencia...">
+            </div>
+            <button class="btn-action-primary" id="btn-history-add-compra">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              Nueva compra
+            </button>
+          </div>
+
+          <div class="table-responsive">
+            <table class="app-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Folio</th>
+                  <th>Proveedor</th>
+                  <th>Referencia</th>
+                  <th>Artículos</th>
+                  <th>Total</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="purchases-table-body">
+                <tr>
+                  <td colspan="9" style="text-align: center; padding: 2.5rem; color: #64748b;">
+                    Consultando historial de compras...
                   </td>
                 </tr>
               </tbody>
@@ -2968,8 +3010,11 @@
   <!-- ========================================================================= -->
   <!-- MODAL: AGREGAR COMPRA                                                    -->
   <!-- ========================================================================= -->
+  <!-- ========================================================================= -->
+  <!-- MODAL: AGREGAR COMPRA                                                    -->
+  <!-- ========================================================================= -->
   <div id="modal-add-compra" class="modal-overlay">
-    <div class="modal-card" style="max-width: 660px;">
+    <div class="modal-card" style="max-width: 720px;">
       <div class="modal-header">
         <div class="modal-header-left">
           <div class="modal-header-icon" style="background: #ecfdf5; color: #059669;">🛍️</div>
@@ -2978,7 +3023,7 @@
             <p class="modal-subtitle">Adquisición o ingreso de mercancía de proveedores.</p>
           </div>
         </div>
-        <button class="modal-close-btn" id="btn-close-compra-modal">&times;</button>
+        <button type="button" class="modal-close-btn" id="btn-close-compra-modal">&times;</button>
       </div>
 
       <div id="modal-compra-alert" class="modal-alert"></div>
@@ -2997,20 +3042,44 @@
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
           <label class="form-label" for="compra-reference-input">Folio / Factura / Remisión (opcional)</label>
           <input type="text" id="compra-reference-input" class="form-input" placeholder="Ej. FAC-9823 o Nota de entrega #14">
         </div>
 
-        <div style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
-          <label class="form-label" style="margin-bottom: 0;">Artículos a adquirir *</label>
-          <button type="button" id="btn-add-compra-item" style="background: none; border: none; color: #0284c7; font-weight: 700; font-size: 0.82rem; cursor: pointer; display: flex; align-items: center; gap: 4px;">
-            + Agregar artículo
-          </button>
+        <!-- Product Picker Box -->
+        <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+            <label class="form-label" for="compra-product-picker" style="margin-bottom: 0; font-size: 0.82rem; font-weight: 700; color: #334155;">Seleccionar producto del catálogo para agregar</label>
+            <button type="button" id="btn-compra-goto-new-product" style="background:none; border:none; color:#0284c7; font-size:0.78rem; font-weight:700; cursor:pointer; padding:0;">
+              ¿No está en el catálogo? + Crear producto
+            </button>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <select id="compra-product-picker" class="form-input" style="flex: 1; font-size: 0.85rem; padding: 0.5rem 0.65rem;">
+              <option value="">Buscar o seleccionar producto / presentación...</option>
+            </select>
+            <button type="button" id="btn-compra-add-picker-item" class="btn-action-primary" style="padding: 0.5rem 1rem; font-size: 0.84rem; white-space: nowrap;">
+              + Agregar
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 0.4rem; display: flex; justify-content: space-between; align-items: center;">
+          <label class="form-label" style="margin-bottom: 0; font-weight: 700;">Detalle de artículos de la compra *</label>
+        </div>
+
+        <!-- Items Header -->
+        <div style="display: flex; gap: 0.5rem; padding: 0.3rem 0.75rem; font-size: 0.72rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em;">
+          <div style="flex: 2; min-width: 170px;">Producto / Presentación</div>
+          <div style="width: 80px; text-align: center;">Cantidad</div>
+          <div style="width: 110px; text-align: right;">Costo unit.</div>
+          <div style="width: 85px; text-align: right;">Importe</div>
+          <div style="width: 25px;"></div>
         </div>
 
         <!-- Items container -->
-        <div id="compra-items-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem;">
+        <div id="compra-items-list" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; max-height: 240px; overflow-y: auto;">
           <!-- Item rows dynamically appended here -->
         </div>
 
@@ -3031,10 +3100,82 @@
         <div class="modal-actions">
           <button type="button" class="btn-cancel" id="btn-cancel-compra-modal">Cancelar</button>
           <button type="submit" class="btn-save-modal" id="btn-submit-compra">
-            Registrar compra
+            Guardar compra
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: DETALLE DE COMPRA (TICKET / HISTORIAL)                             -->
+  <!-- ========================================================================= -->
+  <div id="modal-purchase-detail" class="modal-overlay">
+    <div class="modal-card" style="max-width: 540px; padding: 1.75rem;">
+      <div class="modal-header" style="border-bottom: 1px dashed var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" style="background: #ecfdf5; color: #059669;">🧾</div>
+          <div>
+            <h3 class="modal-title" id="purchase-detail-folio">Compra C-000001</h3>
+            <p class="modal-subtitle" id="purchase-detail-subtitle">Comprobante de compra de mercancía</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" id="btn-close-purchase-detail">&times;</button>
+      </div>
+
+      <!-- Ticket Meta Information Grid -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.9rem 1.1rem; margin-bottom: 1.25rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+        <div>
+          <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Proveedor</span>
+          <div id="purchase-detail-supplier" style="font-weight: 700; color: var(--text-main); margin-top: 2px;">-</div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Fecha y Hora</span>
+          <div id="purchase-detail-datetime" style="color: #334155; margin-top: 2px;">-</div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Referencia / Factura</span>
+          <div id="purchase-detail-reference" style="color: #334155; margin-top: 2px;">-</div>
+        </div>
+        <div>
+          <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Estado</span>
+          <div id="purchase-detail-status" style="margin-top: 2px;">
+            <span class="status-pill-completed" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #d1fae5;">✓ Completada</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Line Items Section (Ticket Style) -->
+      <div style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; letter-spacing: 0.03em;">
+        Artículos Adquiridos
+      </div>
+      <div id="purchase-detail-items-container" style="border: 1px solid var(--border-color); border-radius: 10px; padding: 0.75rem 1rem; max-height: 260px; overflow-y: auto; margin-bottom: 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; background: #ffffff;">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <!-- Ticket Totals -->
+      <div style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 10px; padding: 0.9rem 1.1rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <span style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Total Pagado</span>
+          <div style="font-size: 0.75rem; color: #94a3b8;">Costo de adquisición al proveedor</div>
+        </div>
+        <div id="purchase-detail-total" style="font-size: 1.5rem; font-weight: 800; color: #059669;">$0.00</div>
+      </div>
+
+      <!-- Notes -->
+      <div id="purchase-detail-notes-box" style="margin-bottom: 1.25rem; display: none;">
+        <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700;">Notas</span>
+        <div id="purchase-detail-notes" style="font-size: 0.85rem; color: #475569; background: #f1f5f9; padding: 0.6rem 0.8rem; border-radius: 6px; margin-top: 3px;"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-cancel" id="btn-print-purchase-detail" style="display: flex; align-items: center; gap: 5px;">
+          <span>🖨️</span> Imprimir
+        </button>
+        <button type="button" class="btn-save-modal" id="btn-close-purchase-detail-action" style="background: #0f172a;">
+          Cerrar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -3098,14 +3239,17 @@
     import { salesManager } from '../js/sales-manager.js';
     import { suppliersManager } from '../js/suppliers-manager.js';
     import { inventoryManager } from '../js/inventory-manager.js';
+    import { purchasesManager } from '../js/purchases-manager.js';
 
     const supabase = getSupabase();
     let currentLoadedProducts = [];
     let currentLoadedCategories = [];
     let currentLoadedSales = [];
     let currentLoadedSuppliers = [];
+    let currentLoadedPurchases = [];
     let currentLoadedInventoryMap = new Map();
     let currentInventariosGrouping = 'product'; // 'product' | 'supplier' | 'category'
+    let currentComprasGrouping = 'category'; // 'category' | 'supplier' | 'history'
     let currentCartItems = [];
     let activeCategoryFilter = 'all';
     let pendingSupplierTargetSelect = null;
@@ -3169,8 +3313,13 @@
     const tabTopComprasCategories = document.getElementById('tab-top-compras-categories');
     const tabTopComprasSuppliers = document.getElementById('tab-top-compras-suppliers');
     const tabTopComprasDirectory = document.getElementById('tab-top-compras-directory');
+    const tabTopComprasHistory = document.getElementById('tab-top-compras-history');
     const comprasSectionProducts = document.getElementById('compras-section-products');
     const comprasSectionSuppliers = document.getElementById('compras-section-suppliers');
+    const comprasSectionHistory = document.getElementById('compras-section-history');
+    const searchPurchasesInput = document.getElementById('search-purchases-input');
+    const purchasesTableBody = document.getElementById('purchases-table-body');
+    const btnHistoryAddCompra = document.getElementById('btn-history-add-compra');
 
     // Compra Modal Elements
     const modalAddCompra = document.getElementById('modal-add-compra');
@@ -3181,11 +3330,29 @@
     const compraSupplierSelect = document.getElementById('compra-supplier-select');
     const compraDateInput = document.getElementById('compra-date-input');
     const compraReferenceInput = document.getElementById('compra-reference-input');
+    const compraProductPicker = document.getElementById('compra-product-picker');
+    const btnCompraAddPickerItem = document.getElementById('btn-compra-add-picker-item');
+    const btnCompraGotoNewProduct = document.getElementById('btn-compra-goto-new-product');
     const compraItemsList = document.getElementById('compra-items-list');
-    const btnAddCompraItem = document.getElementById('btn-add-compra-item');
     const compraTotalDisplay = document.getElementById('compra-total-display');
     const modalCompraAlert = document.getElementById('modal-compra-alert');
     const btnSubmitCompra = document.getElementById('btn-submit-compra');
+
+    // Purchase Detail Modal Elements
+    const modalPurchaseDetail = document.getElementById('modal-purchase-detail');
+    const btnClosePurchaseDetail = document.getElementById('btn-close-purchase-detail');
+    const btnClosePurchaseDetailAction = document.getElementById('btn-close-purchase-detail-action');
+    const btnPrintPurchaseDetail = document.getElementById('btn-print-purchase-detail');
+    const purchaseDetailFolio = document.getElementById('purchase-detail-folio');
+    const purchaseDetailSubtitle = document.getElementById('purchase-detail-subtitle');
+    const purchaseDetailSupplier = document.getElementById('purchase-detail-supplier');
+    const purchaseDetailDatetime = document.getElementById('purchase-detail-datetime');
+    const purchaseDetailReference = document.getElementById('purchase-detail-reference');
+    const purchaseDetailStatus = document.getElementById('purchase-detail-status');
+    const purchaseDetailItemsContainer = document.getElementById('purchase-detail-items-container');
+    const purchaseDetailTotal = document.getElementById('purchase-detail-total');
+    const purchaseDetailNotesBox = document.getElementById('purchase-detail-notes-box');
+    const purchaseDetailNotes = document.getElementById('purchase-detail-notes');
 
     // Assign Supplier Modal Elements
     const modalAssignSupplier = document.getElementById('modal-assign-supplier');
@@ -4007,9 +4174,9 @@
     }
 
     // Top navigation in Compras (CRM Blue Tabs Style)
-    // Top navigation in Compras (Category Grouping, Supplier Grouping, and Directory)
+    // Top navigation in Compras (Category Grouping, Supplier Grouping, Directory, and History)
     function setComprasActiveTopTab(activeBtn) {
-      [tabTopComprasCategories, tabTopComprasSuppliers, tabTopComprasDirectory].forEach(btn => {
+      [tabTopComprasCategories, tabTopComprasSuppliers, tabTopComprasDirectory, tabTopComprasHistory].forEach(btn => {
         if (btn) btn.classList.remove('active');
       });
       if (activeBtn) activeBtn.classList.add('active');
@@ -4019,8 +4186,9 @@
       tabTopComprasCategories.addEventListener('click', () => {
         setComprasActiveTopTab(tabTopComprasCategories);
         currentComprasGrouping = 'category';
-        comprasSectionProducts.style.display = 'block';
-        comprasSectionSuppliers.style.display = 'none';
+        if (comprasSectionProducts) comprasSectionProducts.style.display = 'block';
+        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
+        if (comprasSectionHistory) comprasSectionHistory.style.display = 'none';
         renderComprasGroupedView(currentLoadedProducts, searchComprasInput?.value || '');
       });
     }
@@ -4029,8 +4197,9 @@
       tabTopComprasSuppliers.addEventListener('click', () => {
         setComprasActiveTopTab(tabTopComprasSuppliers);
         currentComprasGrouping = 'supplier';
-        comprasSectionProducts.style.display = 'block';
-        comprasSectionSuppliers.style.display = 'none';
+        if (comprasSectionProducts) comprasSectionProducts.style.display = 'block';
+        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
+        if (comprasSectionHistory) comprasSectionHistory.style.display = 'none';
         renderComprasGroupedView(currentLoadedProducts, searchComprasInput?.value || '');
       });
     }
@@ -4038,10 +4207,26 @@
     if (tabTopComprasDirectory) {
       tabTopComprasDirectory.addEventListener('click', () => {
         setComprasActiveTopTab(tabTopComprasDirectory);
-        comprasSectionProducts.style.display = 'none';
-        comprasSectionSuppliers.style.display = 'block';
+        if (comprasSectionProducts) comprasSectionProducts.style.display = 'none';
+        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'block';
+        if (comprasSectionHistory) comprasSectionHistory.style.display = 'none';
         loadSuppliers();
       });
+    }
+
+    if (tabTopComprasHistory) {
+      tabTopComprasHistory.addEventListener('click', () => {
+        setComprasActiveTopTab(tabTopComprasHistory);
+        currentComprasGrouping = 'history';
+        if (comprasSectionProducts) comprasSectionProducts.style.display = 'none';
+        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
+        if (comprasSectionHistory) comprasSectionHistory.style.display = 'block';
+        loadPurchasesHistory();
+      });
+    }
+
+    if (btnHistoryAddCompra) {
+      btnHistoryAddCompra.addEventListener('click', () => openAddCompraModal());
     }
 
     // Supplier Select Options Generator
@@ -4309,8 +4494,176 @@
     }
 
     // -------------------------------------------------------------
-    // MODAL: AGREGAR COMPRA CONTROLLER & LOGIC
+    // PURCHASES & PROCUREMENT CONTROLLER & LOGIC
     // -------------------------------------------------------------
+    function populateCompraProductPicker(selectedSupplierId = null) {
+      if (!compraProductPicker) return;
+      let html = '<option value="">Buscar o seleccionar producto / presentación...</option>';
+
+      if (currentLoadedProducts && currentLoadedProducts.length > 0) {
+        currentLoadedProducts.forEach(group => {
+          const gName = group.name ? escapeHtml(group.name) : 'Producto';
+          const catName = group.categories?.name ? escapeHtml(group.categories.name.trim()) : 'General';
+          const presList = group.products || [];
+
+          if (presList.length > 0) {
+            html += `<optgroup label="${gName} (${catName})">`;
+            presList.forEach(p => {
+              const pName = p.name ? escapeHtml(p.name) : 'Estándar';
+              const sps = p.supplier_presentations || [];
+              let defaultCost = 0;
+              let costBadge = '';
+
+              if (selectedSupplierId) {
+                const sp = sps.find(r => r.supplier_id === selectedSupplierId);
+                if (sp && sp.last_purchase_cost != null && !isNaN(parseFloat(sp.last_purchase_cost))) {
+                  defaultCost = parseFloat(sp.last_purchase_cost);
+                  costBadge = ` · Costo proveedor: $${defaultCost.toFixed(2)}`;
+                }
+              }
+
+              if (!costBadge && sps.length > 0 && sps[0].last_purchase_cost != null && !isNaN(parseFloat(sps[0].last_purchase_cost))) {
+                defaultCost = parseFloat(sps[0].last_purchase_cost);
+                costBadge = ` · Último costo: $${defaultCost.toFixed(2)}`;
+              }
+
+              html += `<option value="${p.id}" data-cost="${defaultCost}">${gName} — ${pName}${costBadge}</option>`;
+            });
+            html += `</optgroup>`;
+          }
+        });
+      }
+
+      compraProductPicker.innerHTML = html;
+    }
+
+    function addCompraPresentationItem(presId, defaultQty = 1, customCost = null) {
+      if (!compraItemsList || !presId) return;
+
+      // Check if item already in list
+      const existingRow = compraItemsList.querySelector(`.compra-item-row[data-pres-id="${presId}"]`);
+      if (existingRow) {
+        const qtyInput = existingRow.querySelector('.compra-row-qty');
+        if (qtyInput) {
+          qtyInput.value = (parseFloat(qtyInput.value) || 0) + 1;
+          qtyInput.dispatchEvent(new Event('input'));
+          existingRow.style.transition = 'background 0.3s ease';
+          existingRow.style.background = '#ecfdf5';
+          setTimeout(() => { existingRow.style.background = '#ffffff'; }, 500);
+        }
+        return;
+      }
+
+      // Find product info in currentLoadedProducts
+      let targetGroup = null;
+      let targetPres = null;
+      if (currentLoadedProducts && currentLoadedProducts.length > 0) {
+        for (const g of currentLoadedProducts) {
+          const pres = (g.products || []).find(p => p.id === presId);
+          if (pres) {
+            targetGroup = g;
+            targetPres = pres;
+            break;
+          }
+        }
+      }
+
+      if (!targetGroup || !targetPres) return;
+
+      // Remove empty state placeholder if present
+      const emptyPlaceholder = compraItemsList.querySelector('.empty-compra-items');
+      if (emptyPlaceholder) emptyPlaceholder.remove();
+
+      // Determine initial cost
+      let costVal = 0.00;
+      if (customCost !== null && !isNaN(parseFloat(customCost))) {
+        costVal = parseFloat(customCost);
+      } else {
+        const selectedSuppId = compraSupplierSelect ? compraSupplierSelect.value : null;
+        const sps = targetPres.supplier_presentations || [];
+        if (selectedSuppId) {
+          const sp = sps.find(r => r.supplier_id === selectedSuppId);
+          if (sp && sp.last_purchase_cost != null && !isNaN(parseFloat(sp.last_purchase_cost))) {
+            costVal = parseFloat(sp.last_purchase_cost);
+          }
+        }
+        if (costVal === 0 && sps.length > 0 && sps[0].last_purchase_cost != null && !isNaN(parseFloat(sps[0].last_purchase_cost))) {
+          costVal = parseFloat(sps[0].last_purchase_cost);
+        }
+      }
+
+      const row = document.createElement('div');
+      row.className = 'compra-item-row';
+      row.setAttribute('data-pres-id', targetPres.id);
+      row.setAttribute('data-prod-name', targetGroup.name || 'Producto');
+      row.setAttribute('data-pres-name', targetPres.name || 'Estándar');
+      row.style.cssText = 'display: flex; gap: 0.5rem; align-items: center; background: #ffffff; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.55rem 0.75rem;';
+
+      const initialSubtotal = (defaultQty * costVal).toFixed(2);
+
+      row.innerHTML = `
+        <div style="flex: 2; min-width: 170px;">
+          <div style="font-weight: 700; font-size: 0.88rem; color: var(--text-main);">${escapeHtml(targetGroup.name || 'Producto')}</div>
+          <div style="font-size: 0.78rem; color: #64748b;">${escapeHtml(targetPres.name || 'Estándar')}</div>
+        </div>
+        <div style="width: 80px;">
+          <input type="number" class="form-input compra-row-qty" placeholder="Cant." min="0.01" step="1" value="${defaultQty}" style="padding: 0.45rem 0.5rem; font-size: 0.84rem; text-align: center;" required title="Cantidad">
+        </div>
+        <div style="width: 110px;">
+          <div style="position: relative;">
+            <span style="position: absolute; left: 8px; top: 50%; transform: translateY(-50%); font-size: 0.8rem; color: #64748b; font-weight: 700;">$</span>
+            <input type="number" class="form-input compra-row-cost" placeholder="0.00" min="0" step="0.01" value="${costVal.toFixed(2)}" style="padding: 0.45rem 0.5rem 0.45rem 1.15rem; font-size: 0.84rem; text-align: right;" required title="Costo unitario">
+          </div>
+        </div>
+        <div style="width: 85px; text-align: right; font-weight: 700; font-size: 0.88rem; color: var(--text-main);" class="compra-row-subtotal">
+          $${initialSubtotal}
+        </div>
+        <button type="button" class="btn-remove-compra-item" style="background: none; border: none; color: #94a3b8; font-size: 1.25rem; line-height: 1; cursor: pointer; padding: 0 4px; width: 25px; text-align: center;" title="Eliminar artículo">&times;</button>
+      `;
+
+      compraItemsList.appendChild(row);
+
+      const qtyInput = row.querySelector('.compra-row-qty');
+      const costInput = row.querySelector('.compra-row-cost');
+      const subtotalEl = row.querySelector('.compra-row-subtotal');
+      const removeBtn = row.querySelector('.btn-remove-compra-item');
+
+      function updateSubtotal() {
+        const q = parseFloat(qtyInput.value) || 0;
+        const c = parseFloat(costInput.value) || 0;
+        subtotalEl.textContent = `$${(q * c).toFixed(2)}`;
+        calcCompraTotals();
+      }
+
+      qtyInput.addEventListener('input', updateSubtotal);
+      costInput.addEventListener('input', updateSubtotal);
+
+      removeBtn.addEventListener('click', () => {
+        row.remove();
+        if (compraItemsList.querySelectorAll('.compra-item-row').length === 0) {
+          compraItemsList.innerHTML = `
+            <div class="empty-compra-items" style="text-align: center; padding: 1.5rem 1rem; border: 1.5px dashed var(--border-color); border-radius: 8px; color: #94a3b8; font-size: 0.84rem;">
+              No has agregado productos a esta compra todavía. Selecciona una presentación arriba.
+            </div>
+          `;
+        }
+        calcCompraTotals();
+      });
+
+      calcCompraTotals();
+    }
+
+    function calcCompraTotals() {
+      if (!compraItemsList || !compraTotalDisplay) return;
+      let grandTotal = 0;
+      compraItemsList.querySelectorAll('.compra-item-row').forEach(row => {
+        const qty = parseFloat(row.querySelector('.compra-row-qty')?.value) || 0;
+        const cost = parseFloat(row.querySelector('.compra-row-cost')?.value) || 0;
+        grandTotal += (qty * cost);
+      });
+      compraTotalDisplay.textContent = `$${grandTotal.toFixed(2)}`;
+    }
+
     function openAddCompraModal() {
       if (!modalAddCompra) return;
       if (modalCompraAlert) modalCompraAlert.style.display = 'none';
@@ -4333,14 +4686,21 @@
         compraSupplierSelect.innerHTML = suppHtml;
       }
 
-      // Populate initial item row
+      // Initialize empty items list
       if (compraItemsList) {
-        compraItemsList.innerHTML = '';
-        addCompraItemRow();
+        compraItemsList.innerHTML = `
+          <div class="empty-compra-items" style="text-align: center; padding: 1.5rem 1rem; border: 1.5px dashed var(--border-color); border-radius: 8px; color: #94a3b8; font-size: 0.84rem;">
+            No has agregado productos a esta compra todavía. Selecciona una presentación arriba.
+          </div>
+        `;
       }
 
+      // Populate product picker
+      populateCompraProductPicker(compraSupplierSelect?.value || null);
       calcCompraTotals();
+
       modalAddCompra.classList.add('active');
+      if (compraSupplierSelect) compraSupplierSelect.focus();
     }
 
     function closeAddCompraModal() {
@@ -4349,110 +4709,9 @@
       }
     }
 
-    function buildCompraPresentationOptions(selectedPresId = '') {
-      let html = '<option value="">Selecciona producto / presentación...</option>';
-      if (currentLoadedProducts && currentLoadedProducts.length > 0) {
-        currentLoadedProducts.forEach(group => {
-          const gName = group.name ? escapeHtml(group.name) : 'Producto';
-          const presList = group.products || [];
-          if (presList.length > 0) {
-            html += `<optgroup label="${gName}">`;
-            presList.forEach(p => {
-              const pName = p.name ? escapeHtml(p.name) : 'Estándar';
-              const pCost = p.supplier_presentations && p.supplier_presentations[0] && p.supplier_presentations[0].purchase_cost 
-                ? parseFloat(p.supplier_presentations[0].purchase_cost) 
-                : (p.price ? parseFloat(p.price) : 0);
-              const isSelected = p.id === selectedPresId ? 'selected' : '';
-              html += `<option value="${p.id}" data-cost="${pCost}" ${isSelected}>${gName} - ${pName}</option>`;
-            });
-            html += `</optgroup>`;
-          }
-        });
-      }
-      return html;
-    }
-
-    function addCompraItemRow() {
-      if (!compraItemsList) return;
-      const row = document.createElement('div');
-      row.className = 'compra-item-row';
-      row.style.cssText = 'display: flex; gap: 0.5rem; align-items: center; background: #ffffff; border: 1.5px solid var(--border-color); border-radius: 8px; padding: 0.6rem 0.75rem; flex-wrap: wrap;';
-
-      row.innerHTML = `
-        <div style="flex: 2; min-width: 170px;">
-          <select class="form-input compra-row-prod" style="padding: 0.45rem 0.6rem; font-size: 0.84rem;" required>
-            ${buildCompraPresentationOptions()}
-          </select>
-        </div>
-        <div style="width: 75px;">
-          <input type="number" class="form-input compra-row-qty" placeholder="Cant." min="1" step="1" value="1" style="padding: 0.45rem 0.6rem; font-size: 0.84rem; text-align: center;" required title="Cantidad">
-        </div>
-        <div style="width: 105px;">
-          <input type="number" class="form-input compra-row-cost" placeholder="Costo unit." min="0" step="0.01" value="0.00" style="padding: 0.45rem 0.6rem; font-size: 0.84rem; text-align: right;" required title="Costo unitario">
-        </div>
-        <div style="width: 85px; text-align: right; font-weight: 700; font-size: 0.88rem; color: var(--text-main);" class="compra-row-subtotal">
-          $0.00
-        </div>
-        <button type="button" class="btn-remove-compra-item" style="background: none; border: none; color: #94a3b8; font-size: 1.25rem; line-height: 1; cursor: pointer; padding: 0 4px;" title="Eliminar artículo">&times;</button>
-      `;
-
-      compraItemsList.appendChild(row);
-
-      const prodSelect = row.querySelector('.compra-row-prod');
-      const qtyInput = row.querySelector('.compra-row-qty');
-      const costInput = row.querySelector('.compra-row-cost');
-      const subtotalEl = row.querySelector('.compra-row-subtotal');
-      const removeBtn = row.querySelector('.btn-remove-compra-item');
-
-      function updateRowSubtotal() {
-        const qty = parseFloat(qtyInput.value) || 0;
-        const cost = parseFloat(costInput.value) || 0;
-        const subtotal = qty * cost;
-        subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
-        calcCompraTotals();
-      }
-
-      prodSelect.addEventListener('change', () => {
-        const selectedOpt = prodSelect.options[prodSelect.selectedIndex];
-        if (selectedOpt && selectedOpt.dataset.cost) {
-          costInput.value = parseFloat(selectedOpt.dataset.cost).toFixed(2);
-        }
-        updateRowSubtotal();
-      });
-
-      qtyInput.addEventListener('input', updateRowSubtotal);
-      costInput.addEventListener('input', updateRowSubtotal);
-
-      removeBtn.addEventListener('click', () => {
-        if (compraItemsList.querySelectorAll('.compra-item-row').length > 1) {
-          row.remove();
-        } else {
-          prodSelect.value = '';
-          qtyInput.value = '1';
-          costInput.value = '0.00';
-          subtotalEl.textContent = '$0.00';
-        }
-        calcCompraTotals();
-      });
-
-      updateRowSubtotal();
-    }
-
-    function calcCompraTotals() {
-      if (!compraItemsList || !compraTotalDisplay) return;
-      let grandTotal = 0;
-      compraItemsList.querySelectorAll('.compra-item-row').forEach(row => {
-        const qty = parseFloat(row.querySelector('.compra-row-qty')?.value) || 0;
-        const cost = parseFloat(row.querySelector('.compra-row-cost')?.value) || 0;
-        grandTotal += (qty * cost);
-      });
-      compraTotalDisplay.textContent = `$${grandTotal.toFixed(2)}`;
-    }
-
     if (btnOpenAddCompra) btnOpenAddCompra.addEventListener('click', openAddCompraModal);
     if (btnCloseCompraModal) btnCloseCompraModal.addEventListener('click', closeAddCompraModal);
     if (btnCancelCompraModal) btnCancelCompraModal.addEventListener('click', closeAddCompraModal);
-    if (btnAddCompraItem) btnAddCompraItem.addEventListener('click', () => addCompraItemRow());
 
     if (modalAddCompra) {
       modalAddCompra.addEventListener('click', (e) => {
@@ -4460,15 +4719,79 @@
       });
     }
 
+    // Refresh picker costs when supplier changes
+    if (compraSupplierSelect) {
+      compraSupplierSelect.addEventListener('change', () => {
+        const suppId = compraSupplierSelect.value;
+        populateCompraProductPicker(suppId);
+
+        // Also update unit costs of existing items if they have a recorded cost for this new supplier
+        if (suppId && compraItemsList) {
+          compraItemsList.querySelectorAll('.compra-item-row').forEach(row => {
+            const presId = row.getAttribute('data-pres-id');
+            if (presId && currentLoadedProducts) {
+              for (const g of currentLoadedProducts) {
+                const p = (g.products || []).find(item => item.id === presId);
+                if (p) {
+                  const sp = (p.supplier_presentations || []).find(r => r.supplier_id === suppId);
+                  if (sp && sp.last_purchase_cost != null && !isNaN(parseFloat(sp.last_purchase_cost))) {
+                    const costInput = row.querySelector('.compra-row-cost');
+                    if (costInput) {
+                      costInput.value = parseFloat(sp.last_purchase_cost).toFixed(2);
+                      costInput.dispatchEvent(new Event('input'));
+                    }
+                  }
+                  break;
+                }
+              }
+            }
+          });
+        }
+      });
+    }
+
+    // Add selected product from picker button
+    if (btnCompraAddPickerItem && compraProductPicker) {
+      btnCompraAddPickerItem.addEventListener('click', () => {
+        const presId = compraProductPicker.value;
+        if (!presId) {
+          if (modalCompraAlert) {
+            modalCompraAlert.textContent = 'Por favor selecciona un producto o presentación del catálogo.';
+            modalCompraAlert.className = 'modal-alert error';
+            modalCompraAlert.style.display = 'block';
+          }
+          return;
+        }
+        if (modalCompraAlert) modalCompraAlert.style.display = 'none';
+        addCompraPresentationItem(presId);
+        compraProductPicker.value = '';
+      });
+    }
+
+    // Direct link to create product if not in catalog
+    if (btnCompraGotoNewProduct) {
+      btnCompraGotoNewProduct.addEventListener('click', () => {
+        closeAddCompraModal();
+        if (typeof openAddModal === 'function') {
+          openAddModal('compras');
+        }
+      });
+    }
+
+    // Form Add Compra submit
     if (formAddCompra) {
-      formAddCompra.addEventListener('submit', (e) => {
+      formAddCompra.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (modalCompraAlert) modalCompraAlert.style.display = 'none';
 
         const supplierId = compraSupplierSelect ? compraSupplierSelect.value : '';
+        const purchaseDate = compraDateInput ? compraDateInput.value : '';
+        const reference = compraReferenceInput ? compraReferenceInput.value.trim() : '';
+        const notes = compraNotesInput ? compraNotesInput.value.trim() : '';
+
         if (!supplierId) {
           if (modalCompraAlert) {
-            modalCompraAlert.textContent = 'Por favor selecciona un proveedor para la compra.';
+            modalCompraAlert.textContent = 'Por favor selecciona un proveedor para registrar la compra.';
             modalCompraAlert.className = 'modal-alert error';
             modalCompraAlert.style.display = 'block';
           }
@@ -4476,24 +4799,279 @@
         }
 
         const rows = compraItemsList ? compraItemsList.querySelectorAll('.compra-item-row') : [];
-        let hasValidItem = false;
-        rows.forEach(r => {
-          const pVal = r.querySelector('.compra-row-prod')?.value;
-          const qVal = parseFloat(r.querySelector('.compra-row-qty')?.value) || 0;
-          if (pVal && qVal > 0) hasValidItem = true;
-        });
-
-        if (!hasValidItem) {
+        if (!rows || rows.length === 0) {
           if (modalCompraAlert) {
-            modalCompraAlert.textContent = 'Por favor selecciona al menos un producto a adquirir con cantidad mayor a cero.';
+            modalCompraAlert.textContent = 'Por favor agrega al menos un producto al detalle de la compra.';
             modalCompraAlert.className = 'modal-alert error';
             modalCompraAlert.style.display = 'block';
           }
           return;
         }
 
-        closeAddCompraModal();
-        showToast('Compra registrada exitosamente.');
+        const items = [];
+        let hasInvalidQty = false;
+
+        rows.forEach(r => {
+          const presId = r.getAttribute('data-pres-id');
+          const prodName = r.getAttribute('data-prod-name');
+          const presName = r.getAttribute('data-pres-name');
+          const qty = parseFloat(r.querySelector('.compra-row-qty')?.value) || 0;
+          const cost = parseFloat(r.querySelector('.compra-row-cost')?.value) || 0;
+
+          if (qty <= 0) {
+            hasInvalidQty = true;
+          }
+
+          if (presId) {
+            items.push({
+              presentation_id: presId,
+              product_name: prodName,
+              presentation_name: presName,
+              quantity: qty,
+              unit_cost: cost
+            });
+          }
+        });
+
+        if (hasInvalidQty || items.length === 0) {
+          if (modalCompraAlert) {
+            modalCompraAlert.textContent = 'Cada producto de la compra debe tener una cantidad mayor a cero.';
+            modalCompraAlert.className = 'modal-alert error';
+            modalCompraAlert.style.display = 'block';
+          }
+          return;
+        }
+
+        if (btnSubmitCompra) {
+          btnSubmitCompra.disabled = true;
+          btnSubmitCompra.textContent = 'Guardando compra...';
+        }
+
+        try {
+          const result = await purchasesManager.createPurchaseOrder({
+            supplierId,
+            purchaseDate,
+            reference,
+            notes,
+            items
+          });
+
+          showToast(`Compra ${result.folio} registrada exitosamente.`);
+          closeAddCompraModal();
+
+          // Switch to History tab to immediately display the registered purchase
+          if (tabTopComprasHistory) {
+            setComprasActiveTopTab(tabTopComprasHistory);
+            currentComprasGrouping = 'history';
+            if (comprasSectionProducts) comprasSectionProducts.style.display = 'none';
+            if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
+            if (comprasSectionHistory) comprasSectionHistory.style.display = 'block';
+          }
+
+          await loadPurchasesHistory();
+          // Also refresh Compras catalog in the background so updated costs reflect
+          loadComprasCatalog();
+        } catch (err) {
+          console.error('Error saving purchase order:', err);
+          if (modalCompraAlert) {
+            modalCompraAlert.textContent = err.message || 'Error al registrar la compra.';
+            modalCompraAlert.className = 'modal-alert error';
+            modalCompraAlert.style.display = 'block';
+          }
+        } finally {
+          if (btnSubmitCompra) {
+            btnSubmitCompra.disabled = false;
+            btnSubmitCompra.textContent = 'Guardar compra';
+          }
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // PURCHASES HISTORY RENDERING (COMPRAS TABLE)
+    // -------------------------------------------------------------
+    async function loadPurchasesHistory() {
+      if (!purchasesTableBody) return;
+      try {
+        purchasesTableBody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align:center; padding: 2.5rem; color: #64748b;">
+              Consultando historial de compras...
+            </td>
+          </tr>
+        `;
+
+        currentLoadedPurchases = await purchasesManager.getPurchasesHistory();
+        renderPurchasesTable(currentLoadedPurchases);
+      } catch (err) {
+        console.error('Error loading purchases history:', err);
+        purchasesTableBody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align:center; padding: 2.5rem; color: #ef4444;">
+              Error al cargar compras: ${escapeHtml(err.message)}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function renderPurchasesTable(purchases) {
+      if (!purchasesTableBody) return;
+
+      if (!purchases || purchases.length === 0) {
+        purchasesTableBody.innerHTML = `
+          <tr>
+            <td colspan="9">
+              <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center;">
+                <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧾</div>
+                <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
+                  0 compras registradas
+                </h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+                  Aún no has registrado ninguna compra a proveedores en este negocio.
+                </p>
+                <button class="btn-action-primary" id="btn-empty-create-compra" style="margin: 0 auto;">
+                  + Registrar primera compra
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        document.getElementById('btn-empty-create-compra')?.addEventListener('click', openAddCompraModal);
+        return;
+      }
+
+      purchasesTableBody.innerHTML = purchases.map(p => {
+        const dateObj = new Date(p.purchase_date ? `${p.purchase_date}T12:00:00` : p.created_at);
+        const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const timeObj = new Date(p.created_at);
+        const timeStr = timeObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        const itemsCount = (p.purchase_items || []).length;
+        const itemsLabel = itemsCount === 1 ? '1 partida' : `${itemsCount} partidas`;
+
+        return `
+          <tr>
+            <td style="font-weight: 700; color: #1e293b;">${dateStr}</td>
+            <td style="color: #64748b; font-size: 0.82rem;">${timeStr}</td>
+            <td><strong style="color: #0f172a; font-family: monospace; font-size: 0.95rem;">${escapeHtml(p.folio || '')}</strong></td>
+            <td style="color: #334155; font-weight: 600;">${escapeHtml(p.supplier_name || 'Proveedor sin registrar')}</td>
+            <td style="color: #64748b; font-size: 0.84rem;">${escapeHtml(p.reference || '—')}</td>
+            <td style="color: #475569; font-size: 0.84rem;">${itemsLabel}</td>
+            <td style="font-weight: 800; color: #059669; font-size: 0.95rem;">$${parseFloat(p.total || 0).toFixed(2)}</td>
+            <td>
+              <span class="status-pill-completed" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #d1fae5;">✓ Completada</span>
+            </td>
+            <td>
+              <button class="action-btn-link btn-view-purchase-detail" data-purchase-id="${p.id}">Ver detalle</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      purchasesTableBody.querySelectorAll('.btn-view-purchase-detail').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pId = btn.getAttribute('data-purchase-id');
+          openPurchaseDetailModal(pId);
+        });
+      });
+    }
+
+    if (searchPurchasesInput) {
+      searchPurchasesInput.addEventListener('input', () => {
+        const q = searchPurchasesInput.value.toLowerCase().trim();
+        if (!q) {
+          renderPurchasesTable(currentLoadedPurchases);
+          return;
+        }
+
+        const filtered = (currentLoadedPurchases || []).filter(p => {
+          const folio = (p.folio || '').toLowerCase();
+          const supp = (p.supplier_name || '').toLowerCase();
+          const ref = (p.reference || '').toLowerCase();
+          const notes = (p.notes || '').toLowerCase();
+          return folio.includes(q) || supp.includes(q) || ref.includes(q) || notes.includes(q);
+        });
+
+        renderPurchasesTable(filtered);
+      });
+    }
+
+    // -------------------------------------------------------------
+    // PURCHASE DETAIL MODAL CONTROLLER & LOGIC
+    // -------------------------------------------------------------
+    async function openPurchaseDetailModal(purchaseId) {
+      if (!modalPurchaseDetail) return;
+      try {
+        if (purchaseDetailItemsContainer) {
+          purchaseDetailItemsContainer.innerHTML = '<div style="text-align:center; padding:1.25rem; color:#64748b;">Cargando partidas de la compra...</div>';
+        }
+        modalPurchaseDetail.classList.add('active');
+
+        const purchase = await purchasesManager.getPurchaseDetail(purchaseId);
+        const dateObj = new Date(purchase.purchase_date ? `${purchase.purchase_date}T12:00:00` : purchase.created_at);
+        const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const timeObj = new Date(purchase.created_at);
+        const timeStr = timeObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+        if (purchaseDetailFolio) purchaseDetailFolio.textContent = `Compra ${purchase.folio}`;
+        if (purchaseDetailSubtitle) purchaseDetailSubtitle.textContent = `Registrada el ${dateStr} a las ${timeStr}`;
+        if (purchaseDetailSupplier) purchaseDetailSupplier.textContent = purchase.supplier_name || 'Proveedor sin registrar';
+        if (purchaseDetailDatetime) purchaseDetailDatetime.textContent = `${dateStr} ${timeStr}`;
+        if (purchaseDetailReference) purchaseDetailReference.textContent = purchase.reference || 'Sin referencia registrada';
+        if (purchaseDetailTotal) purchaseDetailTotal.textContent = `$${parseFloat(purchase.total || 0).toFixed(2)}`;
+
+        if (purchase.notes && purchase.notes.trim()) {
+          if (purchaseDetailNotesBox) purchaseDetailNotesBox.style.display = 'block';
+          if (purchaseDetailNotes) purchaseDetailNotes.textContent = purchase.notes.trim();
+        } else {
+          if (purchaseDetailNotesBox) purchaseDetailNotesBox.style.display = 'none';
+        }
+
+        const items = purchase.purchase_items || [];
+        if (items.length === 0) {
+          if (purchaseDetailItemsContainer) {
+            purchaseDetailItemsContainer.innerHTML = '<div style="color:#94a3b8; font-size:0.84rem; text-align:center;">No hay partidas registradas en esta compra.</div>';
+          }
+        } else {
+          if (purchaseDetailItemsContainer) {
+            purchaseDetailItemsContainer.innerHTML = items.map(item => `
+              <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #f1f5f9;">
+                <div>
+                  <div style="font-weight: 700; font-size: 0.88rem; color: #0f172a;">${escapeHtml(item.product_name)}</div>
+                  <div style="font-size: 0.78rem; color: #64748b;">${escapeHtml(item.presentation_name)}</div>
+                  <div style="font-size: 0.76rem; color: #0284c7; margin-top: 1px; font-weight: 600;">
+                    ${parseFloat(item.quantity)} unidades × $${parseFloat(item.unit_cost).toFixed(2)}
+                  </div>
+                </div>
+                <div style="font-weight: 800; font-size: 0.95rem; color: #0f172a;">
+                  $${parseFloat(item.subtotal || 0).toFixed(2)}
+                </div>
+              </div>
+            `).join('');
+          }
+        }
+      } catch (err) {
+        console.error('Error opening purchase detail:', err);
+        showToast(`Error al cargar detalle: ${err.message}`, 'error');
+        closePurchaseDetailModal();
+      }
+    }
+
+    function closePurchaseDetailModal() {
+      if (modalPurchaseDetail) modalPurchaseDetail.classList.remove('active');
+    }
+
+    if (btnClosePurchaseDetail) btnClosePurchaseDetail.addEventListener('click', closePurchaseDetailModal);
+    if (btnClosePurchaseDetailAction) btnClosePurchaseDetailAction.addEventListener('click', closePurchaseDetailModal);
+    if (modalPurchaseDetail) {
+      modalPurchaseDetail.addEventListener('click', (e) => {
+        if (e.target === modalPurchaseDetail) closePurchaseDetailModal();
+      });
+    }
+    if (btnPrintPurchaseDetail) {
+      btnPrintPurchaseDetail.addEventListener('click', () => {
+        window.print();
       });
     }
 

@@ -17,29 +17,49 @@ async function testSalesFlow() {
   // 2. Create tenant
   const { data: tenantData } = await supabase.rpc('create_tenant_with_owner', {
     p_name: 'Minisuper El Sol',
-    p_slug: 'minisuper-el-sol',
+    p_slug: `minisuper-el-sol-${Date.now()}`,
     p_business_type: 'Tienda de Abarrotes'
   });
   const tenantId = tenantData.tenant_id;
   console.log('Tenant created:', tenantId);
 
-  // 3. Create Category and Product
+  // 3. Create Category, Supplier and Product
   const { data: catData } = await supabase
     .from('categories')
     .insert({ tenant_id: tenantId, name: 'Bebidas' })
     .select()
     .single();
 
-  const { data: prodResult } = await supabase.rpc('create_product_with_presentations', {
+  const { data: suppData } = await supabase
+    .from('suppliers')
+    .insert({ tenant_id: tenantId, name: 'Distribuidora Central' })
+    .select()
+    .single();
+
+  const { data: prodResult, error: prodErr } = await supabase.rpc('create_product_with_presentations', {
     p_tenant_id: tenantId,
     p_name: 'Café soluble Nescafé',
     p_description: 'Frasco de vidrio',
     p_category_id: catData.id,
     p_presentations: [
-      { name: '1 kg', price: 250.00, cost: 150.00 },
-      { name: '500 g', price: 140.00, cost: 80.00 }
+      { 
+        name: '1 kg', 
+        price: 250.00, 
+        cost: 150.00,
+        suppliers: [{ supplier_id: suppData.id, purchase_cost: 150.00 }]
+      },
+      { 
+        name: '500 g', 
+        price: 140.00, 
+        cost: 80.00,
+        suppliers: [{ supplier_id: suppData.id, purchase_cost: 80.00 }]
+      }
     ]
   });
+
+  if (prodErr) {
+    console.error('prodErr:', prodErr);
+  }
 
   const { data: products } = await supabase
     .from('products')

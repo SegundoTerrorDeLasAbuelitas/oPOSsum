@@ -835,95 +835,62 @@
       min-width: 0;
     }
 
-    .compras-item-prod-name {
-      font-weight: 800;
-      font-size: 1.02rem;
-      color: var(--text-main);
-      margin-bottom: 3px;
-    }
-
-    .compras-item-desc {
-      font-size: 0.8rem;
-      color: #64748b;
-      margin-bottom: 0.5rem;
-      line-height: 1.35;
-    }
-
-    .compras-item-presentations-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      margin-top: 0.35rem;
-    }
-
-    .compras-pres-line {
+    .compras-unified-item-line {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      font-size: 0.9rem;
-      flex-wrap: wrap;
-    }
-
-    .compras-pres-name {
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .compras-pres-separator {
-      color: #94a3b8;
-      font-weight: 400;
-      user-select: none;
-    }
-
-    .compras-pres-price {
-      font-weight: 700;
-      color: #0284c7;
-    }
-
-    .compras-pres-supplier-tag {
-      font-size: 0.76rem;
-      font-weight: 600;
-      background: #f0fdf4;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-      padding: 0.15rem 0.5rem;
-      border-radius: 6px;
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .compras-supplier-pres-line {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
+      gap: 0.65rem;
       font-size: 0.95rem;
       flex-wrap: wrap;
     }
 
-    .compras-prod-bold {
+    .compras-item-details-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+    }
+
+    .compras-item-prod-name {
       font-weight: 800;
       color: var(--text-main);
+      font-size: 0.98rem;
     }
 
-    .compras-pres-pill {
+    .compras-item-dot {
+      color: #94a3b8;
+      font-weight: 800;
+      user-select: none;
+      font-size: 0.9rem;
+    }
+
+    .compras-item-pres-name {
       font-weight: 600;
-      color: #1e293b;
+      color: #334155;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 0.15rem 0.55rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+    }
+
+    .compras-item-price {
+      font-weight: 800;
+      color: #0284c7;
+      font-size: 0.95rem;
+    }
+
+    .compras-item-extra-info {
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #475569;
       background: #f1f5f9;
+      border: 1px solid #e2e8f0;
       padding: 0.18rem 0.55rem;
       border-radius: 6px;
-      border: 1px solid #cbd5e1;
-      font-size: 0.86rem;
-    }
-
-    .compras-cat-small-badge {
-      font-size: 0.74rem;
-      font-weight: 600;
-      background: #f1f5f9;
-      color: #475569;
-      padding: 0.18rem 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #e2e8f0;
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .compras-item-actions {
@@ -936,19 +903,34 @@
     @media (max-width: 640px) {
       .compras-item-row {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         padding: 0.85rem 1rem;
-        gap: 0.6rem;
+        gap: 0.55rem;
+      }
+      .compras-unified-item-line {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+        font-size: 0.9rem;
+      }
+      .compras-item-details-line {
+        gap: 0.45rem;
+      }
+      .compras-item-details-line .desktop-only {
+        display: none;
       }
       .compras-item-actions {
         align-self: flex-end;
+        width: 100%;
+        justify-content: flex-end;
+        border-top: 1px dashed #f1f5f9;
+        padding-top: 0.35rem;
+      }
+      .compras-item-extra-info {
+        margin-left: 0;
       }
       .compras-heading-title {
-        font-size: 1.15rem;
-      }
-      .compras-pres-line,
-      .compras-supplier-pres-line {
-        font-size: 0.86rem;
+        font-size: 1.18rem;
       }
     }
 
@@ -2895,13 +2877,242 @@
       if (suppCountEl) suppCountEl.textContent = currentLoadedSuppliers ? currentLoadedSuppliers.length : 0;
     }
 
+    // =============================================================
+    // COMPONENTE REUTILIZABLE: GroupedProductList & LÓGICA DE AGRUPACIÓN
+    // =============================================================
+
+    /**
+     * Construye los datos agrupados normalizados para el catálogo de compras.
+     * Funciona tanto para groupBy = 'category' como groupBy = 'supplier'.
+     * @param {Array} productGroups 
+     * @param {'category'|'supplier'} groupBy 
+     * @returns {Array} Grupos con estructura uniforme
+     */
+    function buildGroupedProductData(productGroups, groupBy = 'category') {
+      if (!productGroups || !Array.isArray(productGroups)) return [];
+
+      if (groupBy === 'category') {
+        const categoryMap = new Map();
+
+        productGroups.forEach(g => {
+          const catId = g.category_id || 'sin-categoria';
+          const catName = g.categories?.name ? g.categories.name.trim() : 'Sin categoría';
+
+          if (!categoryMap.has(catId)) {
+            categoryMap.set(catId, {
+              id: catId,
+              title: catName,
+              subtitle: '',
+              icon: '📁',
+              isWarning: !g.category_id,
+              items: []
+            });
+          }
+
+          const presList = g.products || [];
+          presList.forEach(p => {
+            const suppNames = (p.supplier_presentations || [])
+              .map(sp => {
+                const sName = sp.suppliers?.name;
+                return sName && sName.trim().length > 0 ? sName.trim() : (sp.suppliers ? 'Proveedor sin nombre' : null);
+              })
+              .filter(Boolean);
+
+            const supplierBadge = suppNames.length > 0
+              ? `🏢 ${suppNames.join(', ')}`
+              : '⚠️ Sin proveedor';
+
+            categoryMap.get(catId).items.push({
+              productGroupId: g.id,
+              productName: g.name,
+              presentationName: p.name,
+              price: p.price,
+              extraBadgeText: supplierBadge,
+              isExtraWarning: suppNames.length === 0,
+              rawGroup: g,
+              rawPres: p
+            });
+          });
+        });
+
+        // Omitir categorías sin presentaciones (Requisito 9)
+        return Array.from(categoryMap.values()).filter(group => group.items.length > 0);
+
+      } else if (groupBy === 'supplier') {
+        const supplierMap = new Map();
+        const unassignedItems = [];
+
+        productGroups.forEach(g => {
+          const presList = g.products || [];
+          presList.forEach(p => {
+            const suppRels = p.supplier_presentations || [];
+            const catBadgeText = g.categories?.name ? `📁 ${g.categories.name.trim()}` : '';
+
+            if (suppRels.length === 0) {
+              unassignedItems.push({
+                productGroupId: g.id,
+                productName: g.name,
+                presentationName: p.name,
+                price: p.price,
+                extraBadgeText: catBadgeText,
+                isExtraWarning: false,
+                rawGroup: g,
+                rawPres: p
+              });
+            } else {
+              // Relación N:M: si una presentación tiene más de un proveedor,
+              // aparece dentro de cada grupo de proveedor (Requisito 5)
+              suppRels.forEach(sp => {
+                const s = sp.suppliers;
+                const suppId = s?.id || sp.supplier_id || 'unknown';
+                // Proveedores sin nombre: etiqueta visual amigable (Requisito 8)
+                const suppName = s?.name && s.name.trim().length > 0 ? s.name.trim() : 'Proveedor sin nombre';
+                const suppContact = [s?.phone, s?.email].filter(Boolean).join(' · ');
+
+                if (!supplierMap.has(suppId)) {
+                  supplierMap.set(suppId, {
+                    id: suppId,
+                    title: suppName,
+                    subtitle: suppContact,
+                    icon: '🏢',
+                    isWarning: false,
+                    items: []
+                  });
+                }
+
+                supplierMap.get(suppId).items.push({
+                  productGroupId: g.id,
+                  productName: g.name,
+                  presentationName: p.name,
+                  price: p.price,
+                  extraBadgeText: catBadgeText,
+                  isExtraWarning: false,
+                  rawGroup: g,
+                  rawPres: p
+                });
+              });
+            }
+          });
+        });
+
+        // Omitir proveedores sin presentaciones relacionadas (Requisito 9)
+        const result = Array.from(supplierMap.values()).filter(group => group.items.length > 0);
+
+        // Si hay presentaciones sin proveedor asignado, incluirlas al final con alerta
+        if (unassignedItems.length > 0) {
+          result.push({
+            id: 'unassigned-suppliers',
+            title: 'Sin proveedor asignado',
+            subtitle: 'Edita el producto para asignarle un proveedor',
+            icon: '⚠️',
+            isWarning: true,
+            items: unassignedItems
+          });
+        }
+
+        return result;
+      }
+
+      return [];
+    }
+
+    /**
+     * Componente conceptual reutilizable: GroupedProductList
+     * Renderiza una lista visualmente uniforme independientemente de si groupBy es 'category' o 'supplier'.
+     * @param {HTMLElement} container 
+     * @param {Array} groupedData 
+     * @param {'category'|'supplier'} groupBy 
+     */
+    function renderGroupedProductList(container, groupedData, groupBy) {
+      if (!container) return;
+
+      if (!groupedData || groupedData.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center;">
+            <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🛒</div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
+              0 artículos disponibles
+            </h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+              No hay productos o presentaciones registradas bajo este criterio.
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="compras-catalog-grouped">';
+
+      groupedData.forEach(group => {
+        const itemsCount = group.items.length;
+        const countLabel = itemsCount === 1 ? '1 presentación' : `${itemsCount} presentaciones`;
+
+        html += `
+          <div class="compras-group-block">
+            <div class="compras-group-heading" ${group.isWarning ? 'style="border-color: #fef08a;"' : ''}>
+              <div class="compras-heading-text">
+                <span class="compras-heading-icon">${group.icon}</span>
+                <h3 class="compras-heading-title" ${group.isWarning ? 'style="color: #b45309;"' : ''}>${escapeHtml(group.title)}</h3>
+                ${group.subtitle ? `<span class="compras-supplier-contact">${escapeHtml(group.subtitle)}</span>` : ''}
+              </div>
+              <span class="compras-heading-badge" ${group.isWarning ? 'style="background:#fefce8; color:#a16207; border-color:#fef08a;"' : ''}>${countLabel}</span>
+            </div>
+
+            <div class="compras-group-items-list">
+              ${group.items.map(item => `
+                <div class="compras-item-row">
+                  <div class="compras-item-main">
+                    <div class="compras-unified-item-line">
+                      <span class="compras-item-prod-name">${escapeHtml(item.productName)}</span>
+                      <div class="compras-item-details-line">
+                        <span class="compras-item-dot desktop-only">·</span>
+                        <span class="compras-item-pres-name">${escapeHtml(item.presentationName)}</span>
+                        <span class="compras-item-dot">·</span>
+                        <span class="compras-item-price">$${parseFloat(item.price || 0).toFixed(2)}</span>
+                        ${item.extraBadgeText ? `
+                          <span class="compras-item-extra-info" ${item.isExtraWarning ? 'style="color:#b45309; background:#fefce8; border-color:#fef08a;"' : ''}>
+                            ${escapeHtml(item.extraBadgeText)}
+                          </span>
+                        ` : ''}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="compras-item-actions">
+                    <button class="action-btn-link action-edit-compras-prod" data-group-id="${item.productGroupId}">Editar</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+
+      // Asignar eventos de edición a cada botón
+      container.querySelectorAll('.action-edit-compras-prod').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const groupId = e.target.getAttribute('data-group-id');
+          if (typeof openEditModal === 'function') {
+            openEditModal(groupId);
+          }
+        });
+      });
+    }
+
+    /**
+     * Controlador principal de renderizado de la vista de Compras con soporte de filtrado y cambio de criterio.
+     * @param {Array} groups 
+     * @param {string} filterQuery 
+     */
     function renderComprasGroupedView(groups, filterQuery = '') {
       const container = document.getElementById('compras-grouped-container');
       if (!container) return;
 
       const q = (filterQuery || '').toLowerCase().trim();
 
-      // Filter groups according to search query
+      // Filtrar grupos de productos según el término de búsqueda
       let filteredGroups = groups || [];
       if (q) {
         filteredGroups = filteredGroups.filter(g => {
@@ -2938,201 +3149,11 @@
         return;
       }
 
-      // =============================================================
-      // 1. AGRUPACIÓN: POR CATEGORÍA
-      // =============================================================
-      if (currentComprasGrouping === 'category') {
-        const categoryMap = new Map();
+      // 1. Construir datos normalizados con el criterio activo ('category' o 'supplier')
+      const groupedData = buildGroupedProductData(filteredGroups, currentComprasGrouping);
 
-        filteredGroups.forEach(g => {
-          const catId = g.category_id || 'sin-categoria';
-          const catName = g.categories?.name ? g.categories.name.trim() : 'Sin categoría';
-          if (!categoryMap.has(catId)) {
-            categoryMap.set(catId, { name: catName, items: [] });
-          }
-          categoryMap.get(catId).items.push(g);
-        });
-
-        let html = '';
-        categoryMap.forEach((catObj) => {
-          const catTitle = catObj.name;
-          const itemsCount = catObj.items.length;
-          const countLabel = itemsCount === 1 ? '1 producto' : `${itemsCount} productos`;
-
-          html += `
-            <div class="compras-group-block">
-              <div class="compras-group-heading">
-                <div class="compras-heading-text">
-                  <span class="compras-heading-icon">📁</span>
-                  <h3 class="compras-heading-title">${escapeHtml(catTitle)}</h3>
-                </div>
-                <span class="compras-heading-badge">${countLabel}</span>
-              </div>
-
-              <div class="compras-group-items-list">
-                ${catObj.items.map(g => {
-                  const presList = g.products || [];
-                  return `
-                    <div class="compras-item-row">
-                      <div class="compras-item-main">
-                        <div class="compras-item-prod-name">${escapeHtml(g.name)}</div>
-                        ${g.description ? `<div class="compras-item-desc">${escapeHtml(g.description)}</div>` : ''}
-                        <div class="compras-item-presentations-list">
-                          ${presList.length > 0 ? presList.map(p => {
-                            const suppNames = (p.supplier_presentations || []).map(sp => sp.suppliers?.name).filter(Boolean);
-                            const suppDisplay = suppNames.length > 0
-                              ? suppNames.map(s => `🏢 ${escapeHtml(s)}`).join(', ')
-                              : '<span style="color:#d97706; font-weight:600;">⚠️ Sin proveedor</span>';
-                            return `
-                              <div class="compras-pres-line">
-                                <span class="compras-pres-name">${escapeHtml(p.name)}</span>
-                                <span class="compras-pres-separator">—</span>
-                                <span class="compras-pres-price">$${parseFloat(p.price || 0).toFixed(2)}</span>
-                                <span class="compras-pres-supplier-tag">${suppDisplay}</span>
-                              </div>
-                            `;
-                          }).join('') : '<div style="font-size: 0.8rem; color: #94a3b8; font-style: italic;">Sin presentaciones registradas</div>'}
-                        </div>
-                      </div>
-                      <div class="compras-item-actions">
-                        <button class="action-btn-link action-edit-compras-prod" data-group-id="${g.id}">Editar</button>
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          `;
-        });
-
-        container.innerHTML = html;
-
-      // =============================================================
-      // 2. AGRUPACIÓN: POR PROVEEDOR
-      // =============================================================
-      } else if (currentComprasGrouping === 'supplier') {
-        const supplierMap = new Map();
-        const unassignedList = [];
-
-        filteredGroups.forEach(g => {
-          const presList = g.products || [];
-          presList.forEach(p => {
-            const suppRels = p.supplier_presentations || [];
-            if (suppRels.length === 0) {
-              unassignedList.push({ group: g, presentation: p });
-            } else {
-              suppRels.forEach(sp => {
-                const s = sp.suppliers;
-                const suppId = s?.id || sp.supplier_id || 'unknown';
-                const suppName = s?.name && s.name.trim().length > 0 ? s.name.trim() : 'Proveedor sin nombre';
-                const suppContact = [s?.phone, s?.email].filter(Boolean).join(' · ');
-
-                if (!supplierMap.has(suppId)) {
-                  supplierMap.set(suppId, { name: suppName, contact: suppContact, items: [] });
-                }
-                supplierMap.get(suppId).items.push({ group: g, presentation: p });
-              });
-            }
-          });
-        });
-
-        let html = '';
-
-        supplierMap.forEach((suppObj) => {
-          const itemsCount = suppObj.items.length;
-          const countLabel = itemsCount === 1 ? '1 presentación' : `${itemsCount} presentaciones`;
-
-          html += `
-            <div class="compras-group-block">
-              <div class="compras-group-heading">
-                <div class="compras-heading-text">
-                  <span class="compras-heading-icon">🏢</span>
-                  <h3 class="compras-heading-title">${escapeHtml(suppObj.name)}</h3>
-                  ${suppObj.contact ? `<span class="compras-supplier-contact">${escapeHtml(suppObj.contact)}</span>` : ''}
-                </div>
-                <span class="compras-heading-badge">${countLabel}</span>
-              </div>
-
-              <div class="compras-group-items-list">
-                ${suppObj.items.map(item => {
-                  const g = item.group;
-                  const p = item.presentation;
-                  const catName = g.categories?.name;
-
-                  return `
-                    <div class="compras-item-row">
-                      <div class="compras-item-main">
-                        <div class="compras-supplier-pres-line">
-                          <span class="compras-prod-bold">${escapeHtml(g.name)}</span>
-                          <span class="compras-pres-separator">—</span>
-                          <span class="compras-pres-pill">${escapeHtml(p.name)}</span>
-                          <span class="compras-pres-separator">—</span>
-                          <span class="compras-pres-price">$${parseFloat(p.price || 0).toFixed(2)}</span>
-                          ${catName ? `<span class="compras-cat-small-badge">${escapeHtml(catName)}</span>` : ''}
-                        </div>
-                        ${g.description ? `<div class="compras-item-desc" style="margin-top:4px;">${escapeHtml(g.description)}</div>` : ''}
-                      </div>
-                      <div class="compras-item-actions">
-                        <button class="action-btn-link action-edit-compras-prod" data-group-id="${g.id}">Editar</button>
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          `;
-        });
-
-        if (unassignedList.length > 0) {
-          html += `
-            <div class="compras-group-block">
-              <div class="compras-group-heading" style="border-color: #fef08a;">
-                <div class="compras-heading-text">
-                  <span class="compras-heading-icon">⚠️</span>
-                  <h3 class="compras-heading-title" style="color: #b45309;">Sin proveedor asignado</h3>
-                </div>
-                <span class="compras-heading-badge" style="background:#fefce8; color:#a16207; border-color:#fef08a;">
-                  ${unassignedList.length} ${unassignedList.length === 1 ? 'presentación' : 'presentaciones'}
-                </span>
-              </div>
-
-              <div class="compras-group-items-list">
-                ${unassignedList.map(item => {
-                  const g = item.group;
-                  const p = item.presentation;
-                  return `
-                    <div class="compras-item-row">
-                      <div class="compras-item-main">
-                        <div class="compras-supplier-pres-line">
-                          <span class="compras-prod-bold">${escapeHtml(g.name)}</span>
-                          <span class="compras-pres-separator">—</span>
-                          <span class="compras-pres-pill">${escapeHtml(p.name)}</span>
-                          <span class="compras-pres-separator">—</span>
-                          <span class="compras-pres-price">$${parseFloat(p.price || 0).toFixed(2)}</span>
-                          <span style="font-size:0.75rem; color:#d97706; font-weight:600;">(Asigna un proveedor editando el producto)</span>
-                        </div>
-                      </div>
-                      <div class="compras-item-actions">
-                        <button class="action-btn-link action-edit-compras-prod" data-group-id="${g.id}">Editar</button>
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          `;
-        }
-
-        container.innerHTML = html;
-      }
-
-      // Attach edit events
-      container.querySelectorAll('.action-edit-compras-prod').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const groupId = e.target.getAttribute('data-group-id');
-          openEditModal(groupId);
-        });
-      });
+      // 2. Renderizar con el componente unificado GroupedProductList
+      renderGroupedProductList(container, groupedData, currentComprasGrouping);
     }
 
     if (searchComprasInput) {

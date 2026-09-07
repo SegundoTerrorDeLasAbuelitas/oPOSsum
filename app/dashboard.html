@@ -649,6 +649,96 @@
       color: #091335;
     }
 
+    /* ========================================================================= */
+    /* COMPRAS TOP SUBNAV (CRM BLUE TEXT TABS STYLE)                             */
+    /* ========================================================================= */
+    .compras-top-navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 0.25rem;
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .compras-top-tabs {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .compras-top-tab {
+      background: transparent;
+      border: none;
+      padding: 0.85rem 0.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0284c7; /* Letras en azul como en el ejemplo */
+      cursor: pointer;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+      transition: color 0.15s ease, opacity 0.15s ease;
+      text-decoration: none;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .compras-top-tab:hover {
+      color: #0369a1;
+      opacity: 0.85;
+    }
+
+    .compras-top-tab.active {
+      color: #0284c7;
+      font-weight: 700;
+    }
+
+    .compras-top-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2.5px;
+      background-color: #0284c7;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .compras-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding-left: 1rem;
+    }
+
+    .compras-top-actions .compras-nav-divider {
+      width: 1px;
+      height: 18px;
+      background: #cbd5e1;
+    }
+
+    .compras-top-actions .btn-settings-subtle {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      padding: 0.4rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .compras-top-actions .btn-settings-subtle:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
     .pos-cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -742,38 +832,6 @@
 
     .pos-pres-btn:hover .pres-btn-price {
       color: #091335;
-    }
-
-    .printer-status-box {
-      display: inline-flex;
-      align-items: center;
-      justify-content: space-between;
-      background: white;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 0.75rem 1rem;
-      width: 100%;
-    }
-
-    .printer-left {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    .printer-status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #dcfce7;
-      color: #15803d;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 0.25rem 0.65rem;
-      border-radius: 9999px;
     }
 
     /* POS Cart Panel */
@@ -1184,11 +1242,17 @@
       border-radius: 10px;
       padding: 0.75rem;
       display: grid;
-      grid-template-columns: 1.5fr 1fr 36px;
+      grid-template-columns: 1.2fr 0.9fr 1.3fr 36px;
       gap: 0.5rem;
       align-items: center;
       margin-bottom: 0.6rem;
       animation: fadeIn 0.15s ease-out;
+    }
+
+    @media (max-width: 680px) {
+      .presentation-card-row {
+        grid-template-columns: 1fr;
+      }
     }
 
     .field-sublabel {
@@ -1488,7 +1552,7 @@
         </li>
 
         <li class="nav-item" id="nav-compras">
-          <a href="#productos">
+          <a href="#compras">
             <span class="nav-item-left">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               Compras
@@ -1683,18 +1747,6 @@
             </div>
           </div>
 
-          <!-- Thermal Printer Status -->
-          <div class="printer-status-box">
-            <div class="printer-left">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              <span>Impresora Térmica</span>
-            </div>
-            <span class="printer-status-pill">
-              <span style="width: 6px; height: 6px; background: #15803d; border-radius: 50%; display: inline-block;"></span>
-              Conectada
-            </span>
-          </div>
-
         </div>
 
         <!-- Right: Current Sale / Cart Summary -->
@@ -1798,6 +1850,128 @@
       </div>
     </div>
 
+    <!-- ========================================================================= -->
+    <!-- LIENZO 4: COMPRAS VIEW (CATÁLOGO CENTRALIZADO Y SUMINISTROS)              -->
+    <!-- ========================================================================= -->
+    <div id="view-compras" class="canvas-view">
+      
+      <!-- Top Navigation Menu (CRM Blue Letters Style) -->
+      <nav class="compras-top-navbar" aria-label="Navegación de Compras">
+        <div class="compras-top-tabs">
+          <button class="compras-top-tab active" id="tab-top-compras-products" type="button">Lista de productos</button>
+          <button class="compras-top-tab" id="tab-top-compras-suppliers" type="button">Proveedores</button>
+          <button class="compras-top-tab" id="tab-top-compras-categories" type="button">por categoria</button>
+        </div>
+        <div class="compras-top-actions">
+          <div class="compras-nav-divider"></div>
+          <button class="btn-settings-subtle" type="button" title="Configuración de compras">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+      </nav>
+
+      <div class="content-header">
+        <div>
+          <h1 class="page-title">Compras</h1>
+          <p class="page-subtitle">Artículos del catálogo para adquisición a proveedores y suministros del negocio.</p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn-action-secondary" id="btn-open-add-supplier" style="background: white; border: 1.5px solid var(--border-color); color: var(--text-main); font-weight: 700; padding: 0.62rem 1.1rem; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.85rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Agregar proveedor
+          </button>
+          <button class="btn-action-primary" id="btn-open-add-product-compras">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Agregar producto
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Cards for Compras -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Artículos para Compra</div>
+          <div id="compras-count-products" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
+          <div style="font-size: 0.75rem; color: #10b981; font-weight: 600; margin-top: 2px;">● Catálogo unificado</div>
+        </div>
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Presentaciones Totales</div>
+          <div id="compras-count-presentations" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
+          <div style="font-size: 0.75rem; color: #0284c7; font-weight: 600; margin-top: 2px;">Unidades suministrables</div>
+        </div>
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Proveedores Activos</div>
+          <div id="compras-count-suppliers" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
+          <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 2px;">● Proveedores registrados</div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: PRODUCTS / PRESENTATIONS FOR PURCHASE -->
+      <div id="compras-section-products">
+        <div class="data-card">
+          <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="search-input" id="search-compras-input" placeholder="Buscar por producto, categoría o presentación...">
+          </div>
+
+          <div class="table-responsive">
+            <table class="app-table">
+              <thead>
+                <tr>
+                  <th class="checkbox-col"><div class="custom-checkbox"></div></th>
+                  <th>Producto & Categoría</th>
+                  <th>Presentaciones Suministrables</th>
+                  <th>Presentaciones</th>
+                  <th>Proveedor(es)</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="compras-table-body">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 2.5rem; color: #64748b;">
+                    Consultando catálogo de compras de tu negocio...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: SUPPLIERS DIRECTORY -->
+      <div id="compras-section-suppliers" style="display: none;">
+        <div class="data-card">
+          <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="search-input" id="search-suppliers-input" placeholder="Buscar por nombre, teléfono, correo o notas...">
+          </div>
+
+          <div class="table-responsive">
+            <table class="app-table">
+              <thead>
+                <tr>
+                  <th class="checkbox-col"><div class="custom-checkbox"></div></th>
+                  <th>Nombre del Proveedor</th>
+                  <th>Teléfono</th>
+                  <th>Correo Electrónico</th>
+                  <th>Notas Comerciales</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="suppliers-table-body">
+                <tr>
+                  <td colspan="6" style="text-align: center; padding: 2.5rem; color: #64748b;">
+                    Consultando proveedores registrados...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </main>
 
   <!-- ========================================================================= -->
@@ -1807,10 +1981,10 @@
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-header-left">
-          <div class="modal-header-icon">📦</div>
+          <div class="modal-header-icon" id="modal-add-icon">📦</div>
           <div>
-            <h3 class="modal-title">Agregar Producto</h3>
-            <p class="modal-subtitle">Registra tu producto, categoría y presentaciones con precio.</p>
+            <h3 class="modal-title" id="modal-add-title">Agregar Producto</h3>
+            <p class="modal-subtitle" id="modal-add-subtitle">Registra tu producto, categoría y presentaciones con precio.</p>
           </div>
         </div>
         <button class="modal-close-btn" id="btn-close-add-modal">&times;</button>
@@ -1864,8 +2038,14 @@
                 <input type="text" class="presentation-input pres-name-input" placeholder="Ej. 1 kg" required>
               </div>
               <div>
-                <span class="field-sublabel">Precio ($) *</span>
+                <span class="field-sublabel">Precio Venta ($) *</span>
                 <input type="number" step="0.01" min="0" class="presentation-input pres-price-input" placeholder="250.00" required>
+              </div>
+              <div>
+                <span class="field-sublabel">Proveedor Asignado *</span>
+                <select class="presentation-input pres-supplier-select" required>
+                  <option value="">Selecciona proveedor *</option>
+                </select>
               </div>
               <div></div>
             </div>
@@ -1880,6 +2060,57 @@
           <button type="button" class="btn-cancel" id="btn-cancel-add-modal">Cancelar</button>
           <button type="submit" class="btn-save-modal" id="btn-submit-add-product">
             Guardar producto
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: AGREGAR PROVEEDOR                                                 -->
+  <!-- ========================================================================= -->
+  <div id="modal-add-supplier" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" style="background: #ecfdf5; color: #059669;">🏢</div>
+          <div>
+            <h3 class="modal-title" id="modal-supplier-title">Agregar Proveedor</h3>
+            <p class="modal-subtitle">Registra tu proveedor para compras y suministros. Ningún campo es obligatorio.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-supplier-modal">&times;</button>
+      </div>
+
+      <div id="modal-supplier-alert" class="modal-alert"></div>
+
+      <form id="form-add-supplier">
+        <input type="hidden" id="supplier-edit-id" value="">
+        
+        <div class="form-group">
+          <label class="form-label" for="supplier-name">Nombre del Proveedor</label>
+          <input type="text" id="supplier-name" class="form-input" placeholder="Ej. Distribuidora ABC (opcional)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="supplier-phone">Teléfono / WhatsApp</label>
+          <input type="tel" id="supplier-phone" class="form-input" placeholder="Ej. 33 1234 5678 (opcional)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="supplier-email">Correo Electrónico</label>
+          <input type="email" id="supplier-email" class="form-input" placeholder="ejemplo@proveedor.com (opcional)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="supplier-notes">Notas / Condiciones Comerciales</label>
+          <textarea id="supplier-notes" class="form-input" rows="3" placeholder="Días de entrega, condiciones de crédito, contacto... (opcional)" style="resize: vertical; font-family: inherit;"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btn-cancel-supplier-modal">Cancelar</button>
+          <button type="submit" class="btn-save-modal" id="btn-submit-supplier">
+            Guardar proveedor
           </button>
         </div>
       </form>
@@ -2054,13 +2285,16 @@
     import { tenantManager } from '../js/tenant-context.js';
     import { productsManager } from '../js/products-manager.js';
     import { salesManager } from '../js/sales-manager.js';
+    import { suppliersManager } from '../js/suppliers-manager.js';
 
     const supabase = getSupabase();
     let currentLoadedProducts = [];
     let currentLoadedCategories = [];
     let currentLoadedSales = [];
+    let currentLoadedSuppliers = [];
     let currentCartItems = [];
     let activeCategoryFilter = 'all';
+    let pendingSupplierTargetSelect = null;
 
     // Pending deletion state
     let pendingDeletion = null; // { type: 'presentation' | 'product_group', id: string, name: string, groupId?: string }
@@ -2080,8 +2314,10 @@
     const viewProductos = document.getElementById('view-productos');
     const viewNuevaVenta = document.getElementById('view-nueva-venta');
     const viewVentas = document.getElementById('view-ventas');
+    const viewCompras = document.getElementById('view-compras');
     
     const navProductos = document.getElementById('nav-productos');
+    const navCompras = document.getElementById('nav-compras');
     const navVentas = document.getElementById('nav-ventas');
     const navInicio = document.getElementById('nav-inicio');
     const btnQuickNewSale = document.getElementById('btn-quick-new-sale');
@@ -2090,6 +2326,7 @@
     // Modals Elements
     const modalAddProduct = document.getElementById('modal-add-product');
     const btnOpenAddProduct = document.getElementById('btn-open-add-product');
+    const btnOpenAddProductCompras = document.getElementById('btn-open-add-product-compras');
     const btnCloseAddModal = document.getElementById('btn-close-add-modal');
     const btnCancelAddModal = document.getElementById('btn-cancel-add-modal');
     const btnAddPresentationRow = document.getElementById('btn-add-presentation-row');
@@ -2102,6 +2339,25 @@
     const inlineCatCreator = document.getElementById('inline-cat-creator');
     const inputNewCatName = document.getElementById('input-new-cat-name');
     const btnSaveInlineCat = document.getElementById('btn-save-inline-cat');
+
+    // Supplier Elements
+    const modalAddSupplier = document.getElementById('modal-add-supplier');
+    const btnOpenAddSupplier = document.getElementById('btn-open-add-supplier');
+    const btnCloseSupplierModal = document.getElementById('btn-close-supplier-modal');
+    const btnCancelSupplierModal = document.getElementById('btn-cancel-supplier-modal');
+    const formAddSupplier = document.getElementById('form-add-supplier');
+    const modalSupplierAlert = document.getElementById('modal-supplier-alert');
+    const btnSubmitSupplier = document.getElementById('btn-submit-supplier');
+    const suppliersTableBody = document.getElementById('suppliers-table-body');
+    const searchSuppliersInput = document.getElementById('search-suppliers-input');
+    const tabTopComprasProducts = document.getElementById('tab-top-compras-products');
+    const tabTopComprasSuppliers = document.getElementById('tab-top-compras-suppliers');
+    const tabTopComprasCategories = document.getElementById('tab-top-compras-categories');
+    const comprasSectionProducts = document.getElementById('compras-section-products');
+    const comprasSectionSuppliers = document.getElementById('compras-section-suppliers');
+
+    // Context variable for Add Product modal
+    let currentModalContext = 'productos'; // 'productos' | 'compras'
 
     // Edit Modal Elements
     const modalEditProduct = document.getElementById('modal-edit-product');
@@ -2162,8 +2418,10 @@
       viewProductos.classList.remove('active');
       viewNuevaVenta.classList.remove('active');
       viewVentas.classList.remove('active');
+      if (viewCompras) viewCompras.classList.remove('active');
 
       navProductos.classList.remove('active');
+      if (navCompras) navCompras.classList.remove('active');
       navVentas.classList.remove('active');
       navInicio.classList.remove('active');
 
@@ -2177,6 +2435,11 @@
         navVentas.classList.add('active');
         window.location.hash = 'ventas';
         loadSalesHistory();
+      } else if (viewName === 'compras') {
+        if (viewCompras) viewCompras.classList.add('active');
+        if (navCompras) navCompras.classList.add('active');
+        window.location.hash = 'compras';
+        loadComprasCatalog();
       } else {
         viewProductos.classList.add('active');
         navProductos.classList.add('active');
@@ -2186,11 +2449,12 @@
     }
 
     navProductos.addEventListener('click', (e) => { e.preventDefault(); switchView('productos'); });
+    if (navCompras) navCompras.addEventListener('click', (e) => { e.preventDefault(); switchView('compras'); });
     navVentas.addEventListener('click', (e) => { e.preventDefault(); switchView('ventas'); });
     navInicio.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
     btnQuickNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
     btnGoToNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
-    document.getElementById('quick-action-add-prod').addEventListener('click', openAddModal);
+    document.getElementById('quick-action-add-prod').addEventListener('click', () => openAddModal('productos'));
 
     quickActionSearchProd.addEventListener('click', () => {
       posSearchInput.focus();
@@ -2317,7 +2581,7 @@
             </td>
           </tr>
         `;
-        document.getElementById('btn-empty-add-product')?.addEventListener('click', openAddModal);
+        document.getElementById('btn-empty-add-product')?.addEventListener('click', () => openAddModal('productos'));
         return;
       }
 
@@ -2386,6 +2650,411 @@
 
       renderProductsTable(filtered);
     });
+
+    // -------------------------------------------------------------
+    // COMPRAS CATALOG & REAL-TIME SEARCH ENGINE (UNIFIED CATALOG)
+    // -------------------------------------------------------------
+    const comprasTableBody = document.getElementById('compras-table-body');
+    const searchComprasInput = document.getElementById('search-compras-input');
+
+    async function loadComprasCatalog() {
+      try {
+        if (comprasTableBody) {
+          comprasTableBody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align:center; padding: 2rem; color: #64748b;">
+                Consultando catálogo de compras en tiempo real...
+              </td>
+            </tr>
+          `;
+        }
+
+        await loadCategories();
+        await loadSuppliers();
+        const groups = await productsManager.getProductGroupsWithPresentations();
+        currentLoadedProducts = groups || [];
+
+        updateComprasStats(currentLoadedProducts);
+        renderComprasTable(currentLoadedProducts);
+      } catch (err) {
+        console.error('Error loading Compras catalog:', err);
+        if (comprasTableBody) {
+          comprasTableBody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align:center; padding: 2rem; color: #ef4444;">
+                Error al cargar compras: ${escapeHtml(err.message)}
+              </td>
+            </tr>
+          `;
+        }
+      }
+    }
+
+    function updateComprasStats(groups) {
+      const prodCountEl = document.getElementById('compras-count-products');
+      const presCountEl = document.getElementById('compras-count-presentations');
+      const suppCountEl = document.getElementById('compras-count-suppliers');
+      if (prodCountEl) prodCountEl.textContent = groups ? groups.length : 0;
+      if (presCountEl) {
+        const totalPres = (groups || []).reduce((sum, g) => sum + (g.products ? g.products.length : 0), 0);
+        presCountEl.textContent = totalPres;
+      }
+      if (suppCountEl) suppCountEl.textContent = currentLoadedSuppliers ? currentLoadedSuppliers.length : 0;
+    }
+
+    function renderComprasTable(groups) {
+      if (!comprasTableBody) return;
+
+      if (!groups || groups.length === 0) {
+        comprasTableBody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state-box">
+                <div class="empty-state-icon">🛒</div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">0 productos en el catálogo de compras</h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">No hay productos registrados en tu negocio todavía. Agrega tu primer producto y quedará automáticamente disponible para Compras, Productos y Punto de Venta.</p>
+                <button class="btn-action-primary" id="btn-empty-add-compras">
+                  + Agregar primer producto
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        document.getElementById('btn-empty-add-compras')?.addEventListener('click', () => openAddModal('compras'));
+        return;
+      }
+
+      comprasTableBody.innerHTML = groups.map(g => {
+        const presList = g.products || [];
+        const catName = g.categories?.name;
+        const presChips = presList.map(p => `
+          <span class="presentation-chip">
+            <span>${escapeHtml(p.name)}</span>
+            <span class="chip-price" title="Precio público">$${parseFloat(p.price || 0).toFixed(2)}</span>
+          </span>
+        `).join('');
+
+        // Collect all distinct suppliers for this product group
+        const allSupplierNames = [...new Set(
+          presList.flatMap(p => (p.supplier_presentations || []).map(sp => sp.suppliers?.name || 'Proveedor sin nombre'))
+        )];
+        const supplierDisplay = allSupplierNames.length > 0 
+          ? allSupplierNames.map(s => `<span class="category-tag" style="background:#ecfdf5; color:#047857; margin-right:4px; margin-bottom:2px; display:inline-block;">${escapeHtml(s)}</span>`).join('')
+          : '<span style="font-size: 0.82rem; color: #94a3b8; font-style: italic;">Sin proveedor asignado</span>';
+
+        return `
+          <tr>
+            <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.9rem;">
+                <div style="width:44px; height:44px; border-radius:10px; background:#f0fdf4; border:1px solid #dcfce7; display:flex; align-items:center; justify-content:center; font-size:20px;">📦</div>
+                <div>
+                  <div style="font-weight:700; font-size:0.92rem; display:flex; align-items:center; gap:0.4rem;">
+                    ${escapeHtml(g.name)}
+                    ${catName ? `<span class="category-tag">${escapeHtml(catName)}</span>` : ''}
+                  </div>
+                  ${g.description ? `<div style="font-size:0.75rem; color:#64748b; margin-top:2px;">${escapeHtml(g.description)}</div>` : ''}
+                </div>
+              </div>
+            </td>
+            <td>
+              <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+                ${presChips || '<span style="font-size:11px; color:#94a3b8;">Sin presentaciones</span>'}
+              </div>
+            </td>
+            <td>
+              <span class="count-badge">${presList.length} ${presList.length === 1 ? 'presentación' : 'presentaciones'}</span>
+            </td>
+            <td>
+              <div style="max-width: 200px;">${supplierDisplay}</div>
+            </td>
+            <td>
+              <button class="action-btn-link action-edit-compras-prod" data-group-id="${g.id}">Editar</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      comprasTableBody.querySelectorAll('.action-edit-compras-prod').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const groupId = e.target.getAttribute('data-group-id');
+          openEditModal(groupId);
+        });
+      });
+    }
+
+    if (searchComprasInput) {
+      searchComprasInput.addEventListener('input', () => {
+        const q = searchComprasInput.value.toLowerCase().trim();
+        if (!q) {
+          renderComprasTable(currentLoadedProducts);
+          return;
+        }
+
+        const filtered = currentLoadedProducts.filter(g => {
+          const matchName = g.name.toLowerCase().includes(q);
+          const matchCat = (g.categories?.name || '').toLowerCase().includes(q);
+          const matchDesc = (g.description || '').toLowerCase().includes(q);
+          const matchPres = (g.products || []).some(p => p.name.toLowerCase().includes(q));
+          return matchName || matchCat || matchDesc || matchPres;
+        });
+
+        renderComprasTable(filtered);
+      });
+    }
+
+    if (btnOpenAddProductCompras) {
+      btnOpenAddProductCompras.addEventListener('click', () => openAddModal('compras'));
+    }
+
+    // -------------------------------------------------------------
+    // SUPPLIERS DIRECTORY & MANAGEMENT
+    // -------------------------------------------------------------
+    async function loadSuppliers() {
+      try {
+        currentLoadedSuppliers = await suppliersManager.getSuppliers();
+        updateComprasStats(currentLoadedProducts);
+        renderSuppliersTable(currentLoadedSuppliers);
+        refreshAllSupplierSelects();
+      } catch (err) {
+        console.error('Error loading suppliers:', err);
+      }
+    }
+
+    function renderSuppliersTable(suppliers) {
+      if (!suppliersTableBody) return;
+
+      if (!suppliers || suppliers.length === 0) {
+        suppliersTableBody.innerHTML = `
+          <tr>
+            <td colspan="6">
+              <div class="empty-state-box">
+                <div class="empty-state-icon">🏢</div>
+                <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">0 proveedores registrados</h3>
+                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">No tienes proveedores dados de alta todavía. Haz clic en '+ Agregar proveedor' para registrar el primero (ningún campo es obligatorio).</p>
+                <button class="btn-action-primary" id="btn-empty-add-supplier">
+                  + Agregar primer proveedor
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        document.getElementById('btn-empty-add-supplier')?.addEventListener('click', () => openAddSupplierModal());
+        return;
+      }
+
+      suppliersTableBody.innerHTML = suppliers.map(s => {
+        const displayName = s.name ? escapeHtml(s.name) : '<span style="color:#94a3b8; font-style:italic;">Sin registrar</span>';
+        const displayPhone = s.phone ? escapeHtml(s.phone) : '<span style="color:#94a3b8; font-style:italic;">Sin registrar</span>';
+        const displayEmail = s.email ? `<a href="mailto:${escapeHtml(s.email)}" style="color:#0284c7; text-decoration:none;">${escapeHtml(s.email)}</a>` : '<span style="color:#94a3b8; font-style:italic;">Sin registrar</span>';
+        const displayNotes = s.notes ? escapeHtml(s.notes) : '<span style="color:#94a3b8; font-style:italic;">Sin registrar</span>';
+
+        return `
+          <tr>
+            <td class="checkbox-col"><div class="custom-checkbox"></div></td>
+            <td>
+              <div style="display:flex; align-items:center; gap:0.75rem;">
+                <div style="width:36px; height:36px; border-radius:8px; background:#ecfdf5; border:1px solid #d1fae5; display:flex; align-items:center; justify-content:center; font-size:16px;">🏢</div>
+                <div style="font-weight:700; font-size:0.9rem;">${displayName}</div>
+              </div>
+            </td>
+            <td>${displayPhone}</td>
+            <td>${displayEmail}</td>
+            <td style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${displayNotes}</td>
+            <td>
+              <button class="action-btn-link btn-edit-supplier" data-id="${s.id}">Editar</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      suppliersTableBody.querySelectorAll('.btn-edit-supplier').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const suppId = btn.getAttribute('data-id');
+          const supp = currentLoadedSuppliers.find(s => s.id === suppId);
+          if (supp) openEditSupplierModal(supp);
+        });
+      });
+    }
+
+    if (searchSuppliersInput) {
+      searchSuppliersInput.addEventListener('input', () => {
+        const q = searchSuppliersInput.value.toLowerCase().trim();
+        if (!q) {
+          renderSuppliersTable(currentLoadedSuppliers);
+          return;
+        }
+
+        const filtered = currentLoadedSuppliers.filter(s => {
+          const matchName = (s.name || '').toLowerCase().includes(q);
+          const matchPhone = (s.phone || '').toLowerCase().includes(q);
+          const matchEmail = (s.email || '').toLowerCase().includes(q);
+          const matchNotes = (s.notes || '').toLowerCase().includes(q);
+          return matchName || matchPhone || matchEmail || matchNotes;
+        });
+
+        renderSuppliersTable(filtered);
+      });
+    }
+
+    // Top navigation in Compras (CRM Blue Tabs Style)
+    function setComprasActiveTopTab(activeBtn) {
+      [tabTopComprasProducts, tabTopComprasSuppliers, tabTopComprasCategories].forEach(btn => {
+        if (btn) btn.classList.remove('active');
+      });
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    if (tabTopComprasProducts) {
+      tabTopComprasProducts.addEventListener('click', () => {
+        setComprasActiveTopTab(tabTopComprasProducts);
+        comprasSectionProducts.style.display = 'block';
+        comprasSectionSuppliers.style.display = 'none';
+      });
+    }
+
+    if (tabTopComprasSuppliers) {
+      tabTopComprasSuppliers.addEventListener('click', () => {
+        setComprasActiveTopTab(tabTopComprasSuppliers);
+        comprasSectionProducts.style.display = 'none';
+        comprasSectionSuppliers.style.display = 'block';
+        loadSuppliers();
+      });
+    }
+
+    if (tabTopComprasCategories) {
+      tabTopComprasCategories.addEventListener('click', () => {
+        setComprasActiveTopTab(tabTopComprasCategories);
+        // Visual indicator active; products visible
+        comprasSectionProducts.style.display = 'block';
+        comprasSectionSuppliers.style.display = 'none';
+      });
+    }
+
+    // Supplier Select Options Generator
+    function renderSupplierSelectOptions(selectedId = '') {
+      let optionsHtml = '<option value="">Selecciona proveedor *</option>';
+      if (currentLoadedSuppliers && currentLoadedSuppliers.length > 0) {
+        optionsHtml += currentLoadedSuppliers.map(s => {
+          const name = s.name ? escapeHtml(s.name) : 'Proveedor sin nombre';
+          const isSelected = s.id === selectedId ? 'selected' : '';
+          return `<option value="${s.id}" ${isSelected}>${name}</option>`;
+        }).join('');
+      }
+      optionsHtml += '<option value="__new__" style="font-weight: 700; color: #0284c7;">+ Agregar proveedor...</option>';
+      return optionsHtml;
+    }
+
+    function refreshAllSupplierSelects(newSelectedId = null, targetSelectEl = null) {
+      document.querySelectorAll('.pres-supplier-select, .edit-pres-supplier-select').forEach(sel => {
+        const currentVal = targetSelectEl === sel && newSelectedId ? newSelectedId : sel.value;
+        sel.innerHTML = renderSupplierSelectOptions(currentVal);
+      });
+    }
+
+    function wireSupplierSelectElement(selectEl) {
+      selectEl.setAttribute('data-prev-val', selectEl.value);
+      selectEl.addEventListener('change', () => {
+        if (selectEl.value === '__new__') {
+          const prev = selectEl.getAttribute('data-prev-val') || '';
+          selectEl.value = prev;
+          openAddSupplierModal(selectEl);
+        } else {
+          selectEl.setAttribute('data-prev-val', selectEl.value);
+        }
+      });
+    }
+
+    // Modal Add Supplier Logic
+    function openAddSupplierModal(targetSelect = null) {
+      pendingSupplierTargetSelect = targetSelect;
+      modalSupplierAlert.style.display = 'none';
+      formAddSupplier.reset();
+      document.getElementById('supplier-edit-id').value = '';
+      document.getElementById('modal-supplier-title').textContent = 'Agregar Proveedor';
+      modalAddSupplier.classList.add('active');
+      document.getElementById('supplier-name').focus();
+    }
+
+    function openEditSupplierModal(supplier) {
+      pendingSupplierTargetSelect = null;
+      modalSupplierAlert.style.display = 'none';
+      formAddSupplier.reset();
+      document.getElementById('supplier-edit-id').value = supplier.id;
+      document.getElementById('supplier-name').value = supplier.name || '';
+      document.getElementById('supplier-phone').value = supplier.phone || '';
+      document.getElementById('supplier-email').value = supplier.email || '';
+      document.getElementById('supplier-notes').value = supplier.notes || '';
+      document.getElementById('modal-supplier-title').textContent = 'Editar Proveedor';
+      modalAddSupplier.classList.add('active');
+      document.getElementById('supplier-name').focus();
+    }
+
+    function closeAddSupplierModal() {
+      modalAddSupplier.classList.remove('active');
+    }
+
+    if (btnOpenAddSupplier) btnOpenAddSupplier.addEventListener('click', () => openAddSupplierModal());
+    if (btnCloseSupplierModal) btnCloseSupplierModal.addEventListener('click', closeAddSupplierModal);
+    if (btnCancelSupplierModal) btnCancelSupplierModal.addEventListener('click', closeAddSupplierModal);
+
+    if (formAddSupplier) {
+      formAddSupplier.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        modalSupplierAlert.style.display = 'none';
+
+        const editId = document.getElementById('supplier-edit-id').value;
+        const name = document.getElementById('supplier-name').value.trim();
+        const phone = document.getElementById('supplier-phone').value.trim();
+        const email = document.getElementById('supplier-email').value.trim();
+        const notes = document.getElementById('supplier-notes').value.trim();
+
+        // Validation only if email is typed
+        if (email.length > 0) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            modalSupplierAlert.textContent = 'El correo electrónico no tiene un formato válido.';
+            modalSupplierAlert.className = 'modal-alert error';
+            modalSupplierAlert.style.display = 'block';
+            return;
+          }
+        }
+
+        btnSubmitSupplier.disabled = true;
+        btnSubmitSupplier.textContent = 'Guardando...';
+
+        try {
+          let savedSupplier;
+          if (editId) {
+            savedSupplier = await suppliersManager.updateSupplier(editId, { name, phone, email, notes });
+            showToast('Proveedor actualizado correctamente.');
+          } else {
+            savedSupplier = await suppliersManager.createSupplier({ name, phone, email, notes });
+            showToast('Proveedor guardado correctamente.');
+          }
+
+          closeAddSupplierModal();
+          await loadSuppliers();
+          await loadComprasCatalog();
+
+          // If triggered inline from a presentation row, auto-select it!
+          if (pendingSupplierTargetSelect) {
+            refreshAllSupplierSelects(savedSupplier.id, pendingSupplierTargetSelect);
+            pendingSupplierTargetSelect.value = savedSupplier.id;
+            pendingSupplierTargetSelect.setAttribute('data-prev-val', savedSupplier.id);
+            pendingSupplierTargetSelect = null;
+          }
+        } catch (err) {
+          console.error('Error saving supplier:', err);
+          modalSupplierAlert.textContent = err.message || 'Error al guardar el proveedor.';
+          modalSupplierAlert.className = 'modal-alert error';
+          modalSupplierAlert.style.display = 'block';
+        } finally {
+          btnSubmitSupplier.disabled = false;
+          btnSubmitSupplier.textContent = 'Guardar proveedor';
+        }
+      });
+    }
 
     // -------------------------------------------------------------
     // POS CATALOG & REAL-TIME SEARCH ENGINE
@@ -2763,12 +3432,28 @@
     btnCloseDetailModalBtn.addEventListener('click', closeSaleDetailModal);
 
     // -------------------------------------------------------------
-    // ADD PRODUCT MODAL LOGIC
+    // ADD PRODUCT MODAL LOGIC (REUSABLE WITH CONTEXT: PRODUCTOS / COMPRAS)
     // -------------------------------------------------------------
-    function openAddModal() {
+    async function openAddModal(context = 'productos') {
+      currentModalContext = typeof context === 'string' ? context : 'productos';
       modalAddAlert.style.display = 'none';
       formAddProduct.reset();
       inlineCatCreator.classList.remove('active');
+
+      if (currentLoadedSuppliers.length === 0) {
+        await loadSuppliers();
+      }
+
+      const titleEl = document.getElementById('modal-add-title');
+      const subtitleEl = document.getElementById('modal-add-subtitle');
+
+      if (currentModalContext === 'compras') {
+        if (titleEl) titleEl.textContent = 'Agregar Producto al Catálogo';
+        if (subtitleEl) subtitleEl.textContent = 'Registra el artículo en el catálogo general. Estará disponible de inmediato en Compras, Productos y Punto de Venta.';
+      } else {
+        if (titleEl) titleEl.textContent = 'Agregar Producto';
+        if (subtitleEl) subtitleEl.textContent = 'Registra tu producto, categoría y presentaciones con precio.';
+      }
       
       presentationsContainer.innerHTML = `
         <div class="presentation-card-row">
@@ -2777,12 +3462,21 @@
             <input type="text" class="presentation-input pres-name-input" placeholder="Ej. 1 kg" required>
           </div>
           <div>
-            <span class="field-sublabel">Precio ($) *</span>
+            <span class="field-sublabel">Precio Venta ($) *</span>
             <input type="number" step="0.01" min="0" class="presentation-input pres-price-input" placeholder="250.00" required>
+          </div>
+          <div>
+            <span class="field-sublabel">Proveedor Asignado *</span>
+            <select class="presentation-input pres-supplier-select" required>
+              ${renderSupplierSelectOptions()}
+            </select>
           </div>
           <div></div>
         </div>
       `;
+
+      const initialSelect = presentationsContainer.querySelector('.pres-supplier-select');
+      if (initialSelect) wireSupplierSelectElement(initialSelect);
 
       modalAddProduct.classList.add('active');
       document.getElementById('add-prod-name').focus();
@@ -2792,7 +3486,7 @@
       modalAddProduct.classList.remove('active');
     }
 
-    btnOpenAddProduct.addEventListener('click', openAddModal);
+    btnOpenAddProduct.addEventListener('click', () => openAddModal('productos'));
     btnCloseAddModal.addEventListener('click', closeAddModal);
     btnCancelAddModal.addEventListener('click', closeAddModal);
 
@@ -2805,8 +3499,14 @@
           <input type="text" class="presentation-input pres-name-input" placeholder="Ej. 500 g" required>
         </div>
         <div>
-          <span class="field-sublabel">Precio ($) *</span>
+          <span class="field-sublabel">Precio Venta ($) *</span>
           <input type="number" step="0.01" min="0" class="presentation-input pres-price-input" placeholder="140.00" required>
+        </div>
+        <div>
+          <span class="field-sublabel">Proveedor Asignado *</span>
+          <select class="presentation-input pres-supplier-select" required>
+            ${renderSupplierSelectOptions()}
+          </select>
         </div>
         <div>
           <button type="button" class="btn-remove-presentation" title="Eliminar">&times;</button>
@@ -2815,6 +3515,8 @@
       row.querySelector('.btn-remove-presentation').addEventListener('click', () => {
         row.remove();
       });
+      const newSelect = row.querySelector('.pres-supplier-select');
+      if (newSelect) wireSupplierSelectElement(newSelect);
       presentationsContainer.appendChild(row);
       row.querySelector('.pres-name-input').focus();
     });
@@ -2843,6 +3545,7 @@
       for (const row of rows) {
         const presName = row.querySelector('.pres-name-input').value.trim();
         const presPrice = parseFloat(row.querySelector('.pres-price-input').value);
+        const presSupplier = row.querySelector('.pres-supplier-select')?.value;
 
         if (!presName) {
           showAddAlert('Todas las presentaciones deben tener nombre.');
@@ -2852,8 +3555,12 @@
           showAddAlert(`El precio de "${presName}" debe ser un número válido mayor o igual a 0.`);
           return;
         }
+        if (!presSupplier || presSupplier === '__new__') {
+          showAddAlert(`Selecciona al menos un proveedor para la presentación "${presName}".`);
+          return;
+        }
 
-        presentations.push({ name: presName, price: presPrice, cost: 0 });
+        presentations.push({ name: presName, price: presPrice, cost: 0, supplier_id: presSupplier });
       }
 
       if (presentations.length === 0) {
@@ -2867,8 +3574,12 @@
       try {
         await productsManager.createProductWithPresentations(name, desc, categoryId, presentations);
         closeAddModal();
-        showToast('Producto creado correctamente.');
+        const successMsg = currentModalContext === 'compras'
+          ? `Producto "${name}" agregado al catálogo y listo para compras.`
+          : `Producto "${name}" creado correctamente.`;
+        showToast(successMsg);
         await loadProductsList();
+        await loadComprasCatalog();
         await loadPosCatalog();
       } catch (err) {
         console.error('Error creating product:', err);
@@ -2914,32 +3625,53 @@
               <input type="text" class="presentation-input edit-pres-name" placeholder="Ej. 1 kg" required>
             </div>
             <div>
-              <span class="field-sublabel">Precio ($) *</span>
+              <span class="field-sublabel">Precio Venta ($) *</span>
               <input type="number" step="0.01" min="0" class="presentation-input edit-pres-price" placeholder="250.00" required>
+            </div>
+            <div>
+              <span class="field-sublabel">Proveedor Asignado *</span>
+              <select class="presentation-input edit-pres-supplier-select" required>
+                ${renderSupplierSelectOptions()}
+              </select>
             </div>
             <div></div>
           </div>
         `;
+        const sel = editPresentationsList.querySelector('.edit-pres-supplier-select');
+        if (sel) wireSupplierSelectElement(sel);
         return;
       }
 
-      editPresentationsList.innerHTML = presList.map(p => `
-        <div class="presentation-card-row" data-pres-id="${p.id}">
-          <div>
-            <span class="field-sublabel">Presentación *</span>
-            <input type="text" class="presentation-input edit-pres-name" value="${escapeHtml(p.name)}" required>
+      editPresentationsList.innerHTML = presList.map(p => {
+        const assignedSupplierId = p.supplier_presentations?.[0]?.supplier_id || '';
+        return `
+          <div class="presentation-card-row" data-pres-id="${p.id}">
+            <div>
+              <span class="field-sublabel">Presentación *</span>
+              <input type="text" class="presentation-input edit-pres-name" value="${escapeHtml(p.name)}" required>
+            </div>
+            <div>
+              <span class="field-sublabel">Precio Venta ($) *</span>
+              <input type="number" step="0.01" min="0" class="presentation-input edit-pres-price" value="${parseFloat(p.price || 0).toFixed(2)}" required>
+            </div>
+            <div>
+              <span class="field-sublabel">Proveedor Asignado *</span>
+              <select class="presentation-input edit-pres-supplier-select" required>
+                ${renderSupplierSelectOptions(assignedSupplierId)}
+              </select>
+            </div>
+            <div>
+              <button type="button" class="btn-remove-presentation btn-delete-pres-trigger" data-pres-id="${p.id}" data-pres-name="${escapeHtml(p.name)}" title="Eliminar presentación">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              </button>
+            </div>
           </div>
-          <div>
-            <span class="field-sublabel">Precio ($) *</span>
-            <input type="number" step="0.01" min="0" class="presentation-input edit-pres-price" value="${parseFloat(p.price || 0).toFixed(2)}" required>
-          </div>
-          <div>
-            <button type="button" class="btn-remove-presentation btn-delete-pres-trigger" data-pres-id="${p.id}" data-pres-name="${escapeHtml(p.name)}" title="Eliminar presentación">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            </button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
+
+      editPresentationsList.querySelectorAll('.edit-pres-supplier-select').forEach(sel => {
+        wireSupplierSelectElement(sel);
+      });
 
       // Wire individual presentation delete buttons
       editPresentationsList.querySelectorAll('.btn-delete-pres-trigger').forEach(btn => {
@@ -2960,14 +3692,22 @@
           <input type="text" class="presentation-input edit-pres-name" placeholder="Ej. 250 g" required>
         </div>
         <div>
-          <span class="field-sublabel">Precio ($) *</span>
+          <span class="field-sublabel">Precio Venta ($) *</span>
           <input type="number" step="0.01" min="0" class="presentation-input edit-pres-price" placeholder="100.00" required>
+        </div>
+        <div>
+          <span class="field-sublabel">Proveedor Asignado *</span>
+          <select class="presentation-input edit-pres-supplier-select" required>
+            ${renderSupplierSelectOptions()}
+          </select>
         </div>
         <div>
           <button type="button" class="btn-remove-presentation btn-remove-unsaved-row" title="Quitar">&times;</button>
         </div>
       `;
       row.querySelector('.btn-remove-unsaved-row').addEventListener('click', () => row.remove());
+      const newSel = row.querySelector('.edit-pres-supplier-select');
+      if (newSel) wireSupplierSelectElement(newSel);
       editPresentationsList.appendChild(row);
       row.querySelector('.edit-pres-name').focus();
     });
@@ -2979,7 +3719,7 @@
     btnCloseEditModal.addEventListener('click', closeEditModal);
     btnCancelEditModal.addEventListener('click', closeEditModal);
 
-    // Save All Edits (Product group details + Presentations updates + New presentations addition)
+    // Save All Edits (Product group details + Presentations updates + Supplier assignments)
     formEditProduct.addEventListener('submit', async (e) => {
       e.preventDefault();
       modalEditAlert.style.display = 'none';
@@ -3017,6 +3757,7 @@
           const presId = row.getAttribute('data-pres-id');
           const presName = row.querySelector('.edit-pres-name').value.trim();
           const presPrice = parseFloat(row.querySelector('.edit-pres-price').value);
+          const presSupplier = row.querySelector('.edit-pres-supplier-select')?.value;
 
           if (!presName) {
             throw new Error('Todas las presentaciones deben tener nombre.');
@@ -3024,19 +3765,24 @@
           if (isNaN(presPrice) || presPrice < 0) {
             throw new Error(`El precio de "${presName}" debe ser mayor o igual a 0.`);
           }
+          if (!presSupplier || presSupplier === '__new__') {
+            throw new Error(`Selecciona al menos un proveedor para la presentación "${presName}".`);
+          }
 
           if (presId) {
-            // Existing presentation -> UPDATE
+            // Existing presentation -> UPDATE info and supplier
             await productsManager.updatePresentation(presId, presName, presPrice);
+            await productsManager.updatePresentationSupplier(presId, presSupplier);
           } else {
-            // Newly added row -> INSERT
-            await productsManager.addPresentationToGroup(groupId, presName, presPrice);
+            // Newly added row -> INSERT with supplier
+            await productsManager.addPresentationToGroup(groupId, presName, presPrice, 0, presSupplier);
           }
         }
 
         closeEditModal();
-        showToast('Producto y presentaciones actualizados correctamente.');
+        showToast('Producto, presentaciones y proveedores actualizados correctamente.');
         await loadProductsList();
+        await loadComprasCatalog();
         await loadPosCatalog();
       } catch (err) {
         console.error('Error saving edits:', err);
@@ -3112,6 +3858,7 @@
           showToast('Presentación eliminada correctamente.');
           
           await loadProductsList();
+          await loadComprasCatalog();
           await loadPosCatalog();
 
           // If edit modal is open, refresh its presentation rows
@@ -3130,6 +3877,7 @@
           showToast('Producto eliminado correctamente.');
 
           await loadProductsList();
+          await loadComprasCatalog();
           await loadPosCatalog();
         }
       } catch (err) {
@@ -3177,6 +3925,8 @@
         switchView('ventas');
       } else if (hash === '#nueva-venta' || hash === '#pos') {
         switchView('nueva-venta');
+      } else if (hash === '#compras') {
+        switchView('compras');
       } else {
         switchView('productos');
       }

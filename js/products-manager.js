@@ -101,7 +101,19 @@ export class ProductsManager {
           status,
           sku,
           barcode,
-          created_at
+          created_at,
+          supplier_presentations (
+            id,
+            supplier_id,
+            last_purchase_cost,
+            is_primary,
+            suppliers (
+              id,
+              name,
+              phone,
+              email
+            )
+          )
         )
       `)
       .eq('tenant_id', tenantId)
@@ -133,7 +145,18 @@ export class ProductsManager {
         const presName = typeof p === 'string' ? p.trim() : p.name?.trim();
         const price = typeof p === 'object' ? parseFloat(p.price) : 0;
         const cost = typeof p === 'object' ? parseFloat(p.cost || 0) : 0;
-        return { name: presName, price: isNaN(price) ? 0 : price, cost: isNaN(cost) ? 0 : cost };
+        const supplierId = typeof p === 'object' ? p.supplier_id : null;
+        const supplierIds = typeof p === 'object' && Array.isArray(p.supplier_ids) 
+          ? p.supplier_ids 
+          : (supplierId ? [supplierId] : []);
+
+        return { 
+          name: presName, 
+          price: isNaN(price) ? 0 : price, 
+          cost: isNaN(cost) ? 0 : cost,
+          supplier_id: supplierId || (supplierIds[0] || null),
+          supplier_ids: supplierIds
+        };
       })
       .filter(p => p.name && p.name.length > 0);
 
@@ -144,6 +167,9 @@ export class ProductsManager {
     for (const p of validPresentations) {
       if (p.price < 0) {
         throw new Error(`El precio de "${p.name}" no puede ser negativo.`);
+      }
+      if (!p.supplier_id && (!p.supplier_ids || p.supplier_ids.length === 0)) {
+        throw new Error(`Selecciona al menos un proveedor para la presentación "${p.name}".`);
       }
     }
 
@@ -166,7 +192,7 @@ export class ProductsManager {
   /**
    * Add a new presentation to an existing product group
    */
-  async addPresentationToGroup(groupId, presentationName, price = 0, cost = 0) {
+  async addPresentationToGroup(groupId, presentationName, price = 0, cost = 0, supplierId = null) {
     if (!tenantManager.currentTenant) {
       await tenantManager.init();
     }
@@ -195,7 +221,54 @@ export class ProductsManager {
       throw new Error(error.message || 'Error al agregar la presentación.');
     }
 
+    if (supplierId) {
+      await this.supabase
+        .from('supplier_presentations')
+        .insert({
+          tenant_id: tenantId,
+          supplier_id: supplierId,
+          product_id: data.id,
+          is_primary: true
+        });
+    }
+
     return data;
+  }
+
+  /**
+   * Update or assign supplier for an existing presentation
+   */
+  async updatePresentationSupplier(presentationId, newSupplierId) {
+    if (!tenantManager.currentTenant) {
+      await tenantManager.init();
+    }
+    const tenantId = tenantManager.currentTenant?.id;
+    if (!tenantId) throw new Error('No hay tenant activo.');
+
+    if (!newSupplierId) return;
+
+    const { data: existing } = await this.supabase
+      .from('supplier_presentations')
+      .select('id, supplier_id')
+      .eq('product_id', presentationId)
+      .eq('tenant_id', tenantId);
+
+    if (existing && existing.length > 0) {
+      await this.supabase
+        .from('supplier_presentations')
+        .update({ supplier_id: newSupplierId, updated_at: new Date().toISOString() })
+        .eq('id', existing[0].id)
+        .eq('tenant_id', tenantId);
+    } else {
+      await this.supabase
+        .from('supplier_presentations')
+        .insert({
+          tenant_id: tenantId,
+          supplier_id: newSupplierId,
+          product_id: presentationId,
+          is_primary: true
+        });
+    }
   }
 
   /**

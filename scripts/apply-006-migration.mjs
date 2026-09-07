@@ -1,9 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import pg from 'pg';
-const { Client } = pg;
 
-// Read .env.local
+// Read .env.local dynamically
 const envPath = path.resolve(process.cwd(), '.env.local');
 const envContent = fs.readFileSync(envPath, 'utf8');
 const env = {};
@@ -18,45 +16,81 @@ envContent.split('\n').forEach(line => {
 });
 
 const projectRef = env.SUPABASE_PROJECT_REF;
-const password = env.SUPABASE_DB_PASSWORD;
+const accessToken = env.SUPABASE_ACCESS_TOKEN;
+
+if (!projectRef || !accessToken) {
+  console.error('Missing SUPABASE_PROJECT_REF or SUPABASE_ACCESS_TOKEN in .env.local');
+  process.exit(1);
+}
 
 async function apply006Migration() {
-  console.log(`Applying 006_suppliers_and_presentations.sql to Supabase (${projectRef})...`);
+  console.log(`Applying 006_suppliers_and_presentations.sql to Supabase (${projectRef}) via Management API...`);
 
   const sqlPath = path.resolve(process.cwd(), 'supabase/migrations/006_suppliers_and_presentations.sql');
   const sql = fs.readFileSync(sqlPath, 'utf8');
 
-  let client;
-  try {
-    client = new Client({
-      connectionString: `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-us-east-1.pooler.supabase.com:6543/postgres`,
-      ssl: { rejectUnauthorized: false }
-    });
-    await client.connect();
-    console.log('Connected via pooler us-east-1!');
-  } catch (err) {
-    console.log('Pooler us-east-1 failed, trying pooler us-west-1...', err.message);
-    client = new Client({
-      connectionString: `postgresql://postgres.${projectRef}:${encodeURIComponent(password)}@aws-0-us-west-1.pooler.supabase.com:6543/postgres`,
-      ssl: { rejectUnauthorized: false }
-    });
-    await client.connect();
-    console.log('Connected via pooler us-west-1!');
+  const response = await fetch(`https://api.supabase.com/v1/projects/${projectRef}/database/query`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ query: sql })
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Failed to apply migration (Status ${response.status}): ${errorText}`);
   }
 
-  await client.query(sql);
-  console.log('✅ Migration 006 applied successfully!');
+  const result = await response.json();
+  console.log('✅ Migration 006 applied successfully via Management API!');
 
   // Verify created tables
-  const res = await client.query(`
-    SELECT table_name 
-    FROM information_schema.tables 
-    WHERE table_schema = 'public' AND table_name IN ('suppliers', 'supplier_presentations')
-    ORDER BY table_name;
-  `);
-  console.log('Verified tables:', res.rows.map(r => r.table_name));
+  const verifyResponse = await fetch(`https://api.supabase.com/v1/projects/${projectRef}/database/query`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      query: `
+        SELECT table_name 
+        FROM information_schema.tables 
+        WHERE table_schema = 'public' AND table_name IN ('suppliers', 'supplier_presentations')
+        ORDER BY table_name;
+      `
+    })
+  });
 
-  await client.end();
+  if (verifyResponse.ok) {
+    const verifyResult = await verifyResponse.json();
+    console.log('✅ Verified tables in Supabase:', verifyResult);
+  }
+
+  // Also install the exec_sql bridge function for future convenience
+  const bridgeSql = `
+    CREATE OR REPLACE FUNCTION public.exec_sql(sql_query TEXT)
+    RETURNS void
+    LANGUAGE plpgsql
+    SECURITY DEFINER
+    AS $$
+    BEGIN
+      EXECUTE sql_query;
+    END;
+    $$;
+    REVOKE EXECUTE ON FUNCTION public.exec_sql(TEXT) FROM public, anon, authenticated;
+    GRANT EXECUTE ON FUNCTION public.exec_sql(TEXT) TO service_role;
+  `;
+  await fetch(`https://api.supabase.com/v1/projects/${projectRef}/database/query`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ query: bridgeSql })
+  });
+  console.log('✅ Bridge function exec_sql also provisioned for automated future migrations!');
 }
 
 apply006Migration().catch(err => {

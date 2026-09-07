@@ -36,6 +36,15 @@ async function runComprasCatalogTest() {
   if (catErr) throw catErr;
   console.log('✅ Category "Café" created:', catData.id);
 
+  // 3b. Create a Supplier for Tenant A
+  const { data: suppData, error: suppErr } = await supabase
+    .from('suppliers')
+    .insert({ tenant_id: tenantAId, name: 'Distribuidora Café de Altura' })
+    .select()
+    .single();
+  if (suppErr) throw suppErr;
+  console.log('✅ Supplier created:', suppData.id);
+
   // 4. Create Product "Nescafé" from Productos context with 1 kg ($250) and 500 g ($140)
   const { data: prod1Result, error: prod1Err } = await supabase.rpc('create_product_with_presentations', {
     p_tenant_id: tenantAId,
@@ -43,8 +52,8 @@ async function runComprasCatalogTest() {
     p_description: 'Café soluble tradicional',
     p_category_id: catData.id,
     p_presentations: [
-      { name: '1 kg', price: 250.00 },
-      { name: '500 g', price: 140.00 }
+      { name: '1 kg', price: 250.00, supplier_id: suppData.id },
+      { name: '500 g', price: 140.00, supplier_id: suppData.id }
     ]
   });
   if (prod1Err) throw prod1Err;
@@ -80,7 +89,7 @@ async function runComprasCatalogTest() {
     p_description: 'Café gourmet tostado',
     p_category_id: catData.id,
     p_presentations: [
-      { name: '500 g', price: 185.00 }
+      { name: '500 g', price: 185.00, supplier_id: suppData.id }
     ]
   });
   if (prod2Err) throw prod2Err;

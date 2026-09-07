@@ -95,6 +95,8 @@ CREATE POLICY "Users can delete supplier_presentations in their tenant"
 -- 3. ATOMIC FUNCTION: CREATE PRODUCT WITH PRESENTATIONS AND SUPPLIERS
 -- Requires at least one supplier per presentation
 -- -----------------------------------------------------------------------------
+DROP FUNCTION IF EXISTS public.create_product_with_presentations(UUID, TEXT, TEXT, JSONB);
+
 CREATE OR REPLACE FUNCTION public.create_product_with_presentations(
     p_tenant_id UUID,
     p_name TEXT,

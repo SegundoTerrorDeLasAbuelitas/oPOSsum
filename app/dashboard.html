@@ -2692,7 +2692,7 @@
   <!-- ========================================================================= -->
   <!-- MODAL: AGREGAR PROVEEDOR                                                 -->
   <!-- ========================================================================= -->
-  <div id="modal-add-supplier" class="modal-overlay">
+  <div id="modal-add-supplier" class="modal-overlay" style="z-index: 10100;">
     <div class="modal-card">
       <div class="modal-header">
         <div class="modal-header-left">
@@ -2734,6 +2734,69 @@
           <button type="button" class="btn-cancel" id="btn-cancel-supplier-modal">Cancelar</button>
           <button type="submit" class="btn-save-modal" id="btn-submit-supplier">
             Guardar proveedor
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: ASIGNAR PROVEEDOR A PRESENTACIÓN                                  -->
+  <!-- ========================================================================= -->
+  <div id="modal-assign-supplier" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" style="background: #ecfdf5; color: #059669;">🏢</div>
+          <div>
+            <h3 class="modal-title">Asignar Proveedor</h3>
+            <p class="modal-subtitle">Asocia un proveedor y su costo de compra a esta presentación.</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" id="btn-close-assign-supp">&times;</button>
+      </div>
+
+      <div id="modal-assign-supp-alert" class="modal-alert"></div>
+
+      <!-- Context box showing Product and Presentation -->
+      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
+        <div style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 4px;">Producto y Presentación</div>
+        <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; margin-bottom: 4px;">
+          <span id="assign-supp-prod-name" style="font-weight: 800; font-size: 1.05rem; color: var(--text-main);"></span>
+          <span style="color: #94a3b8;">·</span>
+          <span id="assign-supp-pres-name" style="font-weight: 600; font-size: 0.95rem; color: #475569;"></span>
+        </div>
+        <div id="assign-supp-existing-badge" style="font-size: 0.8rem; margin-top: 2px;"></div>
+      </div>
+
+      <form id="form-assign-supplier">
+        <input type="hidden" id="assign-supp-pres-id" value="">
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label class="form-label" for="assign-supp-select" style="margin-bottom: 0;">Proveedor *</label>
+            <button type="button" id="btn-quick-new-supplier" style="background: none; border: none; color: #0284c7; font-size: 0.82rem; font-weight: 700; cursor: pointer; padding: 0;">+ Nuevo proveedor</button>
+          </div>
+          <select id="assign-supp-select" class="form-input assign-supplier-select" required>
+            <!-- Rendered dynamically -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="assign-supp-cost">Costo de compra (opcional)</label>
+          <div style="position: relative;">
+            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-weight: 700; color: #64748b;">$</span>
+            <input type="number" step="0.01" min="0" id="assign-supp-cost" class="form-input" placeholder="0.00" style="padding-left: 26px;">
+          </div>
+          <p style="font-size: 0.75rem; color: #64748b; margin-top: 5px;">
+            Este es el costo pagado al proveedor. No modifica el precio de venta al público.
+          </p>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 1.5rem;">
+          <button type="button" class="btn-cancel" id="btn-cancel-assign-supp">Cancelar</button>
+          <button type="submit" class="btn-save-modal" id="btn-submit-assign-supp">
+            Guardar
           </button>
         </div>
       </form>
@@ -3123,6 +3186,21 @@
     const compraTotalDisplay = document.getElementById('compra-total-display');
     const modalCompraAlert = document.getElementById('modal-compra-alert');
     const btnSubmitCompra = document.getElementById('btn-submit-compra');
+
+    // Assign Supplier Modal Elements
+    const modalAssignSupplier = document.getElementById('modal-assign-supplier');
+    const btnCloseAssignSupp = document.getElementById('btn-close-assign-supp');
+    const btnCancelAssignSupp = document.getElementById('btn-cancel-assign-supp');
+    const formAssignSupplier = document.getElementById('form-assign-supplier');
+    const assignSuppPresId = document.getElementById('assign-supp-pres-id');
+    const assignSuppProdName = document.getElementById('assign-supp-prod-name');
+    const assignSuppPresName = document.getElementById('assign-supp-pres-name');
+    const assignSuppExistingBadge = document.getElementById('assign-supp-existing-badge');
+    const assignSuppSelect = document.getElementById('assign-supp-select');
+    const assignSuppCost = document.getElementById('assign-supp-cost');
+    const btnQuickNewSupplier = document.getElementById('btn-quick-new-supplier');
+    const modalAssignSuppAlert = document.getElementById('modal-assign-supp-alert');
+    const btnSubmitAssignSupp = document.getElementById('btn-submit-assign-supp');
 
     // Inventarios Elements
     const tabTopInvProducts = document.getElementById('tab-top-inv-products');
@@ -3531,24 +3609,31 @@
 
           const presList = g.products || [];
           presList.forEach(p => {
-            const suppNames = (p.supplier_presentations || [])
-              .map(sp => {
-                const sName = sp.suppliers?.name;
-                return sName && sName.trim().length > 0 ? sName.trim() : (sp.suppliers ? 'Proveedor sin nombre' : null);
-              })
-              .filter(Boolean);
+            const suppRels = p.supplier_presentations || [];
+            const hasSupplier = suppRels.length > 0;
+            
+            const supplierDetails = suppRels.map(sp => {
+              const sName = sp.suppliers?.name?.trim() || 'Proveedor sin nombre';
+              const costVal = (sp.last_purchase_cost !== null && sp.last_purchase_cost !== undefined && !isNaN(parseFloat(sp.last_purchase_cost)))
+                ? parseFloat(sp.last_purchase_cost)
+                : null;
+              const costStr = costVal !== null ? ` ($${costVal.toFixed(2)})` : '';
+              return `${sName}${costStr}`;
+            });
 
-            const supplierBadge = suppNames.length > 0
-              ? `🏢 ${suppNames.join(', ')}`
+            const supplierBadge = hasSupplier
+              ? `🏢 ${supplierDetails.join(' · ')}`
               : '⚠️ Sin proveedor';
 
             categoryMap.get(catId).items.push({
+              presentationId: p.id,
               productGroupId: g.id,
               productName: g.name,
               presentationName: p.name,
               price: p.price,
+              hasSupplier: hasSupplier,
               extraBadgeText: supplierBadge,
-              isExtraWarning: suppNames.length === 0,
+              isExtraWarning: !hasSupplier,
               rawGroup: g,
               rawPres: p
             });
@@ -3570,12 +3655,14 @@
 
             if (suppRels.length === 0) {
               unassignedItems.push({
+                presentationId: p.id,
                 productGroupId: g.id,
                 productName: g.name,
                 presentationName: p.name,
                 price: p.price,
-                extraBadgeText: catBadgeText,
-                isExtraWarning: false,
+                hasSupplier: false,
+                extraBadgeText: catBadgeText ? `${catBadgeText} · ⚠️ Sin proveedor` : '⚠️ Sin proveedor',
+                isExtraWarning: true,
                 rawGroup: g,
                 rawPres: p
               });
@@ -3600,12 +3687,20 @@
                   });
                 }
 
+                const costVal = (sp.last_purchase_cost !== null && sp.last_purchase_cost !== undefined && !isNaN(parseFloat(sp.last_purchase_cost)))
+                  ? parseFloat(sp.last_purchase_cost)
+                  : null;
+                const costStr = costVal !== null ? ` · Costo: $${costVal.toFixed(2)}` : '';
+
                 supplierMap.get(suppId).items.push({
+                  presentationId: p.id,
                   productGroupId: g.id,
                   productName: g.name,
                   presentationName: p.name,
                   price: p.price,
-                  extraBadgeText: catBadgeText,
+                  hasSupplier: true,
+                  cost: costVal,
+                  extraBadgeText: `${catBadgeText}${costStr}`,
                   isExtraWarning: false,
                   rawGroup: g,
                   rawPres: p
@@ -3622,8 +3717,8 @@
         if (unassignedItems.length > 0) {
           result.push({
             id: 'unassigned-suppliers',
-            title: 'Sin proveedor asignado',
-            subtitle: 'Edita el producto para asignarle un proveedor',
+            title: 'Sin proveedor',
+            subtitle: 'Asigna un proveedor para registrar compras de estas presentaciones',
             icon: '⚠️',
             isWarning: true,
             items: unassignedItems
@@ -3669,7 +3764,7 @@
 
         html += `
           <div class="compras-group-block">
-            <div class="compras-group-heading" ${group.isWarning ? 'style="border-color: #fef08a;"' : ''}>
+            <div class="compras-group-heading" ${group.isWarning ? 'style="border-color: #fef08a; background: #fffbeb;"' : ''}>
               <div class="compras-heading-text">
                 <span class="compras-heading-icon">${group.icon}</span>
                 <h3 class="compras-heading-title" ${group.isWarning ? 'style="color: #b45309;"' : ''}>${escapeHtml(group.title)}</h3>
@@ -3690,15 +3785,35 @@
                         <span class="compras-item-dot">·</span>
                         <span class="compras-item-price">$${parseFloat(item.price || 0).toFixed(2)}</span>
                         ${item.extraBadgeText ? `
-                          <span class="compras-item-extra-info" ${item.isExtraWarning ? 'style="color:#b45309; background:#fefce8; border-color:#fef08a;"' : ''}>
+                          <span class="compras-item-extra-info" ${item.isExtraWarning ? 'style="color:#b45309; background:#fefce8; border-color:#fef08a; font-weight: 700;"' : ''}>
                             ${escapeHtml(item.extraBadgeText)}
                           </span>
                         ` : ''}
                       </div>
                     </div>
                   </div>
-                  <div class="compras-item-actions">
-                    <button class="action-btn-link action-edit-compras-prod" data-group-id="${item.productGroupId}">Editar</button>
+                  <div class="compras-item-actions" style="display: flex; align-items: center; gap: 0.45rem; flex-wrap: nowrap;">
+                    ${!item.hasSupplier ? `
+                      <button type="button" class="action-assign-supplier-btn" 
+                              data-pres-id="${item.presentationId}" 
+                              data-prod-name="${escapeHtml(item.productName)}" 
+                              data-pres-name="${escapeHtml(item.presentationName)}"
+                              data-cost="${item.cost != null ? item.cost : ''}"
+                              style="padding: 4px 10px; font-size: 0.78rem; font-weight: 700; border-radius: 7px; background: #059669; color: #ffffff; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); white-space: nowrap;">
+                        <span>🏢</span> Asignar proveedor
+                      </button>
+                    ` : `
+                      <button type="button" class="action-assign-supplier-btn" 
+                              data-pres-id="${item.presentationId}" 
+                              data-prod-name="${escapeHtml(item.productName)}" 
+                              data-pres-name="${escapeHtml(item.presentationName)}"
+                              data-cost="${item.cost != null ? item.cost : ''}"
+                              title="Registrar otro proveedor para esta presentación"
+                              style="padding: 4px 9px; font-size: 0.78rem; font-weight: 600; border-radius: 7px; background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap;">
+                        <span style="font-weight: 700; color: #0284c7;">+</span> Proveedor
+                      </button>
+                    `}
+                    <button type="button" class="action-btn-link action-edit-compras-prod" data-group-id="${item.productGroupId}" style="margin-left: 2px;">Editar</button>
                   </div>
                 </div>
               `).join('')}
@@ -3709,6 +3824,21 @@
 
       html += '</div>';
       container.innerHTML = html;
+
+      // Asignar eventos de asignación de proveedor
+      container.querySelectorAll('.action-assign-supplier-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const target = e.currentTarget;
+          const presId = target.getAttribute('data-pres-id');
+          const prodName = target.getAttribute('data-prod-name');
+          const presName = target.getAttribute('data-pres-name');
+          const cost = target.getAttribute('data-cost');
+          if (typeof openAssignSupplierModal === 'function') {
+            openAssignSupplierModal(presId, prodName, presName, null, cost || null);
+          }
+        });
+      });
 
       // Asignar eventos de edición a cada botón
       container.querySelectorAll('.action-edit-compras-prod').forEach(btn => {
@@ -3929,7 +4059,7 @@
     }
 
     function refreshAllSupplierSelects(newSelectedId = null, targetSelectEl = null) {
-      document.querySelectorAll('.pres-supplier-select, .edit-pres-supplier-select, .wizard-supplier-select').forEach(sel => {
+      document.querySelectorAll('.pres-supplier-select, .edit-pres-supplier-select, .wizard-supplier-select, .assign-supplier-select').forEach(sel => {
         const currentVal = targetSelectEl === sel && newSelectedId ? newSelectedId : sel.value;
         sel.innerHTML = renderSupplierSelectOptions(currentVal);
       });
@@ -3939,7 +4069,10 @@
     }
 
     function wireSupplierSelectElement(selectEl) {
+      if (!selectEl) return;
       selectEl.setAttribute('data-prev-val', selectEl.value);
+      if (selectEl.dataset.wiredSupplier === 'true') return;
+      selectEl.dataset.wiredSupplier = 'true';
       selectEl.addEventListener('change', () => {
         if (selectEl.value === '__new__') {
           const prev = selectEl.getAttribute('data-prev-val') || '';
@@ -4026,11 +4159,16 @@
           await loadSuppliers();
           await loadComprasCatalog();
 
-          // If triggered inline from a presentation row, auto-select it!
+          // If triggered inline from a presentation row or assign modal, auto-select it!
           if (pendingSupplierTargetSelect) {
             refreshAllSupplierSelects(savedSupplier.id, pendingSupplierTargetSelect);
             pendingSupplierTargetSelect.value = savedSupplier.id;
             pendingSupplierTargetSelect.setAttribute('data-prev-val', savedSupplier.id);
+            if (pendingSupplierTargetSelect.id === 'assign-supp-select') {
+              setTimeout(() => {
+                if (assignSuppCost) assignSuppCost.focus();
+              }, 80);
+            }
             pendingSupplierTargetSelect = null;
           }
         } catch (err) {
@@ -4041,6 +4179,131 @@
         } finally {
           btnSubmitSupplier.disabled = false;
           btnSubmitSupplier.textContent = 'Guardar proveedor';
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // MODAL: ASIGNAR PROVEEDOR A PRESENTACIÓN CONTROLLER & LOGIC
+    // -------------------------------------------------------------
+    function openAssignSupplierModal(presentationId, productName, presentationName, preselectedSupplierId = null, currentCost = null) {
+      if (!modalAssignSupplier) return;
+      if (modalAssignSuppAlert) modalAssignSuppAlert.style.display = 'none';
+      if (formAssignSupplier) formAssignSupplier.reset();
+
+      if (assignSuppPresId) assignSuppPresId.value = presentationId || '';
+      if (assignSuppProdName) assignSuppProdName.textContent = productName || 'Producto';
+      if (assignSuppPresName) assignSuppPresName.textContent = presentationName || 'Presentación';
+
+      // Consultar proveedores actualmente vinculados
+      if (assignSuppExistingBadge) {
+        let existingHtml = '';
+        if (currentLoadedProducts && currentLoadedProducts.length > 0) {
+          for (const g of currentLoadedProducts) {
+            const pres = (g.products || []).find(p => p.id === presentationId);
+            if (pres) {
+              const rels = pres.supplier_presentations || [];
+              if (rels.length > 0) {
+                const names = rels.map(r => {
+                  const sName = r.suppliers?.name?.trim() || 'Proveedor sin nombre';
+                  const cVal = (r.last_purchase_cost !== null && r.last_purchase_cost !== undefined && !isNaN(parseFloat(r.last_purchase_cost)))
+                    ? parseFloat(r.last_purchase_cost)
+                    : null;
+                  const cStr = cVal !== null ? ` ($${cVal.toFixed(2)})` : '';
+                  return `${escapeHtml(sName)}${cStr}`;
+                });
+                existingHtml = `<span style="color:#059669; font-weight:600;">Proveedores vinculados:</span> ${names.join(' · ')}`;
+              } else {
+                existingHtml = '<span style="color:#d97706; font-weight:600;">⚠️ Sin proveedores vinculados aún</span>';
+              }
+              break;
+            }
+          }
+        }
+        assignSuppExistingBadge.innerHTML = existingHtml;
+      }
+
+      if (assignSuppSelect) {
+        assignSuppSelect.innerHTML = renderSupplierSelectOptions(preselectedSupplierId);
+        assignSuppSelect.value = preselectedSupplierId || '';
+        assignSuppSelect.setAttribute('data-prev-val', preselectedSupplierId || '');
+        wireSupplierSelectElement(assignSuppSelect);
+      }
+
+      if (assignSuppCost) {
+        assignSuppCost.value = (currentCost !== null && currentCost !== undefined && currentCost !== '') ? currentCost : '';
+      }
+
+      modalAssignSupplier.classList.add('active');
+      if (assignSuppSelect) assignSuppSelect.focus();
+    }
+
+    function closeAssignSupplierModal() {
+      if (modalAssignSupplier) {
+        modalAssignSupplier.classList.remove('active');
+      }
+    }
+
+    if (btnCloseAssignSupp) btnCloseAssignSupp.addEventListener('click', closeAssignSupplierModal);
+    if (btnCancelAssignSupp) btnCancelAssignSupp.addEventListener('click', closeAssignSupplierModal);
+    if (modalAssignSupplier) {
+      modalAssignSupplier.addEventListener('click', (e) => {
+        if (e.target === modalAssignSupplier) closeAssignSupplierModal();
+      });
+    }
+
+    if (btnQuickNewSupplier && assignSuppSelect) {
+      btnQuickNewSupplier.addEventListener('click', () => {
+        openAddSupplierModal(assignSuppSelect);
+      });
+    }
+
+    if (formAssignSupplier) {
+      formAssignSupplier.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (modalAssignSuppAlert) modalAssignSuppAlert.style.display = 'none';
+
+        const presId = assignSuppPresId ? assignSuppPresId.value : '';
+        const suppId = assignSuppSelect ? assignSuppSelect.value : '';
+        const costRaw = assignSuppCost ? assignSuppCost.value.trim() : '';
+        const cost = (costRaw !== '' && !isNaN(parseFloat(costRaw))) ? parseFloat(costRaw) : null;
+
+        if (!presId) {
+          modalAssignSuppAlert.textContent = 'Falta el identificador de la presentación.';
+          modalAssignSuppAlert.className = 'modal-alert error';
+          modalAssignSuppAlert.style.display = 'block';
+          return;
+        }
+
+        if (!suppId || suppId === '__new__') {
+          modalAssignSuppAlert.textContent = 'Por favor selecciona o crea un proveedor válido.';
+          modalAssignSuppAlert.className = 'modal-alert error';
+          modalAssignSuppAlert.style.display = 'block';
+          return;
+        }
+
+        if (btnSubmitAssignSupp) {
+          btnSubmitAssignSupp.disabled = true;
+          btnSubmitAssignSupp.textContent = 'Guardando...';
+        }
+
+        try {
+          await suppliersManager.assignSupplierToPresentation(presId, suppId, cost);
+          showToast('Proveedor asignado correctamente.');
+          closeAssignSupplierModal();
+          await loadComprasCatalog();
+        } catch (err) {
+          console.error('Error assigning supplier to presentation:', err);
+          if (modalAssignSuppAlert) {
+            modalAssignSuppAlert.textContent = err.message || 'Error al asignar el proveedor.';
+            modalAssignSuppAlert.className = 'modal-alert error';
+            modalAssignSuppAlert.style.display = 'block';
+          }
+        } finally {
+          if (btnSubmitAssignSupp) {
+            btnSubmitAssignSupp.disabled = false;
+            btnSubmitAssignSupp.textContent = 'Guardar';
+          }
         }
       });
     }

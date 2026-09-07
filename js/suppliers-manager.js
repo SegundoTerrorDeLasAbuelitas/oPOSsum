@@ -172,23 +172,34 @@ export class SuppliersManager {
     const tenantId = tenantManager.currentTenant?.id;
     if (!tenantId) throw new Error('No hay tenant activo.');
 
+    const cleanCost = Math.max(0, parseFloat(lastPurchaseCost) || 0.00);
+
     const { data, error } = await this.supabase
       .from('supplier_presentations')
-      .insert({
+      .upsert({
         tenant_id: tenantId,
         product_id: presentationId,
         supplier_id: supplierId,
-        last_purchase_cost: parseFloat(lastPurchaseCost) || 0.00,
-        is_primary: true
+        last_purchase_cost: cleanCost,
+        updated_at: new Date().toISOString()
+      }, {
+        onConflict: 'supplier_id, product_id'
       })
-      .select()
+      .select(`
+        id,
+        supplier_id,
+        product_id,
+        last_purchase_cost,
+        suppliers (
+          id,
+          name,
+          phone,
+          email
+        )
+      `)
       .single();
 
     if (error) {
-      if (error.code === '23505') {
-        // Already assigned
-        return null;
-      }
       console.error('Error assigning supplier to presentation:', error);
       throw new Error(error.message || 'Error al asignar proveedor.');
     }

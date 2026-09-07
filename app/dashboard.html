@@ -2082,6 +2082,15 @@
           </a>
         </li>
 
+        <li class="nav-item" id="nav-inventarios">
+          <a href="#inventarios">
+            <span class="nav-item-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              Inventarios
+            </span>
+          </a>
+        </li>
+
         <li class="nav-item" id="nav-ventas">
           <a href="#ventas">
             <span class="nav-item-left">
@@ -2477,6 +2486,74 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- LIENZO 5: INVENTARIOS VIEW (GESTIÓN DE EXISTENCIAS POR PRESENTACIÓN)        -->
+    <!-- ========================================================================= -->
+    <div id="view-inventarios" class="canvas-view">
+      
+      <!-- Top Navigation Menu (CRM Blue Letters Style) -->
+      <nav class="compras-top-navbar" aria-label="Navegación de Inventarios">
+        <div class="compras-top-tabs">
+          <button class="compras-top-tab active" id="tab-top-inv-products" type="button">Lista de productos</button>
+          <button class="compras-top-tab" id="tab-top-inv-suppliers" type="button">Proveedor</button>
+          <button class="compras-top-tab" id="tab-top-inv-categories" type="button">Categoría</button>
+        </div>
+        <div class="compras-top-actions">
+          <div class="compras-nav-divider"></div>
+          <button class="btn-settings-subtle" type="button" title="Configuración de inventario">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+        </div>
+      </nav>
+
+      <div class="content-header">
+        <div>
+          <h1 class="page-title">Inventarios</h1>
+          <p class="page-subtitle">Existencias actuales y control de stock por presentación.</p>
+        </div>
+        <div class="compras-header-buttons">
+          <button class="btn-action-secondary" id="btn-refresh-inventory">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Actualizar datos
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Cards for Inventarios -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Presentaciones Registradas</div>
+          <div id="inv-count-presentations" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
+          <div style="font-size: 0.75rem; color: #0284c7; font-weight: 600; margin-top: 2px;">● Catálogo completo</div>
+        </div>
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Unidades Totales en Stock</div>
+          <div id="inv-count-total-units" style="font-size: 1.5rem; font-weight: 800; color: #059669; margin-top: 4px;">0</div>
+          <div style="font-size: 0.75rem; color: #10b981; font-weight: 600; margin-top: 2px;">En existencia física</div>
+        </div>
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Artículos Sin Existencia</div>
+          <div id="inv-count-out-of-stock" style="font-size: 1.5rem; font-weight: 800; color: #dc2626; margin-top: 4px;">0</div>
+          <div style="font-size: 0.75rem; color: #ef4444; font-weight: 600; margin-top: 2px;">0 unidades registradas</div>
+        </div>
+      </div>
+
+      <!-- Main inventory catalog data card -->
+      <div class="data-card" style="padding: 1.35rem;">
+        <div class="search-wrapper" style="margin-bottom: 1.5rem;">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" id="search-inventory-input" placeholder="Buscar por producto, presentación, proveedor o categoría...">
+        </div>
+
+        <div id="inventarios-grouped-container" class="compras-catalog-grouped">
+          <div style="text-align: center; padding: 2.5rem; color: #64748b;">
+            Consultando existencias de inventario de tu negocio...
           </div>
         </div>
       </div>
@@ -2898,6 +2975,58 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL: MODIFICAR INVENTARIO (AJUSTE RÁPIDO DE EXISTENCIAS)               -->
+  <!-- ========================================================================= -->
+  <div id="modal-adjust-inventory" class="modal-overlay">
+    <div class="modal-card" style="max-width: 440px;">
+      <div class="modal-header">
+        <div class="modal-header-left">
+          <div class="modal-header-icon" style="background: #e0f2fe; color: #0284c7;">📦</div>
+          <div>
+            <h3 class="modal-title">Modificar Inventario</h3>
+            <p class="modal-subtitle">Establece la cantidad física disponible.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-adjust-inv-modal">&times;</button>
+      </div>
+
+      <div id="modal-adjust-inv-alert" class="modal-alert"></div>
+
+      <form id="form-adjust-inventory">
+        <input type="hidden" id="adjust-inv-pres-id" value="">
+        
+        <div style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 10px; padding: 0.85rem 1rem; margin-bottom: 1.25rem;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase;">Producto y Presentación</div>
+          <div id="adjust-inv-product-name" style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-top: 2px;">--</div>
+          <div id="adjust-inv-pres-name" style="font-size: 0.85rem; color: #0284c7; font-weight: 600; margin-top: 2px;">--</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adjust-inv-quantity">Cantidad disponible (unidades) *</label>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <button type="button" id="btn-inv-qty-minus" style="width: 44px; height: 44px; border-radius: 8px; border: 1.5px solid var(--border-color); background: white; font-size: 1.3rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-main);">-</button>
+            <input type="number" id="adjust-inv-quantity" class="form-input" min="0" step="1" required style="font-size: 1.35rem; font-weight: 800; text-align: center; height: 44px; color: var(--text-main);">
+            <button type="button" id="btn-inv-qty-plus" style="width: 44px; height: 44px; border-radius: 8px; border: 1.5px solid var(--border-color); background: white; font-size: 1.3rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--text-main);">+</button>
+          </div>
+          <span style="font-size: 0.76rem; color: #64748b; margin-top: 5px; display: block;">Existencia física de esta presentación individual.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adjust-inv-notes">Motivo / Observación (opcional)</label>
+          <input type="text" id="adjust-inv-notes" class="form-input" placeholder="Ej. Conteo físico, ajuste de stock, entrada...">
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btn-cancel-adjust-inv-modal">Cancelar</button>
+          <button type="submit" class="btn-save-modal" id="btn-submit-adjust-inv">
+            Guardar cantidad
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ================= SCRIPT & CONTROLLER ================= -->
   <script type="module">
     import { getSupabase } from '../js/supabase-client.js';
@@ -2905,12 +3034,15 @@
     import { productsManager } from '../js/products-manager.js';
     import { salesManager } from '../js/sales-manager.js';
     import { suppliersManager } from '../js/suppliers-manager.js';
+    import { inventoryManager } from '../js/inventory-manager.js';
 
     const supabase = getSupabase();
     let currentLoadedProducts = [];
     let currentLoadedCategories = [];
     let currentLoadedSales = [];
     let currentLoadedSuppliers = [];
+    let currentLoadedInventoryMap = new Map();
+    let currentInventariosGrouping = 'product'; // 'product' | 'supplier' | 'category'
     let currentCartItems = [];
     let activeCategoryFilter = 'all';
     let pendingSupplierTargetSelect = null;
@@ -2934,9 +3066,11 @@
     const viewNuevaVenta = document.getElementById('view-nueva-venta');
     const viewVentas = document.getElementById('view-ventas');
     const viewCompras = document.getElementById('view-compras');
+    const viewInventarios = document.getElementById('view-inventarios');
     
     const navProductos = document.getElementById('nav-productos');
     const navCompras = document.getElementById('nav-compras');
+    const navInventarios = document.getElementById('nav-inventarios');
     const navVentas = document.getElementById('nav-ventas');
     const navInicio = document.getElementById('nav-inicio');
     const btnQuickNewSale = document.getElementById('btn-quick-new-sale');
@@ -2989,6 +3123,28 @@
     const compraTotalDisplay = document.getElementById('compra-total-display');
     const modalCompraAlert = document.getElementById('modal-compra-alert');
     const btnSubmitCompra = document.getElementById('btn-submit-compra');
+
+    // Inventarios Elements
+    const tabTopInvProducts = document.getElementById('tab-top-inv-products');
+    const tabTopInvSuppliers = document.getElementById('tab-top-inv-suppliers');
+    const tabTopInvCategories = document.getElementById('tab-top-inv-categories');
+    const searchInventoryInput = document.getElementById('search-inventory-input');
+    const btnRefreshInventory = document.getElementById('btn-refresh-inventory');
+
+    // Adjust Inventory Modal Elements
+    const modalAdjustInventory = document.getElementById('modal-adjust-inventory');
+    const btnCloseAdjustInvModal = document.getElementById('btn-close-adjust-inv-modal');
+    const btnCancelAdjustInvModal = document.getElementById('btn-cancel-adjust-inv-modal');
+    const formAdjustInventory = document.getElementById('form-adjust-inventory');
+    const adjustInvPresId = document.getElementById('adjust-inv-pres-id');
+    const adjustInvProductName = document.getElementById('adjust-inv-product-name');
+    const adjustInvPresName = document.getElementById('adjust-inv-pres-name');
+    const adjustInvQuantity = document.getElementById('adjust-inv-quantity');
+    const adjustInvNotes = document.getElementById('adjust-inv-notes');
+    const modalAdjustInvAlert = document.getElementById('modal-adjust-inv-alert');
+    const btnSubmitAdjustInv = document.getElementById('btn-submit-adjust-inv');
+    const btnInvQtyMinus = document.getElementById('btn-inv-qty-minus');
+    const btnInvQtyPlus = document.getElementById('btn-inv-qty-plus');
 
     // Context variable for Add Product modal
     let currentModalContext = 'productos'; // 'productos' | 'compras'
@@ -3053,9 +3209,11 @@
       viewNuevaVenta.classList.remove('active');
       viewVentas.classList.remove('active');
       if (viewCompras) viewCompras.classList.remove('active');
+      if (viewInventarios) viewInventarios.classList.remove('active');
 
       navProductos.classList.remove('active');
       if (navCompras) navCompras.classList.remove('active');
+      if (navInventarios) navInventarios.classList.remove('active');
       navVentas.classList.remove('active');
       navInicio.classList.remove('active');
 
@@ -3074,6 +3232,11 @@
         if (navCompras) navCompras.classList.add('active');
         window.location.hash = 'compras';
         loadComprasCatalog();
+      } else if (viewName === 'inventarios') {
+        if (viewInventarios) viewInventarios.classList.add('active');
+        if (navInventarios) navInventarios.classList.add('active');
+        window.location.hash = 'inventarios';
+        loadInventariosCatalog();
       } else {
         viewProductos.classList.add('active');
         navProductos.classList.add('active');
@@ -3084,6 +3247,7 @@
 
     navProductos.addEventListener('click', (e) => { e.preventDefault(); switchView('productos'); });
     if (navCompras) navCompras.addEventListener('click', (e) => { e.preventDefault(); switchView('compras'); });
+    if (navInventarios) navInventarios.addEventListener('click', (e) => { e.preventDefault(); switchView('inventarios'); });
     navVentas.addEventListener('click', (e) => { e.preventDefault(); switchView('ventas'); });
     navInicio.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
     btnQuickNewSale.addEventListener('click', (e) => { e.preventDefault(); switchView('nueva-venta'); });
@@ -4067,6 +4231,511 @@
 
         closeAddCompraModal();
         showToast('Compra registrada exitosamente.');
+      });
+    }
+
+    // -------------------------------------------------------------
+    // INVENTARIOS MODULE CONTROLLER & LOGIC
+    // -------------------------------------------------------------
+    function setInventariosActiveTopTab(activeBtn) {
+      [tabTopInvProducts, tabTopInvSuppliers, tabTopInvCategories].forEach(btn => {
+        if (btn) btn.classList.remove('active');
+      });
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    if (tabTopInvProducts) {
+      tabTopInvProducts.addEventListener('click', () => {
+        currentInventariosGrouping = 'product';
+        setInventariosActiveTopTab(tabTopInvProducts);
+        renderInventariosGroupedView(currentLoadedProducts, currentLoadedInventoryMap, searchInventoryInput?.value || '');
+      });
+    }
+
+    if (tabTopInvSuppliers) {
+      tabTopInvSuppliers.addEventListener('click', () => {
+        currentInventariosGrouping = 'supplier';
+        setInventariosActiveTopTab(tabTopInvSuppliers);
+        renderInventariosGroupedView(currentLoadedProducts, currentLoadedInventoryMap, searchInventoryInput?.value || '');
+      });
+    }
+
+    if (tabTopInvCategories) {
+      tabTopInvCategories.addEventListener('click', () => {
+        currentInventariosGrouping = 'category';
+        setInventariosActiveTopTab(tabTopInvCategories);
+        renderInventariosGroupedView(currentLoadedProducts, currentLoadedInventoryMap, searchInventoryInput?.value || '');
+      });
+    }
+
+    if (searchInventoryInput) {
+      searchInventoryInput.addEventListener('input', () => {
+        renderInventariosGroupedView(currentLoadedProducts, currentLoadedInventoryMap, searchInventoryInput.value);
+      });
+    }
+
+    if (btnRefreshInventory) {
+      btnRefreshInventory.addEventListener('click', async () => {
+        await loadInventariosCatalog();
+        showToast('Inventario sincronizado con Supabase.');
+      });
+    }
+
+    async function loadInventariosCatalog() {
+      const container = document.getElementById('inventarios-grouped-container');
+      if (container) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2.5rem; color: #64748b;">
+            Consultando existencias de inventario de tu negocio...
+          </div>
+        `;
+      }
+
+      try {
+        const [groups, invMap, suppliers] = await Promise.all([
+          productsManager.getProductGroupsWithPresentations(),
+          inventoryManager.getInventoryMap(),
+          suppliersManager.getSuppliers().catch(() => [])
+        ]);
+
+        currentLoadedProducts = groups || [];
+        currentLoadedInventoryMap = invMap || new Map();
+        currentLoadedSuppliers = suppliers || [];
+
+        updateInventariosMetrics(currentLoadedProducts, currentLoadedInventoryMap);
+        renderInventariosGroupedView(currentLoadedProducts, currentLoadedInventoryMap, searchInventoryInput?.value || '');
+      } catch (err) {
+        console.error('Error loading inventory catalog:', err);
+        if (container) {
+          container.innerHTML = `
+            <div style="text-align: center; padding: 2.5rem; color: #ef4444;">
+              Error al cargar el catálogo de inventarios: ${escapeHtml(err.message || 'Error de conexión')}
+            </div>
+          `;
+        }
+      }
+    }
+
+    function updateInventariosMetrics(groups, invMap) {
+      const presCountEl = document.getElementById('inv-count-presentations');
+      const unitsCountEl = document.getElementById('inv-count-total-units');
+      const outCountEl = document.getElementById('inv-count-out-of-stock');
+
+      let totalPres = 0;
+      let totalUnits = 0;
+      let outOfStock = 0;
+
+      (groups || []).forEach(g => {
+        (g.products || []).forEach(p => {
+          totalPres++;
+          const qty = invMap.get(p.id) || 0;
+          totalUnits += qty;
+          if (qty <= 0) outOfStock++;
+        });
+      });
+
+      if (presCountEl) presCountEl.textContent = totalPres;
+      if (unitsCountEl) unitsCountEl.textContent = Math.round(totalUnits);
+      if (outCountEl) outCountEl.textContent = outOfStock;
+    }
+
+    function buildInventoryGroupedData(groups, invMap, groupBy) {
+      if (!groups || !Array.isArray(groups)) return [];
+
+      if (groupBy === 'product') {
+        const list = [];
+        groups.forEach(g => {
+          const presList = g.products || [];
+          if (presList.length === 0) return;
+
+          const catName = g.categories?.name ? g.categories.name.trim() : '';
+          const items = presList.map(p => {
+            const qty = invMap.get(p.id) || 0;
+            const suppNames = (p.supplier_presentations || [])
+              .map(sp => sp.suppliers?.name?.trim())
+              .filter(Boolean);
+
+            return {
+              presentationId: p.id,
+              productGroupId: g.id,
+              productName: g.name,
+              presentationName: p.name,
+              quantity: qty,
+              categoryName: catName,
+              suppliersText: suppNames.length > 0 ? suppNames.join(', ') : '',
+              price: p.price
+            };
+          });
+
+          list.push({
+            id: g.id,
+            title: g.name,
+            subtitle: catName ? `📁 ${catName}` : '',
+            icon: '📦',
+            itemsCountLabel: items.length === 1 ? '1 presentación' : `${items.length} presentaciones`,
+            items: items
+          });
+        });
+        return list;
+      }
+
+      if (groupBy === 'supplier') {
+        const supplierMap = new Map();
+        const unassignedItems = [];
+
+        groups.forEach(g => {
+          const presList = g.products || [];
+          presList.forEach(p => {
+            const qty = invMap.get(p.id) || 0;
+            const suppRels = p.supplier_presentations || [];
+
+            const item = {
+              presentationId: p.id,
+              productGroupId: g.id,
+              productName: g.name,
+              presentationName: p.name,
+              quantity: qty,
+              categoryName: g.categories?.name ? g.categories.name.trim() : '',
+              price: p.price
+            };
+
+            if (suppRels.length === 0) {
+              unassignedItems.push(item);
+            } else {
+              suppRels.forEach(sp => {
+                const s = sp.suppliers;
+                const suppId = s?.id || sp.supplier_id || 'unknown';
+                const suppName = s?.name && s.name.trim().length > 0 ? s.name.trim() : 'Proveedor sin nombre';
+                const suppContact = [s?.phone, s?.email].filter(Boolean).join(' · ');
+
+                if (!supplierMap.has(suppId)) {
+                  supplierMap.set(suppId, {
+                    id: suppId,
+                    title: suppName,
+                    subtitle: suppContact,
+                    icon: '🏢',
+                    items: []
+                  });
+                }
+                supplierMap.get(suppId).items.push(item);
+              });
+            }
+          });
+        });
+
+        const result = Array.from(supplierMap.values()).filter(group => group.items.length > 0);
+        result.forEach(r => {
+          r.itemsCountLabel = r.items.length === 1 ? '1 presentación' : `${r.items.length} presentaciones`;
+        });
+
+        if (unassignedItems.length > 0) {
+          result.push({
+            id: 'unassigned-suppliers',
+            title: 'Sin proveedor asignado',
+            subtitle: 'Presentaciones sin proveedor vinculado',
+            icon: '⚠️',
+            isWarning: true,
+            itemsCountLabel: unassignedItems.length === 1 ? '1 presentación' : `${unassignedItems.length} presentaciones`,
+            items: unassignedItems
+          });
+        }
+        return result;
+      }
+
+      if (groupBy === 'category') {
+        const categoryMap = new Map();
+
+        groups.forEach(g => {
+          const catId = g.category_id || 'sin-categoria';
+          const catName = g.categories?.name ? g.categories.name.trim() : 'Sin categoría';
+
+          if (!categoryMap.has(catId)) {
+            categoryMap.set(catId, {
+              id: catId,
+              title: catName,
+              subtitle: '',
+              icon: '📁',
+              isWarning: !g.category_id,
+              items: []
+            });
+          }
+
+          const presList = g.products || [];
+          presList.forEach(p => {
+            const qty = invMap.get(p.id) || 0;
+            const suppNames = (p.supplier_presentations || [])
+              .map(sp => sp.suppliers?.name?.trim())
+              .filter(Boolean);
+
+            categoryMap.get(catId).items.push({
+              presentationId: p.id,
+              productGroupId: g.id,
+              productName: g.name,
+              presentationName: p.name,
+              quantity: qty,
+              categoryName: catName,
+              suppliersText: suppNames.length > 0 ? suppNames.join(', ') : '',
+              price: p.price
+            });
+          });
+        });
+
+        const result = Array.from(categoryMap.values()).filter(group => group.items.length > 0);
+        result.forEach(r => {
+          r.itemsCountLabel = r.items.length === 1 ? '1 presentación' : `${r.items.length} presentaciones`;
+        });
+        return result;
+      }
+
+      return [];
+    }
+
+    function renderInventariosGroupedView(groups, invMap, filterQuery = '') {
+      const container = document.getElementById('inventarios-grouped-container');
+      if (!container) return;
+
+      const q = (filterQuery || '').toLowerCase().trim();
+
+      // Filter groups according to search input
+      let filteredGroups = groups || [];
+      if (q) {
+        filteredGroups = filteredGroups.filter(g => {
+          const matchName = (g.name || '').toLowerCase().includes(q);
+          const matchCat = (g.categories?.name || '').toLowerCase().includes(q);
+          const matchDesc = (g.description || '').toLowerCase().includes(q);
+          const matchPres = (g.products || []).some(p => {
+            const pName = (p.name || '').toLowerCase().includes(q);
+            const pSupp = (p.supplier_presentations || []).some(sp => (sp.suppliers?.name || '').toLowerCase().includes(q));
+            return pName || pSupp;
+          });
+          return matchName || matchCat || matchDesc || matchPres;
+        });
+      }
+
+      if (!filteredGroups || filteredGroups.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center;">
+            <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">📦</div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
+              ${q ? 'No se encontraron artículos que coincidan' : '0 productos registrados en tu negocio'}
+            </h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+              ${q ? 'Intenta con otro término de búsqueda o cambia de pestaña.' : 'Comienza registrando tu primer producto en "Productos" o "Compras" para gestionar su inventario.'}
+            </p>
+          </div>
+        `;
+        return;
+      }
+
+      const groupedData = buildInventoryGroupedData(filteredGroups, invMap, currentInventariosGrouping);
+
+      if (!groupedData || groupedData.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center;">
+            <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">📦</div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px;">0 artículos para mostrar</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">No hay presentaciones registradas bajo este criterio.</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="compras-catalog-grouped">';
+
+      groupedData.forEach(group => {
+        html += `
+          <div class="compras-group-block">
+            <div class="compras-group-heading" ${group.isWarning ? 'style="border-color: #fef08a;"' : ''}>
+              <div class="compras-heading-text">
+                <span class="compras-heading-icon">${group.icon}</span>
+                <h3 class="compras-heading-title" ${group.isWarning ? 'style="color: #b45309;"' : ''}>${escapeHtml(group.title)}</h3>
+                ${group.subtitle ? `<span class="compras-supplier-contact">${escapeHtml(group.subtitle)}</span>` : ''}
+              </div>
+              <span class="compras-heading-badge" ${group.isWarning ? 'style="background:#fefce8; color:#a16207; border-color:#fef08a;"' : ''}>${group.itemsCountLabel}</span>
+            </div>
+
+            <div class="compras-group-items-list">
+              ${group.items.map(item => {
+                const isOutOfStock = item.quantity <= 0;
+                const qtyStyle = isOutOfStock
+                  ? 'background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca;'
+                  : 'background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;';
+                const qtyDot = isOutOfStock ? '○' : '●';
+
+                let itemMainContent = '';
+                if (currentInventariosGrouping === 'product') {
+                  itemMainContent = `
+                    <div class="compras-unified-item-line">
+                      <span class="compras-item-prod-name" style="font-size: 0.95rem; font-weight: 800; color: var(--text-main);">${escapeHtml(item.presentationName)}</span>
+                      <div class="compras-item-details-line">
+                        <span class="compras-item-dot">·</span>
+                        <span style="display: inline-flex; align-items: center; gap: 5px; font-weight: 800; font-size: 0.88rem; padding: 2px 10px; border-radius: 9999px; ${qtyStyle}">
+                          ${qtyDot} ${item.quantity} unidades
+                        </span>
+                        ${item.suppliersText ? `
+                          <span class="compras-item-dot desktop-only">·</span>
+                          <span class="desktop-only" style="font-size: 0.78rem; color: #64748b; background: #f8fafc; border: 1px solid var(--border-color); padding: 2px 8px; border-radius: 6px;">
+                            🏢 ${escapeHtml(item.suppliersText)}
+                          </span>
+                        ` : ''}
+                      </div>
+                    </div>
+                  `;
+                } else {
+                  // For 'supplier' and 'category' grouping
+                  itemMainContent = `
+                    <div class="compras-unified-item-line">
+                      <span class="compras-item-prod-name" style="font-weight: 800; color: var(--text-main);">${escapeHtml(item.productName)}</span>
+                      <div class="compras-item-details-line">
+                        <span class="compras-item-dot">·</span>
+                        <span class="compras-item-pres-name" style="font-weight: 700; color: #0284c7;">${escapeHtml(item.presentationName)}</span>
+                        <span class="compras-item-dot">·</span>
+                        <span style="display: inline-flex; align-items: center; gap: 5px; font-weight: 800; font-size: 0.88rem; padding: 2px 10px; border-radius: 9999px; ${qtyStyle}">
+                          ${qtyDot} ${item.quantity} unidades
+                        </span>
+                      </div>
+                    </div>
+                  `;
+                }
+
+                return `
+                  <div class="compras-item-row" style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.15rem;">
+                    <div class="compras-item-main" style="flex: 1;">
+                      ${itemMainContent}
+                    </div>
+                    <div class="compras-item-actions" style="margin-left: 0.75rem;">
+                      <button class="action-btn-adjust-inv btn-action-secondary" 
+                              data-pres-id="${item.presentationId}"
+                              data-prod-name="${escapeHtml(item.productName)}"
+                              data-pres-name="${escapeHtml(item.presentationName)}"
+                              data-current-qty="${item.quantity}"
+                              style="padding: 0.42rem 0.85rem; font-size: 0.82rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                        Modificar
+                      </button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      html += '</div>';
+      container.innerHTML = html;
+
+      // Attach event listeners to all "Modificar" buttons
+      container.querySelectorAll('.action-btn-adjust-inv').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const presId = btn.getAttribute('data-pres-id');
+          const prodName = btn.getAttribute('data-prod-name');
+          const presName = btn.getAttribute('data-pres-name');
+          const currentQty = parseFloat(btn.getAttribute('data-current-qty')) || 0;
+          openAdjustInventoryModal(presId, prodName, presName, currentQty);
+        });
+      });
+    }
+
+    // Modal Adjust Inventory Controller
+    function openAdjustInventoryModal(presId, prodName, presName, currentQty) {
+      if (!modalAdjustInventory) return;
+      if (modalAdjustInvAlert) modalAdjustInvAlert.style.display = 'none';
+      if (formAdjustInventory) formAdjustInventory.reset();
+
+      if (adjustInvPresId) adjustInvPresId.value = presId;
+      if (adjustInvProductName) adjustInvProductName.textContent = prodName || 'Producto';
+      if (adjustInvPresName) adjustInvPresName.textContent = `Presentación: ${presName || 'Estándar'}`;
+      if (adjustInvQuantity) {
+        adjustInvQuantity.value = currentQty;
+        setTimeout(() => adjustInvQuantity.select(), 100);
+      }
+
+      modalAdjustInventory.classList.add('active');
+    }
+
+    function closeAdjustInventoryModal() {
+      if (modalAdjustInventory) {
+        modalAdjustInventory.classList.remove('active');
+      }
+    }
+
+    if (btnCloseAdjustInvModal) btnCloseAdjustInvModal.addEventListener('click', closeAdjustInventoryModal);
+    if (btnCancelAdjustInvModal) btnCancelAdjustInvModal.addEventListener('click', closeAdjustInventoryModal);
+
+    if (modalAdjustInventory) {
+      modalAdjustInventory.addEventListener('click', (e) => {
+        if (e.target === modalAdjustInventory) closeAdjustInventoryModal();
+      });
+    }
+
+    if (btnInvQtyMinus && adjustInvQuantity) {
+      btnInvQtyMinus.addEventListener('click', () => {
+        const val = Math.max(0, (parseFloat(adjustInvQuantity.value) || 0) - 1);
+        adjustInvQuantity.value = val;
+      });
+    }
+
+    if (btnInvQtyPlus && adjustInvQuantity) {
+      btnInvQtyPlus.addEventListener('click', () => {
+        const val = (parseFloat(adjustInvQuantity.value) || 0) + 1;
+        adjustInvQuantity.value = val;
+      });
+    }
+
+    if (formAdjustInventory) {
+      formAdjustInventory.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (modalAdjustInvAlert) modalAdjustInvAlert.style.display = 'none';
+
+        const presId = adjustInvPresId ? adjustInvPresId.value : '';
+        const qtyVal = adjustInvQuantity ? parseFloat(adjustInvQuantity.value) : 0;
+        const notes = adjustInvNotes ? adjustInvNotes.value.trim() : '';
+
+        if (!presId) {
+          if (modalAdjustInvAlert) {
+            modalAdjustInvAlert.textContent = 'Identificador de presentación no válido.';
+            modalAdjustInvAlert.className = 'modal-alert error';
+            modalAdjustInvAlert.style.display = 'block';
+          }
+          return;
+        }
+
+        if (isNaN(qtyVal) || qtyVal < 0) {
+          if (modalAdjustInvAlert) {
+            modalAdjustInvAlert.textContent = 'La cantidad debe ser un número igual o mayor a 0.';
+            modalAdjustInvAlert.className = 'modal-alert error';
+            modalAdjustInvAlert.style.display = 'block';
+          }
+          return;
+        }
+
+        btnSubmitAdjustInv.disabled = true;
+        btnSubmitAdjustInv.textContent = 'Guardando...';
+
+        try {
+          await inventoryManager.setPresentationInventory(presId, qtyVal, notes);
+
+          // Update local memory map
+          currentLoadedInventoryMap.set(presId, qtyVal);
+
+          // Update metrics & UI
+          updateInventariosMetrics(currentLoadedProducts, currentLoadedInventoryMap);
+          renderInventariosGroupedView(currentLoadedProducts, currentLoadedInventoryMap, searchInventoryInput?.value || '');
+
+          closeAdjustInventoryModal();
+          showToast(`Inventario actualizado: ${qtyVal} unidades disponibles.`);
+        } catch (err) {
+          console.error('Error saving inventory:', err);
+          if (modalAdjustInvAlert) {
+            modalAdjustInvAlert.textContent = err.message || 'Error al actualizar el inventario.';
+            modalAdjustInvAlert.className = 'modal-alert error';
+            modalAdjustInvAlert.style.display = 'block';
+          }
+        } finally {
+          btnSubmitAdjustInv.disabled = false;
+          btnSubmitAdjustInv.textContent = 'Guardar cantidad';
+        }
       });
     }
 
@@ -5203,6 +5872,8 @@
         switchView('nueva-venta');
       } else if (hash === '#compras') {
         switchView('compras');
+      } else if (hash === '#inventarios') {
+        switchView('inventarios');
       } else {
         switchView('productos');
       }

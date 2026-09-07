@@ -4871,6 +4871,21 @@
           await loadPurchasesHistory();
           // Also refresh Compras catalog in the background so updated costs reflect
           loadComprasCatalog();
+
+          // Immediately sync and refresh inventory from Supabase so Inventarios view is up to date
+          try {
+            const freshInvMap = await inventoryManager.getInventoryMap();
+            currentLoadedInventoryMap = freshInvMap;
+            if (currentLoadedProducts && currentLoadedProducts.length > 0) {
+              updateInventariosMetrics(currentLoadedProducts, currentLoadedInventoryMap);
+              const invContainer = document.getElementById('inventarios-grouped-container');
+              if (invContainer && viewInventarios && viewInventarios.classList.contains('active')) {
+                renderInventariosGroupedView(currentLoadedProducts, currentLoadedInventoryMap, searchInventoryInput?.value || '');
+              }
+            }
+          } catch (invErr) {
+            console.warn('Could not refresh inventory in background:', invErr);
+          }
         } catch (err) {
           console.error('Error saving purchase order:', err);
           if (modalCompraAlert) {

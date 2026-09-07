@@ -296,10 +296,11 @@ BEGIN
                 updated_at = EXCLUDED.updated_at;
         END IF;
 
-        -- 7c. Retrieve Previous Inventory Quantity
+        -- 7c. Retrieve Previous Inventory Quantity with row lock if exists
         SELECT quantity INTO v_prev_inv_qty
         FROM public.inventory
-        WHERE tenant_id = p_tenant_id AND presentation_id = v_pres_id;
+        WHERE tenant_id = p_tenant_id AND presentation_id = v_pres_id
+        FOR UPDATE;
 
         IF v_prev_inv_qty IS NULL THEN
             v_prev_inv_qty := 0.00;
@@ -307,7 +308,7 @@ BEGIN
 
         v_new_inv_qty := v_prev_inv_qty + v_qty;
 
-        -- 7d. Upsert Inventory Stock
+        -- 7d. Upsert Inventory Stock (Atomic additive upsert)
         INSERT INTO public.inventory (
             tenant_id,
             presentation_id,
@@ -317,13 +318,13 @@ BEGIN
         VALUES (
             p_tenant_id,
             v_pres_id,
-            v_new_inv_qty,
+            v_qty,
             v_created_at
         )
         ON CONFLICT (tenant_id, presentation_id)
         DO UPDATE SET
-            quantity = public.inventory.quantity + EXCLUDED.quantity - v_prev_inv_qty,
-            updated_at = v_created_at;
+            quantity = public.inventory.quantity + EXCLUDED.quantity,
+            updated_at = EXCLUDED.updated_at;
 
         -- 7e. Record Inventory Movement Audit Trail (Associated with Purchase)
         INSERT INTO public.inventory_movements (

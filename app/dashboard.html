@@ -2310,6 +2310,14 @@
             </div>
           </div>
 
+          <!-- Movement date selector for POS Sale -->
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.85rem; background: #f8fafc; border-radius: 8px; margin: 0.6rem 0; border: 1px solid var(--border-color);">
+            <label for="pos-sale-date-input" style="font-size: 0.78rem; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 4px;">
+              📅 Fecha de venta:
+            </label>
+            <input type="date" id="pos-sale-date-input" class="form-input" style="padding: 0.25rem 0.5rem; font-size: 0.82rem; font-weight: 600; width: auto; max-width: 145px;">
+          </div>
+
           <!-- Totals -->
           <div class="cart-totals">
             <div class="total-row">
@@ -2340,7 +2348,7 @@
       <div class="content-header">
         <div>
           <h1 class="page-title">Ventas</h1>
-          <p class="page-subtitle">Consulta el historial de tus ventas realizadas.</p>
+          <p class="page-subtitle">Consulta el historial de tus ventas realizadas agrupadas por periodos de tiempo.</p>
         </div>
         <button class="btn-action-primary" id="btn-go-to-new-sale">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -2348,34 +2356,47 @@
         </button>
       </div>
 
-      <div class="data-card">
+      <!-- Quick Metrics Cards for Ventas -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Ventas Realizadas</div>
+          <div id="ventas-count-tickets" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
+          <div style="font-size: 0.75rem; color: #059669; font-weight: 600; margin-top: 2px;">● Tickets cobrados</div>
+        </div>
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Total Vendido</div>
+          <div id="ventas-total-amount" style="font-size: 1.5rem; font-weight: 800; color: #059669; margin-top: 4px;">$0.00</div>
+          <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 2px;">Monto total acumulado</div>
+        </div>
+        <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Ticket Promedio</div>
+          <div id="ventas-average-ticket" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">$0.00</div>
+          <div style="font-size: 0.75rem; color: #0284c7; font-weight: 600; margin-top: 2px;">Promedio por venta</div>
+        </div>
+      </div>
+
+      <div class="data-card" style="padding: 1.35rem;">
         
-        <div class="search-wrapper">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input type="text" class="search-input" id="search-sales-input" placeholder="Buscar por folio (ej. V-000001) o cliente...">
+        <!-- Filter & Period Selector Bar for Ventas -->
+        <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 0.85rem 1.15rem;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <label for="filter-ventas-period" style="font-size: 0.8rem; font-weight: 700; color: #64748b;">Periodo:</label>
+            <select id="filter-ventas-period" class="form-input" style="padding: 0.42rem 0.75rem; font-size: 0.84rem; font-weight: 600; min-width: 180px;">
+              <option value="all">Todos los periodos</option>
+            </select>
+          </div>
+
+          <div class="search-wrapper" style="margin-bottom: 0; min-width: 240px; flex: 1; max-width: 380px;">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="search-input" id="search-sales-input" placeholder="Buscar por folio (ej. V-000001) o cliente...">
+          </div>
         </div>
 
-        <div class="table-responsive">
-          <table class="app-table">
-            <thead>
-              <tr>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Folio</th>
-                <th>Cliente</th>
-                <th>Total</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody id="sales-table-body">
-              <tr>
-                <td colspan="7" style="text-align: center; padding: 2.5rem; color: #64748b;">
-                  Consultando historial de ventas...
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Sales History Grouped by Period Container -->
+        <div id="ventas-periods-container">
+          <div style="text-align: center; padding: 2.5rem; color: #64748b;">
+            Consultando historial de ventas...
+          </div>
         </div>
 
       </div>
@@ -2473,6 +2494,14 @@
                 </select>
               </div>
 
+              <!-- Period dropdown -->
+              <div id="filter-compras-period-wrapper" style="display: flex; align-items: center; gap: 6px;">
+                <label for="filter-compras-period" style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Periodo:</label>
+                <select id="filter-compras-period" class="form-input" style="padding: 0.42rem 0.75rem; font-size: 0.84rem; font-weight: 600; min-width: 175px;">
+                  <option value="all">Todos los periodos</option>
+                </select>
+              </div>
+
               <!-- Search purchases live input -->
               <div class="search-wrapper" style="margin-bottom: 0; min-width: 220px; flex: 1; max-width: 320px;">
                 <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -2481,29 +2510,11 @@
             </div>
           </div>
 
-          <!-- Purchases History Table -->
-          <div class="table-responsive">
-            <table class="app-table" id="purchases-table">
-              <thead>
-                <tr>
-                  <th style="width: 120px;">Compra</th>
-                  <th>Fecha</th>
-                  <th>Hora</th>
-                  <th>Proveedor</th>
-                  <th>Productos</th>
-                  <th style="text-align: right;">Total</th>
-                  <th style="text-align: center;">Estado</th>
-                  <th style="text-align: center;">Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="purchases-table-body">
-                <tr>
-                  <td colspan="8" style="text-align: center; padding: 2.5rem; color: #64748b;">
-                    Consultando historial de compras...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <!-- Purchases History Grouped by Period Container -->
+          <div id="compras-periods-container">
+            <div style="text-align: center; padding: 2.5rem; color: #64748b;">
+              Consultando historial de compras...
+            </div>
           </div>
 
         </div>
@@ -3338,6 +3349,8 @@
     const filterSupplierWrapper = document.getElementById('filter-supplier-wrapper');
     const filterComprasCategory = document.getElementById('filter-compras-category');
     const filterComprasSupplier = document.getElementById('filter-compras-supplier');
+    const filterComprasPeriod = document.getElementById('filter-compras-period');
+    const comprasPeriodsContainer = document.getElementById('compras-periods-container');
     let currentComprasSegment = 'general'; // 'general' | 'category' | 'supplier'
 
     // Compra Modal Elements
@@ -3452,6 +3465,12 @@
 
     const productsTableBody = document.getElementById('products-table-body');
     const salesTableBody = document.getElementById('sales-table-body');
+    const filterVentasPeriod = document.getElementById('filter-ventas-period');
+    const ventasPeriodsContainer = document.getElementById('ventas-periods-container');
+    const ventasCountTickets = document.getElementById('ventas-count-tickets');
+    const ventasTotalAmount = document.getElementById('ventas-total-amount');
+    const ventasAverageTicket = document.getElementById('ventas-average-ticket');
+    const posSaleDateInput = document.getElementById('pos-sale-date-input');
     const searchProductsInput = document.getElementById('search-products-input');
     const searchSalesInput = document.getElementById('search-sales-input');
 
@@ -3485,6 +3504,9 @@
         viewNuevaVenta.classList.add('active');
         navInicio.classList.add('active');
         window.location.hash = 'nueva-venta';
+        if (posSaleDateInput && !posSaleDateInput.value) {
+          posSaleDateInput.value = new Date().toISOString().split('T')[0];
+        }
         loadPosCatalog();
       } else if (viewName === 'ventas') {
         viewVentas.classList.add('active');
@@ -4895,23 +4917,50 @@
     }
 
     // -------------------------------------------------------------
-    // PURCHASES HISTORY RENDERING (COMPRAS TABLE & SEGMENTATION)
+    // PERIOD UTILITIES & HELPERS
+    // -------------------------------------------------------------
+    const SPANISH_MONTHS = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    ];
+
+    function getMovementPeriodKey(dateStr, fallbackCreatedStr) {
+      const d = dateStr || (fallbackCreatedStr ? fallbackCreatedStr.split('T')[0] : '');
+      if (!d) return 'unknown';
+      const parts = d.split('-');
+      if (parts.length >= 2) {
+        return `${parts[0]}-${parts[1]}`;
+      }
+      return 'unknown';
+    }
+
+    function formatPeriodLabel(periodKey) {
+      if (!periodKey || periodKey === 'unknown') return 'Sin periodo';
+      const parts = periodKey.split('-');
+      if (parts.length < 2) return periodKey;
+      const year = parts[0];
+      const monthIdx = parseInt(parts[1], 10) - 1;
+      const monthName = SPANISH_MONTHS[monthIdx] || parts[1];
+      return `${monthName} ${year}`;
+    }
+
+    // -------------------------------------------------------------
+    // PURCHASES HISTORY RENDERING (COMPRAS TABLE & PERIOD GROUPING)
     // -------------------------------------------------------------
     async function loadPurchasesHistory() {
-      if (!purchasesTableBody) return;
+      if (!comprasPeriodsContainer) return;
       try {
-        purchasesTableBody.innerHTML = `
-          <tr>
-            <td colspan="8" style="text-align:center; padding: 2.5rem; color: #64748b;">
-              Consultando historial de compras...
-            </td>
-          </tr>
+        comprasPeriodsContainer.innerHTML = `
+          <div style="text-align:center; padding: 2.5rem; color: #64748b; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            Consultando historial de compras...
+          </div>
         `;
 
         currentLoadedPurchases = await purchasesManager.getPurchasesHistory();
         
-        // Populate category and supplier filter dropdowns
+        // Populate category, supplier, and period filter dropdowns
         await populateComprasFilterDropdowns();
+        populateComprasPeriodDropdown(currentLoadedPurchases);
 
         // Update top metric indicators
         updateComprasMetrics(currentLoadedPurchases);
@@ -4920,12 +4969,10 @@
         applyComprasFilters();
       } catch (err) {
         console.error('Error loading purchases history:', err);
-        purchasesTableBody.innerHTML = `
-          <tr>
-            <td colspan="8" style="text-align:center; padding: 2.5rem; color: #ef4444;">
-              Error al cargar compras: ${escapeHtml(err.message)}
-            </td>
-          </tr>
+        comprasPeriodsContainer.innerHTML = `
+          <div style="text-align:center; padding: 2.5rem; color: #ef4444; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            Error al cargar compras: ${escapeHtml(err.message)}
+          </div>
         `;
       }
     }
@@ -4998,6 +5045,25 @@
       }
     }
 
+    function populateComprasPeriodDropdown(purchases) {
+      if (!filterComprasPeriod) return;
+      const periodKeys = Array.from(new Set(
+        (purchases || [])
+          .map(p => getMovementPeriodKey(p.purchase_date, p.created_at))
+          .filter(k => k && k !== 'unknown')
+      )).sort().reverse();
+
+      const currentVal = filterComprasPeriod.value || 'all';
+      let html = '<option value="all">Todos los periodos</option>';
+      periodKeys.forEach(pk => {
+        html += `<option value="${pk}">${formatPeriodLabel(pk)}</option>`;
+      });
+      filterComprasPeriod.innerHTML = html;
+      if ([...filterComprasPeriod.options].some(o => o.value === currentVal)) {
+        filterComprasPeriod.value = currentVal;
+      }
+    }
+
     function setComprasSegment(segment) {
       currentComprasSegment = segment;
 
@@ -5036,7 +5102,13 @@
       if (!currentLoadedPurchases) return;
       let results = [...currentLoadedPurchases];
 
-      // 1. Segment filter
+      // 1. Period filter
+      const periodVal = filterComprasPeriod?.value;
+      if (periodVal && periodVal !== 'all') {
+        results = results.filter(p => getMovementPeriodKey(p.purchase_date, p.created_at) === periodVal);
+      }
+
+      // 2. Segment filter
       if (currentComprasSegment === 'category') {
         const catId = filterComprasCategory?.value;
         if (catId && catId !== 'all') {
@@ -5056,7 +5128,7 @@
         }
       }
 
-      // 2. Search query filter
+      // 3. Search query filter
       const q = (searchPurchasesInput?.value || '').toLowerCase().trim();
       if (q) {
         results = results.filter(p => {
@@ -5072,79 +5144,146 @@
         });
       }
 
-      renderPurchasesTable(results);
+      renderComprasPeriods(results);
     }
 
-    function renderPurchasesTable(purchases) {
-      if (!purchasesTableBody) return;
+    function renderComprasPeriods(purchases) {
+      if (!comprasPeriodsContainer) return;
 
       if (!purchases || purchases.length === 0) {
-        purchasesTableBody.innerHTML = `
-          <tr>
-            <td colspan="8">
-              <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center;">
-                <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧾</div>
-                <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
-                  0 compras registradas
-                </h3>
-                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
-                  ${currentComprasSegment !== 'general' ? 'No se encontraron compras con el filtro seleccionado.' : 'Aún no has registrado ninguna compra a proveedores en este negocio.'}
-                </p>
-                <button class="btn-action-primary" id="btn-empty-create-compra" style="margin: 0 auto;">
-                  + Registrar compra
-                </button>
-              </div>
-            </td>
-          </tr>
+        comprasPeriodsContainer.innerHTML = `
+          <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧾</div>
+            <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
+              0 compras encontradas
+            </h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+              ${(filterComprasPeriod?.value !== 'all' || currentComprasSegment !== 'general') ? 'No se encontraron compras con los filtros o periodo seleccionados.' : 'Aún no has registrado ninguna compra a proveedores en este negocio.'}
+            </p>
+            <button class="btn-action-primary" id="btn-empty-create-compra" style="margin: 0 auto;">
+              + Registrar compra
+            </button>
+          </div>
         `;
         document.getElementById('btn-empty-create-compra')?.addEventListener('click', openAddCompraModal);
         return;
       }
 
-      purchasesTableBody.innerHTML = purchases.map(p => {
-        const dateObj = new Date(p.purchase_date ? `${p.purchase_date}T12:00:00` : p.created_at);
-        const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeObj = new Date(p.created_at);
-        const timeStr = timeObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+      // Group purchases by period key (YYYY-MM)
+      const periodMap = new Map();
+      purchases.forEach(p => {
+        const pk = getMovementPeriodKey(p.purchase_date, p.created_at);
+        if (!periodMap.has(pk)) periodMap.set(pk, []);
+        periodMap.get(pk).push(p);
+      });
 
-        const items = p.purchase_items || [];
-        const itemsCount = items.length;
-        const totalUnits = items.reduce((sum, it) => sum + (parseFloat(it.quantity) || 0), 0);
-        const itemsLabel = itemsCount === 1 ? '1 partida' : `${itemsCount} partidas`;
+      // Sort periods descending (most recent month first)
+      const sortedPeriods = Array.from(periodMap.keys()).sort().reverse();
+
+      comprasPeriodsContainer.innerHTML = sortedPeriods.map(pk => {
+        const periodPurchases = periodMap.get(pk);
+        const periodLabel = formatPeriodLabel(pk);
+        const purchasesCount = periodPurchases.length;
+        const purchasesCountLabel = purchasesCount === 1 ? '1 compra realizada' : `${purchasesCount} compras realizadas`;
+        const totalSpent = periodPurchases.reduce((sum, p) => sum + (parseFloat(p.total) || 0), 0);
+        const totalSpentStr = '$' + totalSpent.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        const rowsHtml = periodPurchases.map(p => {
+          const dateObj = new Date(p.purchase_date ? `${p.purchase_date}T12:00:00` : p.created_at);
+          const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          const timeObj = new Date(p.created_at);
+          const timeStr = timeObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+          const items = p.purchase_items || [];
+          const itemsCount = items.length;
+          const totalUnits = items.reduce((sum, it) => sum + (parseFloat(it.quantity) || 0), 0);
+          const itemsLabel = itemsCount === 1 ? '1 partida' : `${itemsCount} partidas`;
+
+          return `
+            <tr class="purchase-history-row" data-purchase-id="${p.id}" style="cursor: pointer;">
+              <td>
+                <span style="font-family: monospace; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 8px; border-radius: 6px; border: 1px solid #bae6fd; font-size: 0.88rem;">
+                  ${escapeHtml(p.folio || 'S/F')}
+                </span>
+              </td>
+              <td style="font-weight: 700; color: #1e293b;">${dateStr}</td>
+              <td style="color: #64748b; font-size: 0.82rem;">${timeStr}</td>
+              <td>
+                <div style="font-weight: 600; color: #334155;">${escapeHtml(p.supplier_name || 'Proveedor sin registrar')}</div>
+                ${p.reference ? `<div style="font-size: 0.74rem; color: #94a3b8;">Ref: ${escapeHtml(p.reference)}</div>` : ''}
+              </td>
+              <td>
+                <div style="color: #334155; font-size: 0.84rem; font-weight: 600;">${itemsLabel}</div>
+                <div style="color: #64748b; font-size: 0.75rem;">${totalUnits} uds.</div>
+              </td>
+              <td style="font-weight: 800; color: #059669; font-size: 0.96rem; text-align: right;">
+                $${parseFloat(p.total || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td style="text-align: center;">
+                <span class="status-pill-completed" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #d1fae5; display: inline-flex; align-items: center; gap: 4px;">✓ Completada</span>
+              </td>
+              <td style="text-align: center;">
+                <button type="button" class="action-btn-link btn-view-purchase-detail" data-purchase-id="${p.id}" style="font-weight: 700; color: #0284c7; cursor: pointer; text-decoration: underline;">
+                  Ver detalle
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
 
         return `
-          <tr class="purchase-history-row" data-purchase-id="${p.id}" style="cursor: pointer;">
-            <td>
-              <span style="font-family: monospace; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 8px; border-radius: 6px; border: 1px solid #bae6fd; font-size: 0.88rem;">
-                ${escapeHtml(p.folio || 'S/F')}
-              </span>
-            </td>
-            <td style="font-weight: 700; color: #1e293b;">${dateStr}</td>
-            <td style="color: #64748b; font-size: 0.82rem;">${timeStr}</td>
-            <td>
-              <div style="font-weight: 600; color: #334155;">${escapeHtml(p.supplier_name || 'Proveedor sin registrar')}</div>
-              ${p.reference ? `<div style="font-size: 0.74rem; color: #94a3b8;">Ref: ${escapeHtml(p.reference)}</div>` : ''}
-            </td>
-            <td>
-              <div style="color: #334155; font-size: 0.84rem; font-weight: 600;">${itemsLabel}</div>
-              <div style="color: #64748b; font-size: 0.75rem;">${totalUnits} uds.</div>
-            </td>
-            <td style="font-weight: 800; color: #059669; font-size: 0.96rem; text-align: right;">
-              $${parseFloat(p.total || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-            </td>
-            <td style="text-align: center;">
-              <span class="status-pill-completed" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #d1fae5; display: inline-flex; align-items: center; gap: 4px;">✓ Completada</span>
-            </td>
-            <td style="text-align: center;">
-              <button type="button" class="action-btn-link btn-view-purchase-detail" data-purchase-id="${p.id}" style="font-weight: 700; color: #0284c7; cursor: pointer; text-decoration: underline;">
-                Ver detalle
-              </button>
-            </td>
-          </tr>
+          <div class="period-group-block" style="margin-bottom: 2rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+            
+            <!-- Period Header & Summary -->
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #f8fafc; border-bottom: 1px solid var(--border-color);">
+              <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <span style="font-size: 1.15rem;">📅</span>
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #0f172a;">
+                    Periodo: ${escapeHtml(periodLabel)}
+                  </h3>
+                  <div style="font-size: 0.78rem; color: #64748b; margin-top: 1px;">
+                    Movimientos registrados en este periodo
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <span style="background: #ffffff; color: #475569; padding: 4px 10px; border-radius: 16px; border: 1px solid var(--border-color); font-weight: 700; font-size: 0.8rem;">
+                  📋 ${purchasesCountLabel}
+                </span>
+                <span style="background: #ecfdf5; color: #059669; padding: 4px 12px; border-radius: 16px; border: 1px solid #d1fae5; font-weight: 800; font-size: 0.85rem;">
+                  Total comprado: ${totalSpentStr}
+                </span>
+              </div>
+            </div>
+
+            <!-- Period Purchases Table -->
+            <div class="table-responsive" style="margin: 0;">
+              <table class="app-table" style="margin: 0;">
+                <thead>
+                  <tr>
+                    <th style="width: 120px;">Compra</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Proveedor</th>
+                    <th>Productos</th>
+                    <th style="text-align: right;">Total</th>
+                    <th style="text-align: center;">Estado</th>
+                    <th style="text-align: center;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rowsHtml}
+                </tbody>
+              </table>
+            </div>
+
+          </div>
         `;
       }).join('');
 
-      purchasesTableBody.querySelectorAll('.purchase-history-row').forEach(row => {
+      comprasPeriodsContainer.querySelectorAll('.purchase-history-row').forEach(row => {
         row.addEventListener('click', () => {
           const pId = row.getAttribute('data-purchase-id');
           if (pId) openPurchaseDetailModal(pId);
@@ -5158,6 +5297,7 @@
     if (segBtnSupplier) segBtnSupplier.addEventListener('click', () => setComprasSegment('supplier'));
     if (filterComprasCategory) filterComprasCategory.addEventListener('change', applyComprasFilters);
     if (filterComprasSupplier) filterComprasSupplier.addEventListener('change', applyComprasFilters);
+    if (filterComprasPeriod) filterComprasPeriod.addEventListener('change', applyComprasFilters);
     if (searchPurchasesInput) searchPurchasesInput.addEventListener('input', applyComprasFilters);
 
     // -------------------------------------------------------------
@@ -5956,7 +6096,8 @@
           unit_price: item.price
         }));
 
-        const result = await salesManager.checkoutSale(checkoutPayload, 'Cliente Mostrador', 0, 'cash');
+        const selectedSaleDate = posSaleDateInput?.value || new Date().toISOString().split('T')[0];
+        const result = await salesManager.checkoutSale(checkoutPayload, 'Cliente Mostrador', 0, 'cash', selectedSaleDate);
 
         alert(`✅ ¡Venta ${result.folio} registrada con éxito!\nTotal cobrado: $${result.total.toFixed(2)}`);
         
@@ -5972,97 +6113,234 @@
     });
 
     // -------------------------------------------------------------
-    // SALES HISTORY RENDERING (VENTAS TABLE)
+    // SALES HISTORY RENDERING (VENTAS TABLE & PERIOD GROUPING)
     // -------------------------------------------------------------
     async function loadSalesHistory() {
+      if (!ventasPeriodsContainer) return;
       try {
-        salesTableBody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align:center; padding: 2.5rem; color: #64748b;">
-              Consultando historial de ventas...
-            </td>
-          </tr>
+        ventasPeriodsContainer.innerHTML = `
+          <div style="text-align: center; padding: 2.5rem; color: #64748b; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            Consultando historial de ventas...
+          </div>
         `;
 
         currentLoadedSales = await salesManager.getSalesHistory();
-        renderSalesTable(currentLoadedSales);
+
+        // Populate dynamic period dropdown
+        populateVentasPeriodDropdown(currentLoadedSales);
+
+        // Update Ventas metrics cards
+        updateVentasMetrics(currentLoadedSales);
+
+        // Render grouped view with current filters
+        applyVentasFilters();
       } catch (err) {
         console.error('Error loading sales history:', err);
-        salesTableBody.innerHTML = `
-          <tr>
-            <td colspan="7" style="text-align:center; padding: 2.5rem; color: #ef4444;">
-              Error al cargar ventas: ${err.message}
-            </td>
-          </tr>
+        ventasPeriodsContainer.innerHTML = `
+          <div style="text-align: center; padding: 2.5rem; color: #ef4444; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            Error al cargar ventas: ${escapeHtml(err.message)}
+          </div>
         `;
       }
     }
 
-    function renderSalesTable(sales) {
+    function updateVentasMetrics(sales) {
+      const totalCount = (sales || []).length;
+      const totalAmount = (sales || []).reduce((sum, s) => sum + (parseFloat(s.total) || 0), 0);
+      const avgTicket = totalCount > 0 ? (totalAmount / totalCount) : 0;
+
+      if (ventasCountTickets) ventasCountTickets.textContent = totalCount;
+      if (ventasTotalAmount) {
+        ventasTotalAmount.textContent = '$' + totalAmount.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      if (ventasAverageTicket) {
+        ventasAverageTicket.textContent = '$' + avgTicket.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+    }
+
+    function populateVentasPeriodDropdown(sales) {
+      if (!filterVentasPeriod) return;
+      const periodKeys = Array.from(new Set(
+        (sales || [])
+          .map(s => getMovementPeriodKey(s.sale_date, s.created_at))
+          .filter(k => k && k !== 'unknown')
+      )).sort().reverse();
+
+      const currentVal = filterVentasPeriod.value || 'all';
+      let html = '<option value="all">Todos los periodos</option>';
+      periodKeys.forEach(pk => {
+        html += `<option value="${pk}">${formatPeriodLabel(pk)}</option>`;
+      });
+      filterVentasPeriod.innerHTML = html;
+      if ([...filterVentasPeriod.options].some(o => o.value === currentVal)) {
+        filterVentasPeriod.value = currentVal;
+      }
+    }
+
+    function applyVentasFilters() {
+      if (!currentLoadedSales) return;
+      let results = [...currentLoadedSales];
+
+      // 1. Period filter
+      const periodVal = filterVentasPeriod?.value;
+      if (periodVal && periodVal !== 'all') {
+        results = results.filter(s => getMovementPeriodKey(s.sale_date, s.created_at) === periodVal);
+      }
+
+      // 2. Search query filter
+      const q = (searchSalesInput?.value || '').toLowerCase().trim();
+      if (q) {
+        results = results.filter(s => {
+          const folio = (s.folio || '').toLowerCase();
+          const cust = (s.customer_name || '').toLowerCase();
+          const matchesItem = (s.sale_items || []).some(it => (it.product_name || '').toLowerCase().includes(q));
+          return folio.includes(q) || cust.includes(q) || matchesItem;
+        });
+      }
+
+      renderVentasPeriods(results);
+    }
+
+    function renderVentasPeriods(sales) {
+      if (!ventasPeriodsContainer) return;
+
       if (!sales || sales.length === 0) {
-        salesTableBody.innerHTML = `
-          <tr>
-            <td colspan="7">
-              <div class="empty-state-box">
-                <div class="empty-state-icon">🧾</div>
-                <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px;">0 ventas registradas</h3>
-                <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">Aún no has realizado ninguna venta en este negocio. Crea tu primera venta desde Nueva Venta.</p>
-                <button class="btn-action-primary" id="btn-empty-create-sale">
-                  + Crear primera venta
-                </button>
-              </div>
-            </td>
-          </tr>
+        ventasPeriodsContainer.innerHTML = `
+          <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center; background: white; border-radius: 12px; border: 1px solid var(--border-color);">
+            <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧾</div>
+            <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; color: var(--text-main);">0 ventas registradas</h3>
+            <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
+              ${filterVentasPeriod?.value !== 'all' ? 'No se encontraron ventas para el periodo seleccionado.' : 'Aún no has realizado ninguna venta en este negocio. Crea tu primera venta desde Nueva Venta.'}
+            </p>
+            <button class="btn-action-primary" id="btn-empty-create-sale" style="margin: 0 auto;">
+              + Crear primera venta
+            </button>
+          </div>
         `;
         document.getElementById('btn-empty-create-sale')?.addEventListener('click', () => switchView('nueva-venta'));
         return;
       }
 
-      salesTableBody.innerHTML = sales.map(s => {
-        const dateObj = new Date(s.created_at);
-        const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeStr = dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+      // Group sales by period key (YYYY-MM)
+      const periodMap = new Map();
+      sales.forEach(s => {
+        const pk = getMovementPeriodKey(s.sale_date, s.created_at);
+        if (!periodMap.has(pk)) periodMap.set(pk, []);
+        periodMap.get(pk).push(s);
+      });
+
+      const sortedPeriods = Array.from(periodMap.keys()).sort().reverse();
+
+      ventasPeriodsContainer.innerHTML = sortedPeriods.map(pk => {
+        const periodSales = periodMap.get(pk);
+        const periodLabel = formatPeriodLabel(pk);
+        const salesCount = periodSales.length;
+        const salesCountLabel = salesCount === 1 ? '1 venta realizada' : `${salesCount} ventas realizadas`;
+        const totalSold = periodSales.reduce((sum, s) => sum + (parseFloat(s.total) || 0), 0);
+        const totalSoldStr = '$' + totalSold.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+        const rowsHtml = periodSales.map(s => {
+          const dateObj = new Date(s.sale_date ? `${s.sale_date}T12:00:00` : s.created_at);
+          const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
+          const timeObj = new Date(s.created_at);
+          const timeStr = timeObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+          const items = s.sale_items || [];
+          const itemsCount = items.length;
+          const totalUnits = items.reduce((sum, it) => sum + (parseFloat(it.quantity) || 0), 0);
+          const itemsLabel = itemsCount === 1 ? '1 producto' : `${itemsCount} productos`;
+
+          return `
+            <tr class="sale-history-row" data-sale-id="${s.id}" style="cursor: pointer;">
+              <td>
+                <span style="font-family: monospace; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 8px; border-radius: 6px; border: 1px solid #bae6fd; font-size: 0.88rem;">
+                  ${escapeHtml(s.folio || `V-${String(s.folio_number || 1).padStart(6, '0')}`)}
+                </span>
+              </td>
+              <td style="font-weight: 700; color: #1e293b;">${dateStr}</td>
+              <td style="color: #64748b; font-size: 0.82rem;">${timeStr}</td>
+              <td style="color: #334155; font-weight: 600;">${escapeHtml(s.customer_name || 'Cliente Mostrador')}</td>
+              <td>
+                <div style="color: #334155; font-size: 0.84rem; font-weight: 600;">${itemsLabel}</div>
+                ${totalUnits > 0 ? `<div style="color: #64748b; font-size: 0.75rem;">${totalUnits} uds.</div>` : ''}
+              </td>
+              <td style="font-weight: 800; color: #059669; font-size: 0.96rem; text-align: right;">
+                $${parseFloat(s.total || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td style="text-align: center;">
+                <span class="status-pill-completed" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #d1fae5; display: inline-flex; align-items: center; gap: 4px;">✓ Completada</span>
+              </td>
+              <td style="text-align: center;">
+                <button type="button" class="action-btn-link btn-view-sale-detail" data-sale-id="${s.id}" style="font-weight: 700; color: #0284c7; cursor: pointer; text-decoration: underline;">
+                  Ver detalle
+                </button>
+              </td>
+            </tr>
+          `;
+        }).join('');
 
         return `
-          <tr>
-            <td style="font-weight: 700; color: #1e293b;">${dateStr}</td>
-            <td style="color: #64748b; font-size: 0.82rem;">${timeStr}</td>
-            <td><strong style="color: #0f172a; letter-spacing: 0.02em;">${escapeHtml(s.folio || `V-${String(s.folio_number || 1).padStart(6, '0')}`)}</strong></td>
-            <td style="color: #334155;">${escapeHtml(s.customer_name || 'Cliente Mostrador')}</td>
-            <td style="font-weight: 800; color: #00aa79; font-size: 0.95rem;">$${parseFloat(s.total || 0).toFixed(2)}</td>
-            <td>
-              <span class="status-pill-completed">✓ Completada</span>
-            </td>
-            <td>
-              <button class="action-btn-link btn-view-sale-detail" data-sale-id="${s.id}">Ver detalle</button>
-            </td>
-          </tr>
+          <div class="period-group-block" style="margin-bottom: 2rem; background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+            
+            <!-- Period Header & Summary -->
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.25rem; background: #f8fafc; border-bottom: 1px solid var(--border-color);">
+              <div style="display: flex; align-items: center; gap: 0.6rem;">
+                <span style="font-size: 1.15rem;">📅</span>
+                <div>
+                  <h3 style="margin: 0; font-size: 1.05rem; font-weight: 800; color: #0f172a;">
+                    Periodo: ${escapeHtml(periodLabel)}
+                  </h3>
+                  <div style="font-size: 0.78rem; color: #64748b; margin-top: 1px;">
+                    Movimientos de venta en este periodo
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                <span style="background: #ffffff; color: #475569; padding: 4px 10px; border-radius: 16px; border: 1px solid var(--border-color); font-weight: 700; font-size: 0.8rem;">
+                  📋 ${salesCountLabel}
+                </span>
+                <span style="background: #ecfdf5; color: #059669; padding: 4px 12px; border-radius: 16px; border: 1px solid #d1fae5; font-weight: 800; font-size: 0.85rem;">
+                  Total vendido: ${totalSoldStr}
+                </span>
+              </div>
+            </div>
+
+            <!-- Period Sales Table -->
+            <div class="table-responsive" style="margin: 0;">
+              <table class="app-table" style="margin: 0;">
+                <thead>
+                  <tr>
+                    <th style="width: 120px;">Venta</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Cliente</th>
+                    <th>Productos</th>
+                    <th style="text-align: right;">Total</th>
+                    <th style="text-align: center;">Estado</th>
+                    <th style="text-align: center;">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rowsHtml}
+                </tbody>
+              </table>
+            </div>
+
+          </div>
         `;
       }).join('');
 
-      salesTableBody.querySelectorAll('.btn-view-sale-detail').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const saleId = btn.getAttribute('data-sale-id');
-          openSaleDetailModal(saleId);
+      ventasPeriodsContainer.querySelectorAll('.sale-history-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const saleId = row.getAttribute('data-sale-id');
+          if (saleId) openSaleDetailModal(saleId);
         });
       });
     }
 
-    searchSalesInput.addEventListener('input', () => {
-      const q = searchSalesInput.value.toLowerCase().trim();
-      if (!q) {
-        renderSalesTable(currentLoadedSales);
-        return;
-      }
-
-      const filtered = currentLoadedSales.filter(s => {
-        const folio = (s.folio || '').toLowerCase();
-        const cust = (s.customer_name || '').toLowerCase();
-        return folio.includes(q) || cust.includes(q);
-      });
-
-      renderSalesTable(filtered);
-    });
+    if (filterVentasPeriod) filterVentasPeriod.addEventListener('change', applyVentasFilters);
+    if (searchSalesInput) searchSalesInput.addEventListener('input', applyVentasFilters);
 
     // -------------------------------------------------------------
     // SALE DETAIL MODAL
@@ -6073,9 +6351,10 @@
         modalSaleDetail.classList.add('active');
 
         const sale = await salesManager.getSaleDetail(saleId);
-        const dateObj = new Date(sale.created_at);
+        const dateObj = new Date(sale.sale_date ? `${sale.sale_date}T12:00:00` : sale.created_at);
         const dateStr = dateObj.toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const timeStr = dateObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const timeObj = new Date(sale.created_at);
+        const timeStr = timeObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
 
         detailFolioTitle.textContent = `Venta ${sale.folio}`;
         detailDateSubtitle.textContent = `Realizada el ${dateStr} a las ${timeStr}`;

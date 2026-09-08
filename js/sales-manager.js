@@ -27,14 +27,23 @@ export class SalesManager {
         folio,
         folio_number,
         customer_name,
+        sale_date,
         subtotal,
         discount_amount,
         total,
         payment_method,
         status,
-        created_at
+        created_at,
+        sale_items (
+          id,
+          quantity,
+          unit_price,
+          subtotal,
+          product_name
+        )
       `)
       .eq('tenant_id', tenantId)
+      .order('sale_date', { ascending: false })
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -91,13 +100,14 @@ export class SalesManager {
   }
 
   /**
-   * Finalize and register a sale in Supabase atomically
+   * Complete checkout and generate atomic sale order with folio
    * @param {Array<{product_id: string, product_name: string, quantity: number, unit_price: number}>} items 
    * @param {string} customerName 
    * @param {number} discountAmount 
    * @param {string} paymentMethod 
+   * @param {string|null} saleDate YYYY-MM-DD format
    */
-  async checkoutSale(items, customerName = 'Cliente Mostrador', discountAmount = 0, paymentMethod = 'cash') {
+  async checkoutSale(items, customerName = 'Cliente Mostrador', discountAmount = 0, paymentMethod = 'cash', saleDate = null) {
     if (!tenantManager.currentTenant) {
       await tenantManager.init();
     }
@@ -119,12 +129,17 @@ export class SalesManager {
       unit_price: parseFloat(item.unit_price || item.price) || 0
     }));
 
+    const finalSaleDate = saleDate && /^\d{4}-\d{2}-\d{2}$/.test(saleDate)
+      ? saleDate
+      : new Date().toISOString().split('T')[0];
+
     const { data, error } = await this.supabase.rpc('create_sale_checkout', {
       p_tenant_id: tenantId,
       p_customer_name: customerName || 'Cliente Mostrador',
       p_items: formattedItems,
       p_discount_amount: parseFloat(discountAmount) || 0,
-      p_payment_method: paymentMethod || 'cash'
+      p_payment_method: paymentMethod || 'cash',
+      p_sale_date: finalSaleDate
     });
 
     if (error) {

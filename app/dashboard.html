@@ -2387,12 +2387,11 @@
     <div id="view-compras" class="canvas-view">
       
       <!-- Top Navigation Menu (CRM Blue Letters Style) -->
+      <!-- Top Navigation Menu (CRM Blue Letters Style) -->
       <nav class="compras-top-navbar" aria-label="Navegación de Compras">
         <div class="compras-top-tabs">
-          <button class="compras-top-tab active" id="tab-top-compras-categories" type="button">Por categoría</button>
-          <button class="compras-top-tab" id="tab-top-compras-suppliers" type="button">Por proveedor</button>
+          <button class="compras-top-tab active" id="tab-top-compras-history" type="button">Historial de compras</button>
           <button class="compras-top-tab" id="tab-top-compras-directory" type="button">Proveedores</button>
-          <button class="compras-top-tab" id="tab-top-compras-history" type="button">Historial de compras</button>
         </div>
         <div class="compras-top-actions">
           <div class="compras-nav-divider"></div>
@@ -2405,13 +2404,9 @@
       <div class="content-header">
         <div>
           <h1 class="page-title">Compras</h1>
-          <p class="page-subtitle">Artículos del catálogo para adquisición a proveedores y suministros del negocio.</p>
+          <p class="page-subtitle">Registro histórico de compras a proveedores y control de abastecimiento.</p>
         </div>
         <div class="compras-header-buttons">
-          <button class="btn-action-secondary" id="btn-open-add-product-compras">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Agregar producto
-          </button>
           <button class="btn-action-primary" id="btn-open-add-compra">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             Agregar compra
@@ -2422,37 +2417,98 @@
       <!-- Quick Metrics Cards for Compras -->
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
         <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
-          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Artículos para Compra</div>
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Compras Totales</div>
           <div id="compras-count-products" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
-          <div style="font-size: 0.75rem; color: #10b981; font-weight: 600; margin-top: 2px;">● Catálogo unificado</div>
+          <div style="font-size: 0.75rem; color: #059669; font-weight: 600; margin-top: 2px;">● Tickets registrados</div>
         </div>
         <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
-          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Presentaciones Totales</div>
-          <div id="compras-count-presentations" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
-          <div style="font-size: 0.75rem; color: #0284c7; font-weight: 600; margin-top: 2px;">Unidades suministrables</div>
+          <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Monto Invertido</div>
+          <div id="compras-count-presentations" style="font-size: 1.5rem; font-weight: 800; color: #059669; margin-top: 4px;">$0.00</div>
+          <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 2px;">Total acumulado</div>
         </div>
         <div style="background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.25rem;">
           <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.04em;">Proveedores Activos</div>
           <div id="compras-count-suppliers" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-top: 4px;">0</div>
-          <div style="font-size: 0.75rem; color: #64748b; font-weight: 600; margin-top: 2px;">● Proveedores registrados</div>
+          <div style="font-size: 0.75rem; color: #0284c7; font-weight: 600; margin-top: 2px;">● Directorio registrado</div>
         </div>
       </div>
 
-      <!-- SECTION 1: PRODUCTS / PRESENTATIONS FOR PURCHASE (GROUPED PROCUREMENT CATALOG) -->
-      <div id="compras-section-products">
+      <!-- SECTION 1: PURCHASES HISTORY (PRIMARY VIEW) -->
+      <div id="compras-section-history" style="display: block;">
         <div class="data-card" style="padding: 1.35rem;">
-          <div class="search-wrapper" style="margin-bottom: 1.5rem;">
-            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" class="search-input" id="search-compras-input" placeholder="Buscar por producto, categoría, proveedor o presentación...">
-          </div>
+          
+          <!-- Segmentation & Filters Bar -->
+          <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 0.85rem 1.15rem;">
+            
+            <!-- Segment Mode Buttons -->
+            <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+              <span style="font-size: 0.8rem; font-weight: 700; color: #64748b; margin-right: 4px;">Segmentar:</span>
+              <button type="button" class="compras-segment-btn active" id="seg-btn-general" style="padding: 0.45rem 0.9rem; font-size: 0.84rem; font-weight: 700; border-radius: 8px; border: 1.5px solid #059669; background: #ecfdf5; color: #059669; cursor: pointer;">
+                General
+              </button>
+              <button type="button" class="compras-segment-btn" id="seg-btn-category" style="padding: 0.45rem 0.9rem; font-size: 0.84rem; font-weight: 600; border-radius: 8px; border: 1.5px solid var(--border-color); background: #ffffff; color: var(--text-main); cursor: pointer;">
+                📁 Por categoría
+              </button>
+              <button type="button" class="compras-segment-btn" id="seg-btn-supplier" style="padding: 0.45rem 0.9rem; font-size: 0.84rem; font-weight: 600; border-radius: 8px; border: 1.5px solid var(--border-color); background: #ffffff; color: var(--text-main); cursor: pointer;">
+                🏢 Por proveedor
+              </button>
+            </div>
 
-          <div id="compras-grouped-container" class="compras-catalog-grouped">
-            <div style="text-align: center; padding: 2.5rem; color: #64748b;">
-              Consultando catálogo de compras de tu negocio...
+            <!-- Dynamic Dropdowns (Category / Supplier) + Search Box -->
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex: 1; min-width: 260px; justify-content: flex-end; flex-wrap: wrap;">
+              <!-- Category dropdown (hidden by default) -->
+              <div id="filter-category-wrapper" style="display: none; align-items: center; gap: 6px;">
+                <label for="filter-compras-category" style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Categoría:</label>
+                <select id="filter-compras-category" class="form-input" style="padding: 0.42rem 0.75rem; font-size: 0.84rem; font-weight: 600; min-width: 170px;">
+                  <option value="all">Todas las categorías</option>
+                </select>
+              </div>
+
+              <!-- Supplier dropdown (hidden by default) -->
+              <div id="filter-supplier-wrapper" style="display: none; align-items: center; gap: 6px;">
+                <label for="filter-compras-supplier" style="font-size: 0.8rem; font-weight: 600; color: #64748b;">Proveedor:</label>
+                <select id="filter-compras-supplier" class="form-input" style="padding: 0.42rem 0.75rem; font-size: 0.84rem; font-weight: 600; min-width: 180px;">
+                  <option value="all">Todos los proveedores</option>
+                  <option value="sin-proveedor">⚠️ Sin proveedor</option>
+                </select>
+              </div>
+
+              <!-- Search purchases live input -->
+              <div class="search-wrapper" style="margin-bottom: 0; min-width: 220px; flex: 1; max-width: 320px;">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input type="text" class="search-input" id="search-purchases-input" placeholder="Buscar folio, proveedor, notas...">
+              </div>
             </div>
           </div>
+
+          <!-- Purchases History Table -->
+          <div class="table-responsive">
+            <table class="app-table" id="purchases-table">
+              <thead>
+                <tr>
+                  <th style="width: 120px;">Compra</th>
+                  <th>Fecha</th>
+                  <th>Hora</th>
+                  <th>Proveedor</th>
+                  <th>Productos</th>
+                  <th style="text-align: right;">Total</th>
+                  <th style="text-align: center;">Estado</th>
+                  <th style="text-align: center;">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="purchases-table-body">
+                <tr>
+                  <td colspan="8" style="text-align: center; padding: 2.5rem; color: #64748b;">
+                    Consultando historial de compras...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
         </div>
       </div>
+
       <!-- SECTION 2: SUPPLIERS DIRECTORY -->
       <div id="compras-section-suppliers" style="display: none;">
         <div class="data-card">
@@ -2483,47 +2539,6 @@
                 <tr>
                   <td colspan="6" style="text-align: center; padding: 2.5rem; color: #64748b;">
                     Consultando proveedores registrados...
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- SECTION 3: PURCHASES HISTORY -->
-      <div id="compras-section-history" style="display: none;">
-        <div class="data-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
-            <div class="search-wrapper" style="flex: 1; min-width: 260px; margin-bottom: 0;">
-              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input type="text" class="search-input" id="search-purchases-input" placeholder="Buscar por folio, proveedor o referencia...">
-            </div>
-            <button class="btn-action-primary" id="btn-history-add-compra">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-              Nueva compra
-            </button>
-          </div>
-
-          <div class="table-responsive">
-            <table class="app-table">
-              <thead>
-                <tr>
-                  <th>Fecha</th>
-                  <th>Hora</th>
-                  <th>Folio</th>
-                  <th>Proveedor</th>
-                  <th>Referencia</th>
-                  <th>Artículos</th>
-                  <th>Total</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody id="purchases-table-body">
-                <tr>
-                  <td colspan="9" style="text-align: center; padding: 2.5rem; color: #64748b;">
-                    Consultando historial de compras...
                   </td>
                 </tr>
               </tbody>
@@ -3310,16 +3325,20 @@
     const btnSubmitSupplier = document.getElementById('btn-submit-supplier');
     const suppliersTableBody = document.getElementById('suppliers-table-body');
     const searchSuppliersInput = document.getElementById('search-suppliers-input');
-    const tabTopComprasCategories = document.getElementById('tab-top-compras-categories');
-    const tabTopComprasSuppliers = document.getElementById('tab-top-compras-suppliers');
     const tabTopComprasDirectory = document.getElementById('tab-top-compras-directory');
     const tabTopComprasHistory = document.getElementById('tab-top-compras-history');
-    const comprasSectionProducts = document.getElementById('compras-section-products');
     const comprasSectionSuppliers = document.getElementById('compras-section-suppliers');
     const comprasSectionHistory = document.getElementById('compras-section-history');
     const searchPurchasesInput = document.getElementById('search-purchases-input');
     const purchasesTableBody = document.getElementById('purchases-table-body');
-    const btnHistoryAddCompra = document.getElementById('btn-history-add-compra');
+    const segBtnGeneral = document.getElementById('seg-btn-general');
+    const segBtnCategory = document.getElementById('seg-btn-category');
+    const segBtnSupplier = document.getElementById('seg-btn-supplier');
+    const filterCategoryWrapper = document.getElementById('filter-category-wrapper');
+    const filterSupplierWrapper = document.getElementById('filter-supplier-wrapper');
+    const filterComprasCategory = document.getElementById('filter-compras-category');
+    const filterComprasSupplier = document.getElementById('filter-compras-supplier');
+    let currentComprasSegment = 'general'; // 'general' | 'category' | 'supplier'
 
     // Compra Modal Elements
     const modalAddCompra = document.getElementById('modal-add-compra');
@@ -3476,7 +3495,10 @@
         if (viewCompras) viewCompras.classList.add('active');
         if (navCompras) navCompras.classList.add('active');
         window.location.hash = 'compras';
-        loadComprasCatalog();
+        setComprasActiveTopTab(tabTopComprasHistory);
+        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
+        if (comprasSectionHistory) comprasSectionHistory.style.display = 'block';
+        loadPurchasesHistory();
       } else if (viewName === 'inventarios') {
         if (viewInventarios) viewInventarios.classList.add('active');
         if (navInventarios) navInventarios.classList.add('active');
@@ -4173,59 +4195,30 @@
     }
 
     // Top navigation in Compras (CRM Blue Tabs Style)
-    // Top navigation in Compras (Category Grouping, Supplier Grouping, Directory, and History)
+    // Top navigation in Compras (Historial de compras & Proveedores Directory)
     function setComprasActiveTopTab(activeBtn) {
-      [tabTopComprasCategories, tabTopComprasSuppliers, tabTopComprasDirectory, tabTopComprasHistory].forEach(btn => {
+      [tabTopComprasDirectory, tabTopComprasHistory].forEach(btn => {
         if (btn) btn.classList.remove('active');
       });
       if (activeBtn) activeBtn.classList.add('active');
     }
 
-    if (tabTopComprasCategories) {
-      tabTopComprasCategories.addEventListener('click', () => {
-        setComprasActiveTopTab(tabTopComprasCategories);
-        currentComprasGrouping = 'category';
-        if (comprasSectionProducts) comprasSectionProducts.style.display = 'block';
-        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
-        if (comprasSectionHistory) comprasSectionHistory.style.display = 'none';
-        renderComprasGroupedView(currentLoadedProducts, searchComprasInput?.value || '');
-      });
-    }
-
-    if (tabTopComprasSuppliers) {
-      tabTopComprasSuppliers.addEventListener('click', () => {
-        setComprasActiveTopTab(tabTopComprasSuppliers);
-        currentComprasGrouping = 'supplier';
-        if (comprasSectionProducts) comprasSectionProducts.style.display = 'block';
-        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
-        if (comprasSectionHistory) comprasSectionHistory.style.display = 'none';
-        renderComprasGroupedView(currentLoadedProducts, searchComprasInput?.value || '');
-      });
-    }
-
-    if (tabTopComprasDirectory) {
-      tabTopComprasDirectory.addEventListener('click', () => {
-        setComprasActiveTopTab(tabTopComprasDirectory);
-        if (comprasSectionProducts) comprasSectionProducts.style.display = 'none';
-        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'block';
-        if (comprasSectionHistory) comprasSectionHistory.style.display = 'none';
-        loadSuppliers();
-      });
-    }
-
     if (tabTopComprasHistory) {
       tabTopComprasHistory.addEventListener('click', () => {
         setComprasActiveTopTab(tabTopComprasHistory);
-        currentComprasGrouping = 'history';
-        if (comprasSectionProducts) comprasSectionProducts.style.display = 'none';
         if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'none';
         if (comprasSectionHistory) comprasSectionHistory.style.display = 'block';
         loadPurchasesHistory();
       });
     }
 
-    if (btnHistoryAddCompra) {
-      btnHistoryAddCompra.addEventListener('click', () => openAddCompraModal());
+    if (tabTopComprasDirectory) {
+      tabTopComprasDirectory.addEventListener('click', () => {
+        setComprasActiveTopTab(tabTopComprasDirectory);
+        if (comprasSectionSuppliers) comprasSectionSuppliers.style.display = 'block';
+        if (comprasSectionHistory) comprasSectionHistory.style.display = 'none';
+        loadSuppliers();
+      });
     }
 
     // Supplier Select Options Generator
@@ -4902,31 +4895,184 @@
     }
 
     // -------------------------------------------------------------
-    // PURCHASES HISTORY RENDERING (COMPRAS TABLE)
+    // PURCHASES HISTORY RENDERING (COMPRAS TABLE & SEGMENTATION)
     // -------------------------------------------------------------
     async function loadPurchasesHistory() {
       if (!purchasesTableBody) return;
       try {
         purchasesTableBody.innerHTML = `
           <tr>
-            <td colspan="9" style="text-align:center; padding: 2.5rem; color: #64748b;">
+            <td colspan="8" style="text-align:center; padding: 2.5rem; color: #64748b;">
               Consultando historial de compras...
             </td>
           </tr>
         `;
 
         currentLoadedPurchases = await purchasesManager.getPurchasesHistory();
-        renderPurchasesTable(currentLoadedPurchases);
+        
+        // Populate category and supplier filter dropdowns
+        await populateComprasFilterDropdowns();
+
+        // Update top metric indicators
+        updateComprasMetrics(currentLoadedPurchases);
+
+        // Render current segment/filter view
+        applyComprasFilters();
       } catch (err) {
         console.error('Error loading purchases history:', err);
         purchasesTableBody.innerHTML = `
           <tr>
-            <td colspan="9" style="text-align:center; padding: 2.5rem; color: #ef4444;">
+            <td colspan="8" style="text-align:center; padding: 2.5rem; color: #ef4444;">
               Error al cargar compras: ${escapeHtml(err.message)}
             </td>
           </tr>
         `;
       }
+    }
+
+    function updateComprasMetrics(purchases) {
+      const countEl = document.getElementById('compras-count-products');
+      const totalAmountEl = document.getElementById('compras-count-presentations');
+      const suppliersCountEl = document.getElementById('compras-count-suppliers');
+
+      const totalPurchases = (purchases || []).length;
+      const totalSpent = (purchases || []).reduce((acc, p) => acc + parseFloat(p.total || 0), 0);
+
+      if (countEl) countEl.textContent = totalPurchases;
+      if (totalAmountEl) {
+        totalAmountEl.textContent = '$' + totalSpent.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      }
+      if (suppliersCountEl) {
+        const distinctSupps = new Set(
+          (purchases || [])
+            .map(p => p.supplier_name)
+            .filter(name => name && name !== 'Proveedor sin registrar')
+        );
+        const suppCount = (currentLoadedSuppliers && currentLoadedSuppliers.length > 0) ? currentLoadedSuppliers.length : distinctSupps.size;
+        suppliersCountEl.textContent = suppCount;
+      }
+    }
+
+    async function populateComprasFilterDropdowns() {
+      try {
+        // Load categories if not already cached
+        let categories = currentCategories;
+        if (!categories || categories.length === 0) {
+          if (typeof productsManager !== 'undefined' && productsManager.getCategories) {
+            categories = await productsManager.getCategories();
+            currentCategories = categories;
+          }
+        }
+        if (filterComprasCategory && categories) {
+          const currentVal = filterComprasCategory.value || 'all';
+          filterComprasCategory.innerHTML = `
+            <option value="all">Todas las categorías</option>
+            ${categories.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join('')}
+          `;
+          if ([...filterComprasCategory.options].some(o => o.value === currentVal)) {
+            filterComprasCategory.value = currentVal;
+          }
+        }
+
+        // Load suppliers if not already cached
+        let suppliers = currentLoadedSuppliers;
+        if (!suppliers || suppliers.length === 0) {
+          if (typeof suppliersManager !== 'undefined' && suppliersManager.getSuppliers) {
+            suppliers = await suppliersManager.getSuppliers();
+            currentLoadedSuppliers = suppliers;
+          }
+        }
+        if (filterComprasSupplier && suppliers) {
+          const currentVal = filterComprasSupplier.value || 'all';
+          filterComprasSupplier.innerHTML = `
+            <option value="all">Todos los proveedores</option>
+            <option value="sin-proveedor">⚠️ Sin proveedor</option>
+            ${suppliers.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('')}
+          `;
+          if ([...filterComprasSupplier.options].some(o => o.value === currentVal)) {
+            filterComprasSupplier.value = currentVal;
+          }
+        }
+      } catch (err) {
+        console.warn('Error populating purchases filter dropdowns:', err);
+      }
+    }
+
+    function setComprasSegment(segment) {
+      currentComprasSegment = segment;
+
+      const buttons = [
+        { el: segBtnGeneral, name: 'general' },
+        { el: segBtnCategory, name: 'category' },
+        { el: segBtnSupplier, name: 'supplier' }
+      ];
+
+      buttons.forEach(({ el, name }) => {
+        if (!el) return;
+        if (name === segment) {
+          el.style.borderColor = '#059669';
+          el.style.background = '#ecfdf5';
+          el.style.color = '#059669';
+          el.style.fontWeight = '700';
+        } else {
+          el.style.borderColor = 'var(--border-color)';
+          el.style.background = '#ffffff';
+          el.style.color = 'var(--text-main)';
+          el.style.fontWeight = '600';
+        }
+      });
+
+      if (filterCategoryWrapper) {
+        filterCategoryWrapper.style.display = segment === 'category' ? 'flex' : 'none';
+      }
+      if (filterSupplierWrapper) {
+        filterSupplierWrapper.style.display = segment === 'supplier' ? 'flex' : 'none';
+      }
+
+      applyComprasFilters();
+    }
+
+    function applyComprasFilters() {
+      if (!currentLoadedPurchases) return;
+      let results = [...currentLoadedPurchases];
+
+      // 1. Segment filter
+      if (currentComprasSegment === 'category') {
+        const catId = filterComprasCategory?.value;
+        if (catId && catId !== 'all') {
+          results = results.filter(p => {
+            return (p.purchase_items || []).some(item => {
+              const itemCatId = item.products?.product_groups?.category_id;
+              return itemCatId === catId;
+            });
+          });
+        }
+      } else if (currentComprasSegment === 'supplier') {
+        const suppId = filterComprasSupplier?.value;
+        if (suppId === 'sin-proveedor') {
+          results = results.filter(p => !p.supplier_id || p.supplier_name === 'Proveedor sin registrar');
+        } else if (suppId && suppId !== 'all') {
+          results = results.filter(p => p.supplier_id === suppId);
+        }
+      }
+
+      // 2. Search query filter
+      const q = (searchPurchasesInput?.value || '').toLowerCase().trim();
+      if (q) {
+        results = results.filter(p => {
+          const folio = (p.folio || '').toLowerCase();
+          const supp = (p.supplier_name || '').toLowerCase();
+          const ref = (p.reference || '').toLowerCase();
+          const notes = (p.notes || '').toLowerCase();
+          const matchesItem = (p.purchase_items || []).some(it => 
+            (it.product_name || '').toLowerCase().includes(q) || 
+            (it.presentation_name || '').toLowerCase().includes(q)
+          );
+          return folio.includes(q) || supp.includes(q) || ref.includes(q) || notes.includes(q) || matchesItem;
+        });
+      }
+
+      renderPurchasesTable(results);
     }
 
     function renderPurchasesTable(purchases) {
@@ -4935,17 +5081,17 @@
       if (!purchases || purchases.length === 0) {
         purchasesTableBody.innerHTML = `
           <tr>
-            <td colspan="9">
+            <td colspan="8">
               <div class="empty-state-box" style="padding: 2.5rem 1rem; text-align: center;">
                 <div class="empty-state-icon" style="font-size: 2.5rem; margin-bottom: 0.5rem;">🧾</div>
                 <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; color: var(--text-main);">
                   0 compras registradas
                 </h3>
                 <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.25rem;">
-                  Aún no has registrado ninguna compra a proveedores en este negocio.
+                  ${currentComprasSegment !== 'general' ? 'No se encontraron compras con el filtro seleccionado.' : 'Aún no has registrado ninguna compra a proveedores en este negocio.'}
                 </p>
                 <button class="btn-action-primary" id="btn-empty-create-compra" style="margin: 0 auto;">
-                  + Registrar primera compra
+                  + Registrar compra
                 </button>
               </div>
             </td>
@@ -4961,55 +5107,58 @@
         const timeObj = new Date(p.created_at);
         const timeStr = timeObj.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit', hour12: true });
 
-        const itemsCount = (p.purchase_items || []).length;
+        const items = p.purchase_items || [];
+        const itemsCount = items.length;
+        const totalUnits = items.reduce((sum, it) => sum + (parseFloat(it.quantity) || 0), 0);
         const itemsLabel = itemsCount === 1 ? '1 partida' : `${itemsCount} partidas`;
 
         return `
-          <tr>
+          <tr class="purchase-history-row" data-purchase-id="${p.id}" style="cursor: pointer;">
+            <td>
+              <span style="font-family: monospace; font-weight: 800; color: #0284c7; background: #f0f9ff; padding: 3px 8px; border-radius: 6px; border: 1px solid #bae6fd; font-size: 0.88rem;">
+                ${escapeHtml(p.folio || 'S/F')}
+              </span>
+            </td>
             <td style="font-weight: 700; color: #1e293b;">${dateStr}</td>
             <td style="color: #64748b; font-size: 0.82rem;">${timeStr}</td>
-            <td><strong style="color: #0f172a; font-family: monospace; font-size: 0.95rem;">${escapeHtml(p.folio || '')}</strong></td>
-            <td style="color: #334155; font-weight: 600;">${escapeHtml(p.supplier_name || 'Proveedor sin registrar')}</td>
-            <td style="color: #64748b; font-size: 0.84rem;">${escapeHtml(p.reference || '—')}</td>
-            <td style="color: #475569; font-size: 0.84rem;">${itemsLabel}</td>
-            <td style="font-weight: 800; color: #059669; font-size: 0.95rem;">$${parseFloat(p.total || 0).toFixed(2)}</td>
             <td>
-              <span class="status-pill-completed" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #d1fae5;">✓ Completada</span>
+              <div style="font-weight: 600; color: #334155;">${escapeHtml(p.supplier_name || 'Proveedor sin registrar')}</div>
+              ${p.reference ? `<div style="font-size: 0.74rem; color: #94a3b8;">Ref: ${escapeHtml(p.reference)}</div>` : ''}
             </td>
             <td>
-              <button class="action-btn-link btn-view-purchase-detail" data-purchase-id="${p.id}">Ver detalle</button>
+              <div style="color: #334155; font-size: 0.84rem; font-weight: 600;">${itemsLabel}</div>
+              <div style="color: #64748b; font-size: 0.75rem;">${totalUnits} uds.</div>
+            </td>
+            <td style="font-weight: 800; color: #059669; font-size: 0.96rem; text-align: right;">
+              $${parseFloat(p.total || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </td>
+            <td style="text-align: center;">
+              <span class="status-pill-completed" style="background:#ecfdf5; color:#059669; font-size:0.75rem; font-weight:700; padding:3px 8px; border-radius:12px; border:1px solid #d1fae5; display: inline-flex; align-items: center; gap: 4px;">✓ Completada</span>
+            </td>
+            <td style="text-align: center;">
+              <button type="button" class="action-btn-link btn-view-purchase-detail" data-purchase-id="${p.id}" style="font-weight: 700; color: #0284c7; cursor: pointer; text-decoration: underline;">
+                Ver detalle
+              </button>
             </td>
           </tr>
         `;
       }).join('');
 
-      purchasesTableBody.querySelectorAll('.btn-view-purchase-detail').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const pId = btn.getAttribute('data-purchase-id');
-          openPurchaseDetailModal(pId);
+      purchasesTableBody.querySelectorAll('.purchase-history-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const pId = row.getAttribute('data-purchase-id');
+          if (pId) openPurchaseDetailModal(pId);
         });
       });
     }
 
-    if (searchPurchasesInput) {
-      searchPurchasesInput.addEventListener('input', () => {
-        const q = searchPurchasesInput.value.toLowerCase().trim();
-        if (!q) {
-          renderPurchasesTable(currentLoadedPurchases);
-          return;
-        }
-
-        const filtered = (currentLoadedPurchases || []).filter(p => {
-          const folio = (p.folio || '').toLowerCase();
-          const supp = (p.supplier_name || '').toLowerCase();
-          const ref = (p.reference || '').toLowerCase();
-          const notes = (p.notes || '').toLowerCase();
-          return folio.includes(q) || supp.includes(q) || ref.includes(q) || notes.includes(q);
-        });
-
-        renderPurchasesTable(filtered);
-      });
-    }
+    // Connect segment buttons & filters
+    if (segBtnGeneral) segBtnGeneral.addEventListener('click', () => setComprasSegment('general'));
+    if (segBtnCategory) segBtnCategory.addEventListener('click', () => setComprasSegment('category'));
+    if (segBtnSupplier) segBtnSupplier.addEventListener('click', () => setComprasSegment('supplier'));
+    if (filterComprasCategory) filterComprasCategory.addEventListener('change', applyComprasFilters);
+    if (filterComprasSupplier) filterComprasSupplier.addEventListener('change', applyComprasFilters);
+    if (searchPurchasesInput) searchPurchasesInput.addEventListener('input', applyComprasFilters);
 
     // -------------------------------------------------------------
     // PURCHASE DETAIL MODAL CONTROLLER & LOGIC

@@ -37,7 +37,25 @@ export class PurchasesManager {
         created_at,
         purchase_items (
           id,
-          quantity
+          presentation_id,
+          product_name,
+          presentation_name,
+          quantity,
+          unit_cost,
+          subtotal,
+          products (
+            id,
+            product_group_id,
+            product_groups (
+              id,
+              name,
+              category_id,
+              categories (
+                id,
+                name
+              )
+            )
+          )
         )
       `)
       .eq('tenant_id', tenantId)
